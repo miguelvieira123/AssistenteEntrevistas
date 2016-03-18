@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AssistenteEntrevistas</string>
+    <string-array name="titles_tab">
+        <item>Inicio</item>
+        <item>Projetos</item>
+        <item>Entrevistas</item>
+        <item>Configurações</item>
+    </string-array>
+
 </resources>

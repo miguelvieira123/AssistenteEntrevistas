@@ -12,10 +12,8 @@ import javax.xml.transform.stream.StreamResult;
 
 
 public class General {
-    public static boolean createStructOfForders(String path){
-
+    public static boolean createStructOfFolders(String path){
         try {
-
             File f = new File(path + "/Entervistas");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
@@ -26,7 +24,6 @@ public class General {
         } catch (Exception e1) {
             return false;
         }
-
     }
 
     public static boolean createProject(String path,String projectName,String info[], String questions[], String urls[]){
@@ -69,7 +66,6 @@ public class General {
             }
             return true;
         } catch (Exception e1) {
-
             return false;
         }
 

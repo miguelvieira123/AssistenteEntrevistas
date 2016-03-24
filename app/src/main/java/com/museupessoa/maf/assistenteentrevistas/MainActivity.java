@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     MyPagerAdapter myPagerAdapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Home","Projectos","Entervistas","Demenições"};
+    CharSequence Titles[]={"Home","Projetos","Entrevistas","Definições"};
     int Numboftabs =4;
     String[] info={"Name","Apelido","Idade","Profissão"};
     String[] questions = {"Pergunta 1","Pergunta 2","Pergunta 3","Pergunta 4","Pergunta 5"};
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-           if(General.createStructOfForders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
+           if(General.createStructOfFolders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
                 General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
                       "Geral",info,questions,urls);
 

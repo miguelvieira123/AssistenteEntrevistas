@@ -27,12 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
            if(General.createStructOfFolders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
-=======
-
-           if(General.createStructOfForders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
->>>>>>> alex
                 General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
                       "Geral",info,questions,urls);
 

@@ -1,4 +1,4 @@
-package com.museupessoa.maf.assistenteentrevistas;
+package com.museupessoa.maf.assistenteentrevistas.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,11 +10,11 @@ import com.museupessoa.maf.assistenteentrevistas.main.Main;
 import com.museupessoa.maf.assistenteentrevistas.main.Projects;
 
 
-public class MyPagerAdapter extends FragmentStatePagerAdapter {
+public  class MainActivityPagerAdapter extends FragmentStatePagerAdapter{
     CharSequence Titles[];
     int NumbOfTabs;
 
-    public MyPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
+    public MainActivityPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
         super(fm);
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;

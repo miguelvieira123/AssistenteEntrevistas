@@ -4,17 +4,16 @@ import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
+import com.museupessoa.maf.assistenteentrevistas.adapters.MainActivityPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
-
-import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity {
     public final  String APP_NAME = "AssistenteEntrevistas";
     ViewPager pager;
-    MyPagerAdapter myPagerAdapter;
+    MainActivityPagerAdapter myPagerAdapter;
     SlidingTabLayout tabs;
     CharSequence Titles[]={"Home","Projetos","Entrevistas","Definições"};
     int Numboftabs =4;
@@ -28,11 +27,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
            if(General.createStructOfFolders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
+=======
+
+           if(General.createStructOfForders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
+>>>>>>> alex
                 General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
                       "Geral",info,questions,urls);
 
-                myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
+                myPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
                 pager = (ViewPager) findViewById(R.id.pager);
                 pager.setAdapter(myPagerAdapter);
                 tabs = (SlidingTabLayout) findViewById(R.id.tabs);

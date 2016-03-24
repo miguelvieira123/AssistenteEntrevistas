@@ -23,7 +23,7 @@ public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapt
 
         InterviewViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.CV_Project);
+            cv = (CardView)itemView.findViewById(R.id.CV_Interview);
             interviewName = (TextView)itemView.findViewById(R.id.ProjectName);
 
         }

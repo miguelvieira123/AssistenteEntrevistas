@@ -17,6 +17,16 @@ public class General {
             File f = new File(path + "/Entervistas");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
+
+            f = new File(path + "/Entervistas/e000");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+
+            f = new File(path + "/Entervistas/e001");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+
+
             f = new File(path + "/Projetos");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);

@@ -17,8 +17,9 @@ public class InterviewUnit {
     static public List<InterviewUnit> getInterviews(String PATH){
         String[] list;
         List<InterviewUnit> interviews = new ArrayList<>();
-        File f = new File(PATH+"/Entervistas");
+        File f = new File(PATH+"/Entrevistas");
         list = f.list();
+
         for(int i=0;i<list.length;i++)interviews.add(new InterviewUnit(list[i]));
         return  interviews;
     }

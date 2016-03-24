@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.units.InterviewUnit;
-import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapt
         InterviewViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.CV_Interview);
-            interviewName = (TextView)itemView.findViewById(R.id.ProjectName);
+            interviewName = (TextView)itemView.findViewById(R.id.InterviewName);
 
         }
     }
@@ -36,8 +35,8 @@ public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapt
     @Override
     public RVInterviewAdapter.InterviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.interview_item_cv, parent, false);
-        InterviewViewHolder pvh = new InterviewViewHolder(v);
-        return pvh;
+        InterviewViewHolder ivh = new InterviewViewHolder(v);
+        return ivh;
     }
 
     @Override

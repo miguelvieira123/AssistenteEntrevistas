@@ -37,7 +37,7 @@ public class Interviews extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(llm);//rebenta aqui
+        recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
         interviewUnits = InterviewUnit.getInterviews(Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString());
         initializeAdapter();

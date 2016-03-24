@@ -11,6 +11,7 @@ public class ProjectUnit {
     public ProjectUnit(String name) {
         this.name = name;
     }
+
     static public List<ProjectUnit> getProjects(String PATH){
         String[] list;
         List<ProjectUnit> projects = new ArrayList<>();;

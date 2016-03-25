@@ -1,8 +1,15 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.content.Context;
+import android.util.Log;
+
 import org.w3c.dom.Document;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -14,17 +21,32 @@ import javax.xml.transform.stream.StreamResult;
 public class General {
     public static boolean createStructOfFolders(String path){
         try {
-            File f = new File(path + "/Entervistas");
+            File f = new File(path + "/Entrevistas");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
 
-            f = new File(path + "/Entervistas/e000");
+            // BEGIN - Entrevista Fake!
+            f = new File(path + "/Entrevistas/e000");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+            f = new File(path + "/Entrevistas/e000/Audio");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+            f = new File(path + "/Entrevistas/e000/Fotos");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+            f = new File(path + "/Entrevistas/e000/manifesto.xml");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
 
-            f = new File(path + "/Entervistas/e001");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
+            File outputFile = new File(path + "/Entrevistas/e000", "manifesto2.xml");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+            writer.write("cenas\n");
+            writer.flush();
+            writer.close();
+
+
+            // END - Entrevista Fake!
 
 
             f = new File(path + "/Projetos");

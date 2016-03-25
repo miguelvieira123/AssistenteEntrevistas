@@ -24,8 +24,7 @@ public class General {
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
 
-
-
+            // BEGIN - Entrevista Fake!
             f = new File(path + "/Entrevistas/e000/Audio");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);

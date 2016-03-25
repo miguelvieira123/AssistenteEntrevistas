@@ -9,6 +9,9 @@ import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.adapters.MainActivityPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     public final  String APP_NAME = "AssistenteEntrevistas";
@@ -16,11 +19,8 @@ public class MainActivity extends AppCompatActivity {
     MainActivityPagerAdapter myPagerAdapter;
     SlidingTabLayout tabs;
     CharSequence Titles[]={"Home","Projetos","Entrevistas","Definições"};
-    int Numboftabs =4;
-    String[] info={"Name","Apelido","Idade","Profissão"};
-    String[] questions = {"Pergunta 1","Pergunta 2","Pergunta 3","Pergunta 4","Pergunta 5"};
-    String[] urls = {"URL 1"};
 
+    int Numboftabs =4;
     final String TAG ="AssistenteEntrevistas";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
            if(General.createStructOfFolders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
                 General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
-                      "Geral",info,questions,urls);
+                      "Geral",General.defaultMetaListInit(),General.defaultQuestionsListInit(),General.defaultLinksListInit());
 
                 myPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
                 pager = (ViewPager) findViewById(R.id.pager);

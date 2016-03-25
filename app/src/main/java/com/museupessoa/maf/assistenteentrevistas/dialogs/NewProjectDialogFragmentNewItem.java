@@ -1,5 +1,6 @@
 package com.museupessoa.maf.assistenteentrevistas.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,38 +18,41 @@ import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.NewProject;
 import com.museupessoa.maf.assistenteentrevistas.R;
+import com.museupessoa.maf.assistenteentrevistas.newproject.MetaInfo;
 
 
-public class NewProjectDialogFragmentNewItem extends DialogFragment implements
-        DialogInterface.OnClickListener {
-    private View form=null;
+
+
+public class NewProjectDialogFragmentNewItem extends DialogFragment {
+    EditText test;
+    public static final String REQUEST = "add";
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.newproject_dialog_fragment, null);
+        test = (EditText) view.findViewById(R.id.NewProjectNameEdit);
+        builder.setView(view);
+        builder.setTitle("Novo Elemento")
+                .setPositiveButton("Adicionar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(test.getText().toString().isEmpty())Toast.makeText(getActivity(),
+                                "O elemento não pode ser vasio", Toast.LENGTH_SHORT).show();
+                        else {
+                            Intent intent = new Intent();
+                            intent.putExtra(REQUEST, test.getText().toString());
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                        }
 
-        form= getActivity().getLayoutInflater()
-                .inflate(R.layout.newproject_dialog_fragment, null);
-        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-        return(builder.setTitle("Novo Elemento").setView(form)
-                .setPositiveButton("Adicionar", this)
-                .setNegativeButton("Cancelar", null).create());
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getActivity(), "Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return builder.create();
     }
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
 
-        EditText name=(EditText)form.findViewById(R.id.NewProjectNameEdit);
-        String projectName = name.getText().toString();
-        if(!projectName.isEmpty()) {
-
-        }
-        else Toast.makeText(getActivity(), "Não pode ser vasio", Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    public void onDismiss(DialogInterface unused) {
-        super.onDismiss(unused);
-    }
-    @Override
-    public void onCancel(DialogInterface unused) {
-        super.onCancel(unused);
-    }
 }
 

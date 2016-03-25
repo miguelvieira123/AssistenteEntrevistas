@@ -7,4 +7,7 @@
     <color name="fabPrimary">#ff7054</color>
     <color name="fabPressed">#dab1a5</color>
     <color name="fabRipple">#8f8e8d</color>
+
+    <color name="grey_ultra_light">#dee4d0</color>
+
 </resources>

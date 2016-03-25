@@ -3,6 +3,8 @@ package com.museupessoa.maf.assistenteentrevistas;
 import org.w3c.dom.Document;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -16,7 +18,7 @@ public class General {
 
         try {
 
-            File f = new File(path + "/Entervistas");
+            File f = new File(path + "/Entrevistas");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
             f = new File(path + "/Projetos");
@@ -26,10 +28,12 @@ public class General {
         } catch (Exception e1) {
             return false;
         }
-
     }
 
-    public static boolean createProject(String path,String projectName,String info[], String questions[], String urls[]){
+
+
+
+    public static boolean createProject(String path,String projectName,List<String> info, List<String> questions, List<String> urls){
         try {
             File f  = new File(path + "/Projetos/" + projectName + ".xml");
             if(!f.exists()){
@@ -41,24 +45,24 @@ public class General {
                 org.w3c.dom.Element n1;
                 n1 = doc.createElement("meta");
                 org.w3c.dom.Element child;
-                for (int i=0; i<info.length ;i++) {
+                for (int i=0; i<info.size() ;i++) {
                     child = doc.createElement("info");
                     child.setAttribute("id", Integer.toString(i));
-                    child.setTextContent(info[i]);
+                    child.setTextContent(info.get(i));
                     n1.appendChild(child);
                 }
                 root.appendChild(n1);
                 n1 = doc.createElement("perguntas");
-                for (int i=0; i<questions.length ;i++) {
+                for (int i=0; i<questions.size() ;i++) {
                     child = doc.createElement("p");
-                    child.setTextContent(questions[i]);
+                    child.setTextContent(questions.get(i));
                     n1.appendChild(child);
                 }
                 root.appendChild(n1);
                 n1 = doc.createElement("urls");
-                for (int i=0; i<urls.length ;i++) {
+                for (int i=0; i<urls.size() ;i++) {
                     child = doc.createElement("url");
-                    child.setTextContent(urls[i]);
+                    child.setTextContent(urls.get(i));
                     n1.appendChild(child);
                 }
                 root.appendChild(n1);
@@ -75,4 +79,35 @@ public class General {
 
     }
 
+    public static List<String> defaultMetaListInit() {
+
+        List<String> local = new ArrayList<String>();
+        local.add("Nome");
+        local.add("Apelido");
+        local.add("Idade");
+        local.add("Profissão");
+        local.add("Morada");
+        return local;
+
+    }
+    public static List<String> defaultQuestionsListInit() {
+
+        List<String> local = new ArrayList<String>();
+        local.add("Pergunta 1");
+        local.add("Pergunta 2");
+        local.add("Pergunta 3");
+        local.add("Pergunta 4");
+        local.add("Pergunta 5");
+        return local;
+
+    }
+    public static List<String> defaultLinksListInit() {
+
+        List<String> local = new ArrayList<String>();
+        local.add("link 1");
+        local.add("link 2");
+
+        return local;
+
+    }
 }

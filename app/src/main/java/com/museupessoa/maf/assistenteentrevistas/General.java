@@ -31,15 +31,17 @@ public class General {
             f = new File(path + "/Entrevistas/e000/Fotos");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
-            f = new File(path + "/Entrevistas/e000/manifesto.xml");
+            f = new File(path + "/Entrevistas/e000");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
 
-            File outputFile = new File(path + "/Entrevistas/e000", "manifesto2.xml");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-            writer.write("cenas\n");
-            writer.flush();
-            writer.close();
+            File outputFile = new File(path + "/Entrevistas/e000", "manifesto.xml");
+            if (!f.exists()){
+                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+                writer.write("<manifesto>\n\t<meta>\n\t\t<nome>Dionísio Mbanze</nome>\n\t</meta>\n</manifesto>\n");
+                writer.flush();
+                writer.close();
+            }
 
 
             // END - Entrevista Fake!

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
@@ -19,12 +20,13 @@ public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapt
 
         CardView cv;
         TextView interviewName;
+        ImageView interviewPic;
 
         InterviewViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.CV_Interview);
             interviewName = (TextView)itemView.findViewById(R.id.InterviewName);
-
+            interviewPic = (ImageView) itemView.findViewById(R.id.foto_entrevista);
         }
     }
     List<InterviewUnit> interviews;
@@ -42,6 +44,7 @@ public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapt
     @Override
     public void onBindViewHolder(RVInterviewAdapter.InterviewViewHolder holder, int position) {
         holder.interviewName.setText( interviews.get(position).name);
+        holder.interviewPic.setImageBitmap( interviews.get(position).foto);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class ProjectUnit {
         List<ProjectUnit> projects = new ArrayList<>();;
         File f = new File(PATH+"/Projetos");
         list = f.list();
-        for(int i=0;i<list.length;i++)projects.add(new ProjectUnit(list[i]));
+        for(int i=0;i<list.length;i++)projects.add(new ProjectUnit(list[i].substring(0,list[i].length()-4)));
         return  projects;
     }
 }

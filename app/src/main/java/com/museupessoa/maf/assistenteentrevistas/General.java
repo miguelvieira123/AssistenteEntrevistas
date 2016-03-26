@@ -25,25 +25,42 @@ public class General {
             f.setWritable(true);
 
             // BEGIN - Entrevista Fake!
+            f = new File(path + "/Entrevistas/e000");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
             f = new File(path + "/Entrevistas/e000/Audio");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
             f = new File(path + "/Entrevistas/e000/Fotos");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
-            f = new File(path + "/Entrevistas/e000");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
 
             File outputFile = new File(path + "/Entrevistas/e000", "manifesto.xml");
-            if (!f.exists()){
+            if (!outputFile.exists()){
                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 writer.write("<manifesto>\n\t<meta>\n\t\t<nome>Dionísio Mbanze</nome>\n\t</meta>\n</manifesto>\n");
                 writer.flush();
                 writer.close();
             }
+            // END - Entrevista Fake!
+            // BEGIN - Entrevista Fake!
+            f = new File(path + "/Entrevistas/e001");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+            f = new File(path + "/Entrevistas/e001/Audio");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+            f = new File(path + "/Entrevistas/e001/Fotos");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
 
-
+            outputFile = new File(path + "/Entrevistas/e001", "manifesto.xml");
+            if (!outputFile.exists()){
+                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+                writer.write("<manifesto>\n\t<meta>\n\t\t<nome>Graça Sucá</nome>\n\t</meta>\n</manifesto>\n");
+                writer.flush();
+                writer.close();
+            }
             // END - Entrevista Fake!
 
 

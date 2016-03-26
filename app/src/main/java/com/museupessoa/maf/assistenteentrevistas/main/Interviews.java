@@ -41,6 +41,10 @@ public class Interviews extends Fragment {
         recyclerView.setHasFixedSize(true);
         interviewUnits = InterviewUnit.getInterviews(Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString());
         initializeAdapter();
+
+
+
+
     }
 
 

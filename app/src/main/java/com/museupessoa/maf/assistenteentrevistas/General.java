@@ -1,11 +1,16 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.util.Log;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -14,6 +19,7 @@ import javax.xml.transform.stream.StreamResult;
 
 
 public class General {
+    public static final String TAG ="AssistenteEntrevistas";
     public static boolean createStructOfForders(String path){
 
         try {
@@ -33,10 +39,10 @@ public class General {
 
 
 
-    public static boolean createProject(String path,String projectName,List<String> info, List<String> questions, List<String> urls){
+    public static boolean createProject(String path,String projectName,List<String> info, List<String> questions, List<String> urls, int status){
         try {
             File f  = new File(path + "/Projetos/" + projectName + ".xml");
-            if(!f.exists()){
+            if(!f.exists()||status==2){
                 Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
                 org.w3c.dom.Element root;
                 root = doc.createElement("project");
@@ -79,6 +85,69 @@ public class General {
 
     }
 
+    public static List<String> getProjectMeta(String nameProject, String PATH){
+        List<String> meta = new ArrayList<String>();
+        try {
+            File f  = new File(PATH + "/Projetos/" + nameProject + ".xml");
+            if(f.exists()) {
+                DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docB = docBF.newDocumentBuilder();
+                Document xmlRead = docB.parse(f);
+                NodeList list = xmlRead.getElementsByTagName("info");
+                for(int i=0; i<list.getLength();i++){
+                    Node elem = list.item(i);
+                    meta.add(elem.getTextContent());
+                }
+            }
+            return meta;
+
+        } catch (Exception e1) {
+            return meta;
+        }
+    }
+    public static List<String> getProjectQuestions(String nameProject, String PATH){
+        List<String> questions = new ArrayList<String>();
+        try {
+            File f  = new File(PATH + "/Projetos/" + nameProject + ".xml");
+            if(f.exists()) {
+                DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docB = docBF.newDocumentBuilder();
+                Document xmlRead = docB.parse(f);
+                NodeList list = xmlRead.getElementsByTagName("p");
+                for(int i=0; i<list.getLength();i++){
+                    Node elem = list.item(i);
+                    questions.add(elem.getTextContent());
+                }
+            }
+            return questions;
+
+        } catch (Exception e1) {
+            return questions;
+        }
+    }
+    public static List<String> getProjectUrls(String nameProject, String PATH){
+        List<String> urls = new ArrayList<String>();
+        try {
+            File f  = new File(PATH + "/Projetos/" + nameProject + ".xml");
+            if(f.exists()) {
+                DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docB = docBF.newDocumentBuilder();
+                Document xmlRead = docB.parse(f);
+                NodeList list = xmlRead.getElementsByTagName("url");
+                for(int i=0; i<list.getLength();i++){
+                    Node elem = list.item(i);
+                    urls.add(elem.getTextContent());
+                }
+            }
+            return urls;
+
+        } catch (Exception e1) {
+            return urls;
+        }
+    }
+
+
+
     public static List<String> defaultMetaListInit() {
 
         List<String> local = new ArrayList<String>();
@@ -90,8 +159,7 @@ public class General {
         return local;
 
     }
-    public static List<String> defaultQuestionsListInit() {
-
+    public static List<String>  defaultQuestionsListInit(){
         List<String> local = new ArrayList<String>();
         local.add("Pergunta 1");
         local.add("Pergunta 2");
@@ -99,15 +167,12 @@ public class General {
         local.add("Pergunta 4");
         local.add("Pergunta 5");
         return local;
-
     }
-    public static List<String> defaultLinksListInit() {
-
+    public static List<String>  defaultLinksListInit(){
         List<String> local = new ArrayList<String>();
-        local.add("link 1");
-        local.add("link 2");
-
+        local.add("Link 1");
+        local.add("Link 2");
         return local;
-
     }
+
 }

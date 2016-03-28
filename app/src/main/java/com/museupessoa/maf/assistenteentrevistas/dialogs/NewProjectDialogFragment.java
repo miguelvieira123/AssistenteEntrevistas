@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,12 +18,42 @@ import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.NewProject;
 import com.museupessoa.maf.assistenteentrevistas.R;
-public class NewProjectDialogFragment extends DialogFragment implements
-        DialogInterface.OnClickListener {
-    private View form=null;
+import com.museupessoa.maf.assistenteentrevistas.main.Projects;
+
+public class NewProjectDialogFragment extends DialogFragment  {
+    EditText test;
+    public static final String REQUEST = "new";
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.newproject_dialog_fragment, null);
+        test = (EditText) view.findViewById(R.id.NewProjectNameEdit);
+        builder.setView(view);
+        builder.setTitle("Novo Projeto")
+                .setPositiveButton("Aplicar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(test.getText().toString().isEmpty())Toast.makeText(getActivity(),
+                                "O nome do projecto não pode ser vasio", Toast.LENGTH_SHORT).show();
+                        else {
+                            Intent intent = new Intent();
+                            intent.putExtra(REQUEST, test.getText().toString());
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), Projects.NEW_PROJECT, intent);
+
+                        }
+
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getActivity(), "Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return builder.create();
+    }
+
+     /*
         form= getActivity().getLayoutInflater()
                 .inflate(R.layout.newproject_dialog_fragment, null);
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
@@ -50,4 +81,5 @@ public class NewProjectDialogFragment extends DialogFragment implements
     public void onCancel(DialogInterface unused) {
         super.onCancel(unused);
     }
+    */
 }

@@ -21,82 +21,49 @@ import java.util.List;
 
 
 public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.ProjectViewHolder> {
-
-    public static class ProjectViewHolder extends RecyclerView.ViewHolder {
+    private OnItemClickListener listener;
+    public static class ProjectViewHolder extends RecyclerView.ViewHolder  implements View.OnLongClickListener {
 
         CardView cv;
         TextView projectName;
         private final  String TAG="AssistenteEntrevistas";
+        private OnItemClickListener listener;
+        private int position;
 
         ProjectViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.CV_Project);
             projectName = (TextView)itemView.findViewById(R.id.ProjectName);
-
-            /*cv.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()){
-                        case 0:
-                            //v.setBackgroundColor(Color.RED);
-                            break;
-                        case 1:
-                            //v.setBackgroundColor(Color.WHITE);
-                            v.destroyDrawingCache();
-                            break;
-                        case 2:
-                           v.setBackgroundColor(Color.GRAY);
-                            v.destroyDrawingCache();
-
-                            break;
-                    }
-                    return true;
-                }
-            });*/
-          /*  cv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Log.d(TAG, "11111111");
-                }
-            });
-
-
-            cv.setOnHoverListener(new View.OnHoverListener() {
-                @Override
-                public boolean onHover(View v, MotionEvent event) {
-                    cv.setBackgroundColor(Color.RED);
-                    return true;
-                }
-            });
-            cv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-
-                }
-            });
             cv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    cv.setBackgroundColor(Color.RED);
-                    return false;
+                    if(listener!=null)
+                        listener.onItemClick(v,position);
+                    return  false;
                 }
             });
-            cv.setOnDragListener(new View.OnDragListener() {
-                @Override
-                public boolean onDrag(View v, DragEvent event) {
-                    cv.setBackgroundColor(Color.BLUE);
-                    return false;
-                }
-            });*/
+
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
+        }
+        public void setOnItemClickListener(OnItemClickListener listener,int position ){
+            this.listener = listener;
+            this.position = position;
+        }
     }
 
     List<ProjectUnit> projects;
     public RVProjectAdapter(List<ProjectUnit> projects){
         this.projects =  projects;
     }
+
+    public  void RVUpdateListAdapter(List<ProjectUnit> projectUnits){
+        this.projects = projectUnits;
+    }
+
     @Override
     public RVProjectAdapter.ProjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item_cv, parent, false);
@@ -107,6 +74,7 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
     @Override
     public void onBindViewHolder(RVProjectAdapter.ProjectViewHolder holder, int position) {
         holder.projectName.setText( projects.get(position).name);
+        holder.setOnItemClickListener(listener, position);
     }
 
     @Override
@@ -114,5 +82,11 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
         return projects.size();
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
 
+    public interface OnItemClickListener{
+        public  void onItemClick(View v, int position);
+    }
 }

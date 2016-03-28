@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
            if(General.createStructOfForders(Environment.getExternalStoragePublicDirectory("/"+APP_NAME).toString())){
                 General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
-                      "Geral",General.defaultMetaListInit(),General.defaultQuestionsListInit(),General.defaultLinksListInit());
+                      "Geral",General.defaultMetaListInit(),General.defaultQuestionsListInit(),General.defaultLinksListInit(),1);
 
                 myPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
                 pager = (ViewPager) findViewById(R.id.pager);

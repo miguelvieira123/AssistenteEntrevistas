@@ -25,11 +25,5 @@
         fab:fab_colorPressed="@color/fabPressed"
         fab:fab_colorRipple="@color/fabRipple" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/NewProjectName"
-        android:layout_gravity="center" />
-
 
 </FrameLayout>

@@ -13,31 +13,40 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.NewProject;
 import com.museupessoa.maf.assistenteentrevistas.R;
+import com.museupessoa.maf.assistenteentrevistas.adapters.RVNewProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectItemActionDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.ProjectActionDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.List;
 
 
 public class Projects extends Fragment{
-
+    RVProjectAdapter adapter;
     private List<ProjectUnit> projectUnits;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
     private final  String TAG="AssistenteEntrevistas";
-
+    public static final int NEW_PROJECT = 1;
+    public static final int DELETE_PROJECT = 2;
+    public static final int EDIT_PROJECT = 3;
+    private static final int REQUEST = 1;
 
 
     @Override
@@ -56,31 +65,69 @@ public class Projects extends Fragment{
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
         projectUnits = ProjectUnit.getProjects(Environment.getExternalStoragePublicDirectory("/"+getResources().getString(R.string.APP_NAME)).toString());
-        initializeAdapter();
+        adapter = new RVProjectAdapter(projectUnits);
+        recyclerView.setAdapter(adapter);
 
        fab.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                NewProjectDialogFragment dialogProjectName = new NewProjectDialogFragment();
+               dialogProjectName.setTargetFragment(Projects.this, REQUEST);
                dialogProjectName.show(fragmentManager, "NewProjectDialogFragment");
-               //dialogProjectName.getArguments();
-               // getFragmentManager().beginTransaction().replace(R.id.fragmentParentViewGroup, new NewProject()).commit();
-               //Intent intent = new Intent(getActivity(), NewProject.class);
-               //startActivity(intent);
-
            }
        });
+        adapter.setOnItemClickListener((new RVProjectAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                android.support.v4.app.FragmentManager fragmentActionManager = getFragmentManager();
+                ProjectActionDialogFragment dialogAction = new ProjectActionDialogFragment();
+                dialogAction.setTargetFragment(Projects.this, position);
+                dialogAction.show(fragmentActionManager, "ProjectItemActionDialogFragment");
+            }
+        }));
+
        //fab.attachToRecyclerView(recyclerView);
-
-
     }
 
 
-    private void initializeAdapter(){
-        RVProjectAdapter adapter = new RVProjectAdapter(projectUnits);
-        recyclerView.setAdapter(adapter);
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case Projects.NEW_PROJECT:
+                switch (requestCode) {
+                    case 1:
+                        if(ProjectUnit.ifExists(data.getStringExtra(NewProjectDialogFragment.REQUEST),projectUnits)){
+                            Toast.makeText(getActivity(),"Este projeto já existe", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getActivity(), NewProject.class);
+                            intent.putExtra("name",data.getStringExtra(NewProjectDialogFragment.REQUEST));
+                            intent.putExtra("status",1);
+                            startActivity(intent);
+                        }
+                        break;
+                }
+                break;
+            case Projects.EDIT_PROJECT:
+                Intent intent = new Intent(getActivity(), NewProject.class);
+                intent.putExtra("name",projectUnits.get(requestCode).name);
+                intent.putExtra("status",2);
+                startActivity(intent);
+                Toast.makeText(getActivity(),"EDIT",Toast.LENGTH_LONG).show();
+                break;
+            case  Projects.DELETE_PROJECT:
+                if(ProjectUnit.deleteProject(projectUnits.get(requestCode).name,
+                        Environment.getExternalStoragePublicDirectory("/"+getResources().getString(R.string.APP_NAME)).toString())) {
+                    projectUnits.remove(requestCode);
+                    adapter.RVUpdateListAdapter(projectUnits);
+                    recyclerView.setAdapter(adapter);
+                    Toast.makeText(getActivity(), "Este projeto foi eliminado", Toast.LENGTH_LONG).show();
+                }
+                else Toast.makeText(getActivity(), "Erro", Toast.LENGTH_LONG).show();
+                break;
+        }
     }
-
-
 }

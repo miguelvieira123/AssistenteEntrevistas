@@ -1,24 +1,16 @@
 package com.museupessoa.maf.assistenteentrevistas.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.NewProject;
-import com.museupessoa.maf.assistenteentrevistas.R;
+import com.museupessoa.maf.assistenteentrevistas.main.Projects;
 
-public class NewProjectItemActionDialogFragment extends DialogFragment {
-    public static final String ACTION = "action";
-
-
+public class ProjectActionDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());;
@@ -26,15 +18,13 @@ public class NewProjectItemActionDialogFragment extends DialogFragment {
                 .setPositiveButton("Editar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent();
-                        //intent.putExtra(ACTION, element);
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), NewProject.EDIT, intent);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), Projects.EDIT_PROJECT, intent);
                     }
                 })
                 .setNegativeButton("Eliminar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent();
-                        //intent.putExtra(ACTION, element);
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), NewProject.DELETE, intent);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), Projects.DELETE_PROJECT, intent);
                     }
                 });
         return builder.create();

@@ -9,9 +9,7 @@ import com.museupessoa.maf.assistenteentrevistas.main.Interviews;
 import com.museupessoa.maf.assistenteentrevistas.main.Main;
 import com.museupessoa.maf.assistenteentrevistas.main.Projects;
 
-/**
- * Created by smit on 24.03.2016.
- */
+
 public class NewProjectPagerAdapter extends FragmentStatePagerAdapter {
     CharSequence Titles[];
     int NumbOfTabs;
@@ -44,4 +42,5 @@ public class NewProjectPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return NumbOfTabs;
     }
+
 }

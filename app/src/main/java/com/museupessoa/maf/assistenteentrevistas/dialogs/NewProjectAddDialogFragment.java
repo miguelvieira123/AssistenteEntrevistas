@@ -15,7 +15,7 @@ public class NewProjectAddDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Queria criar este projeto?")
+        builder.setTitle("Quer criar este projeto?")
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         ( (NewProject)getActivity()).okClicked();

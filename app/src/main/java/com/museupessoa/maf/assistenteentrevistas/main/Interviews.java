@@ -9,12 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.melnykov.fab.FloatingActionButton;
+import com.museupessoa.maf.assistenteentrevistas.Interview_main.Interview;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVInterviewAdapter;
-import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.units.InterviewUnit;
-import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.List;
 
@@ -22,35 +23,46 @@ import java.util.List;
 public class Interviews extends Fragment {
     private List<InterviewUnit> interviewUnits;
     private RecyclerView recyclerView;
+    private FloatingActionButton fab;
+    RVInterviewAdapter adapter;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View interview  = inflater.inflate(R.layout.interviews,container,false);
         recyclerView = (RecyclerView) interview.findViewById(R.id.recyclerView);
+        fab = (FloatingActionButton) interview.findViewById(R.id.fab);
         return interview;
     }
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
         interviewUnits = InterviewUnit.getInterviews(Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString());
-        initializeAdapter();
-
-
-
-
-    }
-
-
-    private void initializeAdapter(){
-        RVInterviewAdapter adapter = new RVInterviewAdapter(interviewUnits);
+        adapter = new RVInterviewAdapter(interviewUnits);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new RVInterviewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Toast.makeText(v.getContext(),"a abrir:"+interviewUnits.get(position).name, Toast.LENGTH_SHORT).show();
+                android.support.v4.app.FragmentManager fragmentActionManager = getFragmentManager();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
+
+                //Interview interview = (Interview) getFragmentManager().findFragmentById(R.id.interview_main);
+                Interview interview = new Interview(interviewUnits.get(position).path);
+                fragmentTransaction.replace(R.id.interviews_list,interview);
+                fragmentTransaction.commit();
+
+            }
+        });
+
+
     }
 
 

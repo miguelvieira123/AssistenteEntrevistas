@@ -18,9 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewProject"
-            android:label="New Project"
-            ></activity>
+        <activity
+            android:name=".NewProject"
+            android:label="New Project" />
+        <activity android:name=".InterviewActivity"></activity>
     </application>
 
 </manifest>

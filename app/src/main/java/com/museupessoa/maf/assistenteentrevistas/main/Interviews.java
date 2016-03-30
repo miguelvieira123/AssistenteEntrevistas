@@ -1,5 +1,6 @@
 package com.museupessoa.maf.assistenteentrevistas.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.museupessoa.maf.assistenteentrevistas.InterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.Interview_main.Interview;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVInterviewAdapter;
@@ -50,28 +52,12 @@ public class Interviews extends Fragment {
         adapter.setOnItemClickListener(new RVInterviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(v.getContext(),"a abrir:"+interviewUnits.get(position).name, Toast.LENGTH_SHORT).show();
-                android.support.v4.app.FragmentManager fragmentActionManager = getFragmentManager();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
-
-                //Interview interview = (Interview) getFragmentManager().findFragmentById(R.id.interview_main);
-                Interview interview = new Interview(interviewUnits.get(position).path);
-                fragmentTransaction.replace(R.id.interviews_list,interview);
-                fragmentTransaction.commit();
-
+                Intent intent = new Intent(getActivity(), InterviewActivity.class);
+                intent.putExtra("path",interviewUnits.get(position).path);
+                startActivity(intent);
             }
         });
 
-
     }
-
-
-
-
-
-
-
-
-
 
 }

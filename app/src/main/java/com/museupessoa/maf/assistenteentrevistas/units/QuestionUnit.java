@@ -46,8 +46,6 @@ public class QuestionUnit {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
                 NodeList perguntas = doc.getElementsByTagName("pergunta");
                 for (int i=0; i < perguntas.getLength(); i++){
-                    //res.add(perguntas.item(i).getNodeValue());
-                    //perguntas.item(i).getFirstChild().getNodeValue();
                     res.add(perguntas.item(i).getFirstChild().getNodeValue());
                 }
 

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVQuestionAdapter;
@@ -46,6 +47,12 @@ public class Interview extends Fragment {
         questionUnits = QuestionUnit.getQuestions(path);
         adapter = new RVQuestionAdapter(questionUnits);
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RVQuestionAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Toast.makeText(v.getContext(),"pergunt:"+questionUnits.get(position).question, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

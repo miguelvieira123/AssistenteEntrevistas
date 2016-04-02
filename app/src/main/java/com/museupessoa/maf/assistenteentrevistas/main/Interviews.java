@@ -54,6 +54,7 @@ public class Interviews extends Fragment {
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(getActivity(), InterviewActivity.class);
                 intent.putExtra("path",interviewUnits.get(position).path);
+                intent.putExtra("name",interviewUnits.get(position).name);
                 startActivity(intent);
             }
         });

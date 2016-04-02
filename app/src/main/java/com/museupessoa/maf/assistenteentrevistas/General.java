@@ -78,6 +78,9 @@ public class General {
         }
     }
 
+    public static boolean createInterview(){
+        return false;
+    }
 
 
 

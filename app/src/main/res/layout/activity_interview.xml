@@ -27,12 +27,36 @@
 
         </LinearLayout>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&lt;&lt;go back"
-            android:id="@+id/interview_go_back"
-            android:layout_gravity="left|top" />
+            android:id="@+id/rec_button"
+            android:layout_gravity="left|bottom"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/record_button" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/photo_button"
+            android:layout_gravity="right|bottom"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/photo_button" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/person_name"
+            android:layout_gravity="right|top"
+            android:text="pessoaX" />
+
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rec_chronometer"
+            android:layout_gravity="left|top"
+            android:textSize="20dp" />
+
     </FrameLayout>
 </RelativeLayout>

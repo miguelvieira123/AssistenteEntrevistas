@@ -43,7 +43,7 @@ public class General {
             File outputFile = new File(path + "/Entrevistas/e000", "manifesto.xml");
             if (!outputFile.exists()){
                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-                writer.write("<manifesto>\n\t<meta>\n\t\t<nome>Dionísio Mbanze</nome>\n\t</meta><pergunta>como disse?</pergunta><pergunta>o que?</pergunta>\n</manifesto>\n");
+                writer.write("<manifesto><audio contador='0'/>\n\t<meta>\n\t\t<nome>Dionísio Mbanze</nome>\n\t</meta><pergunta>Estudo</pergunta>\n<pergunta>Namoro</pergunta>\n<pergunta>Hobbys</pergunta>\n<pergunta>Trabalho</pergunta>\n<pergunta>Livros</pergunta>\n</manifesto>\n");
                 writer.flush();
                 writer.close();
             }

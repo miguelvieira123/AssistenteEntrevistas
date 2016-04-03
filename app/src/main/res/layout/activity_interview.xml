@@ -27,13 +27,17 @@
 
         </LinearLayout>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rec_button"
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="69dp"
+            android:layout_height="69dp"
+            android:textOn=""
+            android:textOff=""
             android:layout_gravity="left|bottom"
-            android:background="@android:color/transparent"
-            android:src="@mipmap/record_button" />
+            android:background="@drawable/ic_toggle_bg"
+            />
+
+
 
         <ImageButton
             android:layout_width="wrap_content"

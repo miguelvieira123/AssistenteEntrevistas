@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
                 General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
                       "Geral",General.defaultMetaListInit(),General.defaultQuestionsListInit(),General.defaultLinksListInit(),1);
 
+               General.createInterview(Environment.getExternalStorageDirectory() + "/" + APP_NAME, "Dionísio Silva", "e000");
+               General.createInterview(Environment.getExternalStorageDirectory() + "/" + APP_NAME, "Ana Clara Pereira", "e001");
+
                 myPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
                 pager = (ViewPager) findViewById(R.id.pager);
                 pager.setAdapter(myPagerAdapter);

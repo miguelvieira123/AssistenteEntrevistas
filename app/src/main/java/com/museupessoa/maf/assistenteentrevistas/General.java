@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,63 +24,89 @@ public class General {
 
     public static final String TAG ="AssistenteEntrevistas";
     public static boolean createStructOfFolders(String path){
-
         try {
             File f = new File(path + "/Entrevistas");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
 
-            // BEGIN - Entrevista Fake!
-            f = new File(path + "/Entrevistas/e000");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
-            f = new File(path + "/Entrevistas/e000/Audio");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
-            f = new File(path + "/Entrevistas/e000/Fotos");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
-
-            File outputFile = new File(path + "/Entrevistas/e000", "manifesto.xml");
-            if (!outputFile.exists()){
-                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-                writer.write("<manifesto><audio contador='0'/>\n\t<meta>\n\t\t<nome>Dionísio Mbanze</nome>\n\t</meta><pergunta>Estudo</pergunta>\n<pergunta>Namoro</pergunta>\n<pergunta>Hobbys</pergunta>\n<pergunta>Trabalho</pergunta>\n<pergunta>Livros</pergunta>\n</manifesto>\n");
-                writer.flush();
-                writer.close();
-            }
-            // END - Entrevista Fake!
-            // BEGIN - Entrevista Fake!
-            f = new File(path + "/Entrevistas/e001");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
-            f = new File(path + "/Entrevistas/e001/Audio");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
-            f = new File(path + "/Entrevistas/e001/Fotos");
-            if (!f.exists())if(!f.mkdirs())return false;
-            f.setWritable(true);
-
-            outputFile = new File(path + "/Entrevistas/e001", "manifesto.xml");
-            if (!outputFile.exists()){
-                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-                writer.write("<manifesto>\n\t<meta>\n\t\t<nome>Graça Sucá</nome>\n\t</meta>\n</manifesto>\n");
-                writer.flush();
-                writer.close();
-            }
-            // END - Entrevista Fake!
-
-
             f = new File(path + "/Projetos");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
+
             return true;
         } catch (Exception e1) {
             return false;
         }
     }
 
-    public static boolean createInterview(){
-        return false;
+    public static boolean createInterview(String path, String personName, String interviewCode){
+        try{
+            File f = new File(path + "/Entrevistas/" + interviewCode );
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+            f = new File(path + "/Entrevistas/" + interviewCode + "/Audio");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+            f = new File(path + "/Entrevistas/" + interviewCode + "/Fotos");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+
+            File outputFile = new File(path + "/Entrevistas/"+ interviewCode, "/manifesto.xml");
+            if (!outputFile.exists()){
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                org.w3c.dom.Element root;
+                root = doc.createElement("manifesto");
+                doc.appendChild(root);
+                org.w3c.dom.Element n1;
+                n1 = doc.createElement("meta");
+
+                // FAKE -----
+                org.w3c.dom.Element n2;
+                n2 = doc.createElement("nome");
+                n2.setTextContent(personName);
+                n1.appendChild(n2);
+                root.appendChild(n1);
+
+                n1 = doc.createElement("perguntas");
+                n2 = doc.createElement("pergunta");
+                n2.setTextContent("Profissão");
+                n1.appendChild(n2);
+                n2 = doc.createElement("pergunta");
+                n2.setTextContent("Estudos");
+                n1.appendChild(n2);
+                n2 = doc.createElement("pergunta");
+                n2.setTextContent("Namoro");
+                n1.appendChild(n2);
+                n2 = doc.createElement("pergunta");
+                n2.setTextContent("Literatura Favorita");
+                n1.appendChild(n2);
+                n2 = doc.createElement("pergunta");
+                n2.setTextContent("Atividades Desportivas");
+                n1.appendChild(n2);
+                root.appendChild(n1);
+                // FAKE -----
+
+
+                n1 = doc.createElement("audio");
+                n1.setAttribute("count", "0");
+                root.appendChild(n1);
+
+                n1 = doc.createElement("urls");
+                n2 = doc.createElement("url");
+                n1.appendChild(n2);
+                root.appendChild(n1);
+
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(path + "/Entrevistas/" + interviewCode + "/manifesto.xml");
+                trans.transform(xmlSource, result);
+
+            }
+            return true;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return false;
+        }
     }
 
 
@@ -205,17 +232,16 @@ public class General {
     }
     public static List<String>  defaultQuestionsListInit(){
         List<String> local = new ArrayList<String>();
-        local.add("Pergunta 1");
-        local.add("Pergunta 2");
-        local.add("Pergunta 3");
-        local.add("Pergunta 4");
-        local.add("Pergunta 5");
+        local.add("Profissão");
+        local.add("Estudos");
+        local.add("Namoro");
+        local.add("Literatura Favorita");
+        local.add("Atividades Desportivas");
         return local;
     }
     public static List<String>  defaultLinksListInit(){
         List<String> local = new ArrayList<String>();
-        local.add("Link 1");
-        local.add("Link 2");
+        local.add("http://www.museudapessoa.net/submicoes");
         return local;
     }
 

@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import android.widget.ToggleButton;
 import com.museupessoa.maf.assistenteentrevistas.Interview_main.Interview;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -50,6 +52,7 @@ public class InterviewActivity extends AppCompatActivity {
     private MediaRecorder mRecorder = null;
     private int conta_gravacoes;
     private String interview_path;
+    private String audio_file_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +78,59 @@ public class InterviewActivity extends AppCompatActivity {
         rec_time = (Chronometer) findViewById(R.id.rec_chronometer);
 
 
+
         //add Listenners to Buttons
         this.addListennerToButtons();
     }
 
+    public boolean newAudioTag(String question){
+        //FALTA: verificar se existe alguma gravação em curso.
+        try{
+            File outputFile = new File(interview_path + "/Audio/" + audio_file_name + ".xml" );
+            if (outputFile.exists()){
+                Document doc;
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(outputFile);
+                org.w3c.dom.Element root;
+                root = doc.getElementById(audio_file_name);
+                org.w3c.dom.Element n1;
+                n1 = doc.createElement("tag");
+                n1.setAttribute("time", rec_time.getText().toString());
+                n1.setTextContent(question);
+                root.appendChild(n1);
+                //doc.appendChild(root);
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(interview_path + "/Audio/" + audio_file_name + ".xml");
+                trans.transform(xmlSource, result);
+                Toast.makeText(this,"Tagged: ["+question+"] at "+rec_time.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    private boolean createAudioMetaInfo(String audioFileName){
+        try{
+            File outputFile = new File(interview_path + "/Audio/" + audioFileName + ".xml" );
+            if (!outputFile.exists()){
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                org.w3c.dom.Element root;
+                root = doc.createElement("tags-log");
+                root.setAttribute("id", audioFileName);
+                doc.appendChild(root);
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(interview_path + "/Audio/" + audioFileName + ".xml");
+                trans.transform(xmlSource, result);
+            }
+            return true;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return false;
+        }
+    }
     private void addListennerToButtons(){
         ToggleButton rec = (ToggleButton) findViewById(R.id.toggleButton);
         rec.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -89,6 +140,8 @@ public class InterviewActivity extends AppCompatActivity {
                     rec_time.setBase(SystemClock.elapsedRealtime());
                     rec_time.start();
                     startRecording(interview_path);
+                    audio_file_name = "gravacao_"+conta_gravacoes;
+                    createAudioMetaInfo("gravacao_"+conta_gravacoes);
                 }else{
                     rec_time.stop();
                     stopRecording();

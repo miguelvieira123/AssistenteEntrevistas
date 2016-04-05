@@ -1,5 +1,6 @@
 package com.museupessoa.maf.assistenteentrevistas.Interview_main;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.museupessoa.maf.assistenteentrevistas.InterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVQuestionAdapter;
 import com.museupessoa.maf.assistenteentrevistas.units.QuestionUnit;
@@ -50,7 +52,11 @@ public class Interview extends Fragment {
         adapter.setOnItemClickListener(new RVQuestionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(v.getContext(),"pergunt:"+questionUnits.get(position).question, Toast.LENGTH_SHORT).show();
+
+                Activity activity = getActivity();
+                if (activity instanceof InterviewActivity){
+                    ((InterviewActivity) activity).newAudioTag(questionUnits.get(position).question);
+                }
             }
         });
     }

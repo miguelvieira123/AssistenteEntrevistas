@@ -1,7 +1,5 @@
 package com.museupessoa.maf.assistenteentrevistas.adapters;
 
-import android.content.ClipData;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,30 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
-import com.museupessoa.maf.assistenteentrevistas.units.InterviewUnit;
+import com.museupessoa.maf.assistenteentrevistas.units.QuestionUnit;
 
 import java.util.List;
 
+/**
+ * Created by Miguel on 29/03/2016.
+ */
 
-public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapter.InterviewViewHolder> {
+public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter.QuestionViewHolder> {
     private OnItemClickListener listener;
-    public static class InterviewViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    public static class QuestionViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
         CardView cv;
-        TextView interviewName;
-        ImageView interviewPic;
+        TextView question_row;
+
         private OnItemClickListener listener;
         private int position;
 
-        InterviewViewHolder(View itemView) {
+        QuestionViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.CV_Interview);
+            cv = (CardView)itemView.findViewById(R.id.InterviewQuestionsCV);
             itemView = cv;
-            interviewName = (TextView)itemView.findViewById(R.id.InterviewName);
-            interviewPic = (ImageView) itemView.findViewById(R.id.foto_entrevista);
+            question_row = (TextView)itemView.findViewById(R.id.InterviewQuestion);
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -51,28 +50,27 @@ public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapt
     }
 
 
-    List<InterviewUnit> interviews;
+    List<QuestionUnit> questions;
 
-    public RVInterviewAdapter(List<InterviewUnit> interviews){
-        this.interviews =  interviews;
+    public RVQuestionAdapter(List<QuestionUnit> questions){
+        this.questions =  questions;
     }
     @Override
-    public RVInterviewAdapter.InterviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.interview_item_cv, parent, false);
-        InterviewViewHolder ivh = new InterviewViewHolder(v);
+    public RVQuestionAdapter.QuestionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.interview_questions_cv, parent, false);
+        QuestionViewHolder ivh = new QuestionViewHolder(v);
         return ivh;
     }
 
     @Override
-    public void onBindViewHolder(final RVInterviewAdapter.InterviewViewHolder holder, final int position) {
-        holder.interviewName.setText(interviews.get(position).name);
-        holder.interviewPic.setImageBitmap(interviews.get(position).foto);
+    public void onBindViewHolder(final RVQuestionAdapter.QuestionViewHolder holder, final int position) {
+        holder.question_row.setText(questions.get(position).question);
         holder.setOnItemClickListener(listener, position);
     }
 
     @Override
     public int getItemCount() {
-        return interviews.size();
+        return questions.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -82,6 +80,4 @@ public  class RVInterviewAdapter extends   RecyclerView.Adapter<RVInterviewAdapt
     public interface OnItemClickListener{
         public  void onItemClick(View v, int position);
     }
-
-
 }

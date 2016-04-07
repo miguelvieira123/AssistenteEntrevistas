@@ -3,7 +3,6 @@ package com.museupessoa.maf.assistenteentrevistas.units;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
-import android.os.Environment;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -16,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +22,16 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-/**
- * Created by Miguel on 24/03/2016.
- */
+
 public class InterviewUnit {
     public String name;
     public Bitmap foto;
+    public String path;
 
-    public InterviewUnit(String name, Bitmap foto) {
+    public InterviewUnit(String name, Bitmap foto, String path) {
         this.name = name;
         this.foto = foto;
+        this.path = path;
     }
 
     static public List<InterviewUnit> getInterviews(String PATH){
@@ -53,8 +51,8 @@ public class InterviewUnit {
                 myBitmap = ThumbnailUtils.extractThumbnail(myBitmap, dimension, dimension);
             }
             // nome do entrevistado (Abrir XML) ----------------------------------------------------
-            //File file = new File(PATH+"/Entrevistas/e00"+i+"/manifesto.xml");
-            File manif_file = new File(PATH + "/Entrevistas/e00"+i, "manifesto.xml");
+            String interview_path = PATH + "/Entrevistas/e00" + i;
+            File manif_file = new File(interview_path, "manifesto.xml");
             String nome = "";
             try {
                 InputStream is = new FileInputStream(manif_file.getPath());
@@ -65,9 +63,6 @@ public class InterviewUnit {
                 NodeList nodeList = doc.getElementsByTagName("nome");
                 Node n = nodeList.item(0);
                 nome = n.getFirstChild().getNodeValue();
-                //nome = n.getNodeValue();
-
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ParserConfigurationException e) {
@@ -78,27 +73,10 @@ public class InterviewUnit {
                 e.printStackTrace();
             }
 
-            interviews.add(new InterviewUnit(nome, myBitmap));
+            interviews.add(new InterviewUnit(nome, myBitmap, interview_path));
         }
         return  interviews;
     }
-
-
-    public static final String getElementValue(Node elem) {
-        Node child;
-        if( elem != null){
-            if (elem.hasChildNodes()){
-                for( child = elem.getFirstChild(); child != null; child = child.getNextSibling() ){
-                    if( child.getNodeType() == Node.TEXT_NODE  ){
-                        return child.getNodeValue();
-                    }
-                }
-            }
-        }
-        return "";
-    }
-
-
 
 
     public static int getSquareCropDimensionForBitmap(Bitmap bitmap)

@@ -29,13 +29,13 @@
 
         <ToggleButton
             android:id="@+id/toggleButton"
-            android:layout_width="69dp"
-            android:layout_height="69dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:textOn=""
             android:textOff=""
             android:layout_gravity="left|bottom"
             android:background="@drawable/ic_toggle_bg"
-            />
+            android:padding="5dp" />
 
 
 

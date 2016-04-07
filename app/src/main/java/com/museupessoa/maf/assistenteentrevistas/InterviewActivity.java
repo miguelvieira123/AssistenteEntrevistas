@@ -176,6 +176,7 @@ public class InterviewActivity extends AppCompatActivity {
         } catch (IOException e) {
             //System.out.println(e.getMessage());
            // Log.e(LOG_TAG, "prepare() failed");
+            e.printStackTrace();
         }
         mRecorder.start();
     }

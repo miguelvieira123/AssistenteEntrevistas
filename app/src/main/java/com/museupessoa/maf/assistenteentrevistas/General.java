@@ -241,7 +241,7 @@ public class General {
     }
     public static List<String>  defaultLinksListInit(){
         List<String> local = new ArrayList<String>();
-        local.add("http://www.museudapessoa.net/submicoes");
+        local.add("http://www.museudapessoa.net/submissoes");
         return local;
     }
 

@@ -47,8 +47,9 @@ public class InterviewUnit {
             Bitmap myBitmap = null;
             if(imgFile.exists()){
                 myBitmap = decodeFile(imgFile);
-                int dimension = getSquareCropDimensionForBitmap(myBitmap);
-                myBitmap = ThumbnailUtils.extractThumbnail(myBitmap, dimension, dimension);
+                //Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
+                //int dimension = getSquareCropDimensionForBitmap(myBitmap);
+                myBitmap = ThumbnailUtils.extractThumbnail(myBitmap, 64, 64);
             }
             // nome do entrevistado (Abrir XML) ----------------------------------------------------
             String interview_path = PATH + "/Entrevistas/e00" + i;

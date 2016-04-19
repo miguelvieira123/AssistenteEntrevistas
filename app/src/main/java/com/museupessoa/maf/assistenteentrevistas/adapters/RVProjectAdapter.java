@@ -1,8 +1,5 @@
 package com.museupessoa.maf.assistenteentrevistas.adapters;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,10 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
-import com.museupessoa.maf.assistenteentrevistas.main.Configuration;
-import com.museupessoa.maf.assistenteentrevistas.main.Interviews;
-import com.museupessoa.maf.assistenteentrevistas.main.Main;
-import com.museupessoa.maf.assistenteentrevistas.main.Projects;
 import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.List;
@@ -66,7 +59,7 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
 
     @Override
     public RVProjectAdapter.ProjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item_cv, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cv_project_item, parent, false);
         ProjectViewHolder pvh = new ProjectViewHolder(v);
         return pvh;
     }

@@ -24,6 +24,11 @@
             android:label="New Project" />
 
         <activity
+            android:name=".NewInterviewActivity"
+            android:label="New Interview" />
+
+
+        <activity
             android:name=".InterviewActivity"
             android:label="Interview"
             android:parentActivityName=".MainActivity">

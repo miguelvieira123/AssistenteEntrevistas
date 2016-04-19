@@ -1,6 +1,5 @@
 package com.museupessoa.maf.assistenteentrevistas.newproject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
@@ -21,9 +19,6 @@ import com.museupessoa.maf.assistenteentrevistas.adapters.RVNewProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentEdit;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectItemActionDialogFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Urls extends Fragment {
@@ -36,7 +31,7 @@ public class Urls extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View urls = inflater.inflate(R.layout.newproject_urls,container,false);
+        View urls = inflater.inflate(R.layout.fragment_newproject_urls,container,false);
         recyclerView = (RecyclerView) urls.findViewById(R.id.NewProjectRV);
         fab = (FloatingActionButton) urls.findViewById(R.id.NewProjectfab);
 

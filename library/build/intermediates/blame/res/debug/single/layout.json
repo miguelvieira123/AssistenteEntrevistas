@@ -140,11 +140,11 @@
         "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
     },
     {
-        "merged": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_item_material.xml",
-        "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\select_dialog_item_material.xml"
-    },
-    {
         "merged": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\res\\merged\\debug\\layout\\abc_activity_chooser_view_list_item.xml",
         "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_activity_chooser_view_list_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_item_material.xml",
+        "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\select_dialog_item_material.xml"
     }
 ]

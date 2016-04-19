@@ -4,11 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.museupessoa.maf.assistenteentrevistas.main.Configuration;
-import com.museupessoa.maf.assistenteentrevistas.main.Interviews;
-import com.museupessoa.maf.assistenteentrevistas.main.Main;
-import com.museupessoa.maf.assistenteentrevistas.main.Projects;
-
 
 public class NewProjectPagerAdapter extends FragmentStatePagerAdapter {
     CharSequence Titles[];

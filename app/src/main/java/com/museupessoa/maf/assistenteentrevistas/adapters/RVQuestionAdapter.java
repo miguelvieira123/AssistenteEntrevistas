@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
@@ -57,7 +56,7 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
     }
     @Override
     public RVQuestionAdapter.QuestionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.interview_questions_cv, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cv_interview_questions, parent, false);
         QuestionViewHolder ivh = new QuestionViewHolder(v);
         return ivh;
     }

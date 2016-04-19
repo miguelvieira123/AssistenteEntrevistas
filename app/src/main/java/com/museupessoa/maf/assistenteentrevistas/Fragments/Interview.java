@@ -1,4 +1,4 @@
-package com.museupessoa.maf.assistenteentrevistas.Interview_main;
+package com.museupessoa.maf.assistenteentrevistas.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.InterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
@@ -28,21 +27,21 @@ public class Interview extends Fragment {
 
     public Interview() {
         this.path = null;
-    } //PROBLEMA! não tem forma de ir buscar o PATH para entrevista!
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.path = this.getArguments().getString("path");
-        View question = inflater.inflate(R.layout.interview_main, container, false);
-        recyclerView = (RecyclerView) question.findViewById(R.id.recyclerView);
-        return question;
+        View questions = inflater.inflate(R.layout.fragment_interview_questions, container, false);
+        recyclerView = (RecyclerView) questions.findViewById(R.id.recyclerView);
+        return questions;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        this.path = this.getArguments().getString("path");
         super.onActivityCreated(savedInstanceState);
+        this.path = this.getArguments().getString("path");
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);

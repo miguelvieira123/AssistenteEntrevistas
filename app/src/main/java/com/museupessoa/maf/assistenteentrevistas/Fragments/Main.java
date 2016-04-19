@@ -1,4 +1,4 @@
-package com.museupessoa.maf.assistenteentrevistas.main;
+package com.museupessoa.maf.assistenteentrevistas.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import com.museupessoa.maf.assistenteentrevistas.R;
 
 
-
-public class Configuration extends Fragment {
+public class Main extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View configuration = inflater.inflate(R.layout.configuration,container,false);
-        return configuration;
+        View main = inflater.inflate(R.layout.fragment_main,container,false);
+        return main;
     }
 }

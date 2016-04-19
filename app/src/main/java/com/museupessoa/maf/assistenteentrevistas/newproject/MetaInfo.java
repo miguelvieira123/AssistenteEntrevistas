@@ -1,37 +1,26 @@
 package com.museupessoa.maf.assistenteentrevistas.newproject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.NewProject;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVNewProjectAdapter;
-import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectAddDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentEdit;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectItemActionDialogFragment;
-import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class MetaInfo extends Fragment   {
@@ -48,7 +37,7 @@ public class MetaInfo extends Fragment   {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View metainfo = inflater.inflate(R.layout.newproject_metainfo,container,false);
+        View metainfo = inflater.inflate(R.layout.fragment_newproject_metainfo,container,false);
         recyclerView = (RecyclerView) metainfo.findViewById(R.id.NewProjectRV);
         fab = (FloatingActionButton) metainfo.findViewById(R.id.NewProjectfab);
         add = (FloatingActionButton) metainfo.findViewById(R.id.NewProjectAdd);

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +42,9 @@ public class SelectProjects extends Fragment {
         this.path = this.getArguments().getString("path");
         super.onActivityCreated(savedInstanceState);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+
+
+
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
         projectUnits = ProjectUnit.getProjects(path);
@@ -49,7 +54,11 @@ public class SelectProjects extends Fragment {
         adapter.setOnItemClickListener(new RVProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                v.setSelected(true);
+                //v.setSelected(true);
+                //v.setActivated(true);
+                //v.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.cardview_dark_background));
+                CardView c = (CardView) v.findViewById(R.id.CV_Project);
+                c.setCardBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.cardview_dark_background));
             }
         });
 

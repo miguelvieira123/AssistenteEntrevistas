@@ -6,6 +6,7 @@
     android:id="@+id/CV_Project"
     android:clickable="true"
     android:focusableInTouchMode="true"
+    
 
     >
 

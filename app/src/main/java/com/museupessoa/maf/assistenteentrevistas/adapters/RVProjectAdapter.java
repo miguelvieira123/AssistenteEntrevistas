@@ -15,7 +15,7 @@ import java.util.List;
 
 public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.ProjectViewHolder> {
     private OnItemClickListener listener;
-    public static class ProjectViewHolder extends RecyclerView.ViewHolder  implements View.OnLongClickListener {
+    public static class ProjectViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
 
         CardView cv;
         TextView projectName;
@@ -27,25 +27,24 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.CV_Project);
             projectName = (TextView)itemView.findViewById(R.id.ProjectName);
-            cv.setOnLongClickListener(new View.OnLongClickListener() {
+            cv.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
+                public void onClick(View v) {
                     if(listener!=null)
                         listener.onItemClick(v,position);
-                    return  false;
                 }
             });
 
         }
 
         @Override
-        public boolean onLongClick(View v) {
-            return false;
-        }
+        public void onClick(View v) {}
         public void setOnItemClickListener(OnItemClickListener listener,int position ){
             this.listener = listener;
             this.position = position;
         }
+
+
     }
 
     List<ProjectUnit> projects;

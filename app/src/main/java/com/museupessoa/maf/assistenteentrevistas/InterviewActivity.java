@@ -149,21 +149,18 @@ public class InterviewActivity extends AppCompatActivity {
 
     private void startRecording(String path) {
         conta_gravacoes+=1;
-        String mFileName = path +"/Audio/gravacao_"+ conta_gravacoes +".3gp";
+        String mFileName = path +"/Audio/gravacao_"+ conta_gravacoes +".mp4";
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
-        mRecorder.setAudioEncodingBitRate(16);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mRecorder.setAudioEncodingBitRate(32);
         mRecorder.setAudioSamplingRate(44100);
-        mRecorder.setAudioSamplingRate(23);
         mRecorder.setAudioChannels(2);
         mRecorder.setOutputFile(mFileName);
         try {
             mRecorder.prepare();
         } catch (IOException e) {
-            //System.out.println(e.getMessage());
-           // Log.e(LOG_TAG, "prepare() failed");
             e.printStackTrace();
         }
         mRecorder.start();

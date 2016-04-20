@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVNewProjectAdapter;
 
@@ -50,7 +50,7 @@ public class MetaInfo extends Fragment   {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
-        adapter = new RVNewProjectAdapter(NewProject.metaList);
+        adapter = new RVNewProjectAdapter(NewProjectActivity.metaList);
 
         adapter.setOnItemClickListener(new RVNewProjectAdapter.OnItemClickListener() {
             @Override
@@ -92,29 +92,29 @@ public class MetaInfo extends Fragment   {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (resultCode){
-            case NewProject.ADD:
+            case NewProjectActivity.ADD:
                 switch (requestCode) {
                     case 1:
-                        NewProject.metaList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
+                        NewProjectActivity.metaList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
                         Toast.makeText(this.getActivity(), "M Novo elemento foi adicionado", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 break;
-            case  NewProject.DELETE:
-                NewProject.metaList.remove(requestCode);
-                adapter.RVUpdateListAdapter(NewProject.metaList);
+            case  NewProjectActivity.DELETE:
+                NewProjectActivity.metaList.remove(requestCode);
+                adapter.RVUpdateListAdapter(NewProjectActivity.metaList);
                 recyclerView.setAdapter(adapter);
                 Toast.makeText(this.getActivity(), "O elemento foi eliminado", Toast.LENGTH_LONG).show();
                 break;
-            case NewProject.EDIT:
+            case NewProjectActivity.EDIT:
                 android.support.v4.app.FragmentManager fragmentEditManager = getFragmentManager();
-                NewProjectDialogFragmentEdit dialogEdit = new NewProjectDialogFragmentEdit(NewProject.metaList.get(requestCode));
+                NewProjectDialogFragmentEdit dialogEdit = new NewProjectDialogFragmentEdit(NewProjectActivity.metaList.get(requestCode));
                 dialogEdit.setTargetFragment(MetaInfo.this, requestCode);
                 dialogEdit.show(fragmentEditManager, "NewProjectItemEditDialogFragment");
                 break;
-            case  NewProject.CHANGE:
-                NewProject.metaList.set(requestCode,data.getStringExtra(NewProjectDialogFragmentEdit.REQUEST));
-                adapter.RVUpdateListAdapter(NewProject.metaList);
+            case  NewProjectActivity.CHANGE:
+                NewProjectActivity.metaList.set(requestCode,data.getStringExtra(NewProjectDialogFragmentEdit.REQUEST));
+                adapter.RVUpdateListAdapter(NewProjectActivity.metaList);
                 recyclerView.setAdapter(adapter);
                 Toast.makeText(this.getActivity(), "O elemento foi alterado", Toast.LENGTH_LONG).show();
                 break;

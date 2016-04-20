@@ -14,7 +14,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.museupessoa.maf.assistenteentrevistas.NewProject"/>
+        className = "com.museupessoa.maf.assistenteentrevistas.NewProjectActivity"/>
       <point      
         x = "348"      
         y = "388"/>

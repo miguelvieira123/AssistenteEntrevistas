@@ -5,9 +5,8 @@
     android:layout_height="wrap_content"
     android:id="@+id/CV_Project"
     android:clickable="true"
-    android:focusableInTouchMode="true"
-    
-
+    android:descendantFocusability="blocksDescendants"
+    android:foreground="?android:attr/selectableItemBackground"
     >
 
     <RelativeLayout

@@ -16,8 +16,7 @@ import android.widget.Toast;
 
 
 import com.melnykov.fab.FloatingActionButton;
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
-import com.museupessoa.maf.assistenteentrevistas.R;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragment;
@@ -93,7 +92,7 @@ public class Projects extends Fragment{
                             Toast.makeText(getActivity(),"Este projeto já existe", Toast.LENGTH_LONG).show();
                         }
                         else{
-                            Intent intent = new Intent(getActivity(), NewProject.class);
+                            Intent intent = new Intent(getActivity(), NewProjectActivity.class);
                             intent.putExtra("name",data.getStringExtra(NewProjectDialogFragment.REQUEST));
                             intent.putExtra("status",1);
                             startActivity(intent);
@@ -102,7 +101,7 @@ public class Projects extends Fragment{
                 }
                 break;
             case Projects.EDIT_PROJECT:
-                Intent intent = new Intent(getActivity(), NewProject.class);
+                Intent intent = new Intent(getActivity(), NewProjectActivity.class);
                 intent.putExtra("name",projectUnits.get(requestCode).name);
                 intent.putExtra("status",2);
                 startActivity(intent);

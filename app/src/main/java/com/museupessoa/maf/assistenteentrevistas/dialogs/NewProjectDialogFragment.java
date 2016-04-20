@@ -63,7 +63,7 @@ public class NewProjectDialogFragment extends DialogFragment  {
         EditText name=(EditText)form.findViewById(R.id.NewProjectNameEdit);
         String projectName = name.getText().toString();
         if(!projectName.isEmpty()) {
-            Intent intent = new Intent(getActivity(), NewProject.class);
+            Intent intent = new Intent(getActivity(), NewProjectActivity.class);
             intent.putExtra("name",projectName);
             startActivity(intent);
         }

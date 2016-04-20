@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 
 public class NewProjectDialogFragmentEdit extends DialogFragment {
@@ -40,7 +40,7 @@ public class NewProjectDialogFragmentEdit extends DialogFragment {
                         else {
                             Intent intent = new Intent();
                             intent.putExtra(REQUEST, test.getText().toString());
-                            getTargetFragment().onActivityResult(getTargetRequestCode(), NewProject.CHANGE, intent);
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), NewProjectActivity.CHANGE, intent);
 
                         }
 

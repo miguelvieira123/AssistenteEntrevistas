@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 
 
@@ -34,7 +34,7 @@ public class NewProjectDialogFragmentNewItem extends DialogFragment {
                         else {
                             Intent intent = new Intent();
                             intent.putExtra(REQUEST, test.getText().toString());
-                            getTargetFragment().onActivityResult(getTargetRequestCode(),NewProject.ADD, intent);
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), NewProjectActivity.ADD, intent);
 
                         }
 

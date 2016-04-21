@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.museupessoa.maf.assistenteentrevistas.NewInterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVQuestionAdapter;
@@ -19,12 +21,13 @@ import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.List;
 
-public class SelectProjects extends Fragment {
+public class SelectProject extends Fragment {
 
     private String path;
     private RecyclerView recyclerView;
     private List<ProjectUnit> projectUnits;
     private RVProjectAdapter adapter;
+    private String projectName;
 
 
     @Nullable
@@ -32,6 +35,18 @@ public class SelectProjects extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.path = this.getArguments().getString("path");
         View projects = inflater.inflate(R.layout.fragment_new_interview_projects, container, false);
+
+        Button ok_button = (Button) projects.findViewById(R.id.confirm_project_selection);
+        ok_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Activity activity = getActivity();
+                if (activity instanceof NewInterviewActivity){
+                    ((NewInterviewActivity)activity).editInterviewMetadata(projectName);
+                }
+            }
+        });
+
         recyclerView = (RecyclerView) projects.findViewById(R.id.recyclerView);
         return projects;
     }
@@ -44,7 +59,6 @@ public class SelectProjects extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 
 
-
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
         projectUnits = ProjectUnit.getProjects(path);
@@ -54,11 +68,8 @@ public class SelectProjects extends Fragment {
         adapter.setOnItemClickListener(new RVProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                //v.setSelected(true);
-                //v.setActivated(true);
-                //v.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.cardview_dark_background));
-                CardView c = (CardView) v.findViewById(R.id.CV_Project);
-                c.setCardBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.cardview_dark_background));
+                v.setSelected(true);
+                projectName = projectUnits.get(position).name;
             }
         });
 

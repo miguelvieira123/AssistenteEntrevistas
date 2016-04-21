@@ -112,12 +112,12 @@
         "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\notification_template_part_time.xml"
     },
     {
-        "merged": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\res\\merged\\debug\\layout\\abc_select_dialog_material.xml",
-        "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_select_dialog_material.xml"
-    },
-    {
         "merged": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_lines.xml",
         "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\notification_template_lines.xml"
+    },
+    {
+        "merged": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\res\\merged\\debug\\layout\\abc_select_dialog_material.xml",
+        "source": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_select_dialog_material.xml"
     },
     {
         "merged": "C:\\Users\\Miguel\\Desktop\\-MiEI-\\-MEI-\\PLC\\Projeto Integrado\\AssistenteEntrevistas\\library\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_big_media_narrow.xml",

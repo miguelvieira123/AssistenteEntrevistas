@@ -24,7 +24,6 @@
             android:layout_height="240dp"
             android:layout_gravity="center"
             android:id="@+id/interview_activity_questions_list">
-
         </LinearLayout>
 
         <ToggleButton

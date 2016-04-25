@@ -32,11 +32,11 @@ public class NewProjectDialogFragmentEdit extends DialogFragment {
         test = (EditText) view.findViewById(R.id.NewProjectNameEdit);
         test.setText(element.subSequence(0, element.length()));
         builder.setView(view);
-        builder.setTitle("Alteração")
+        builder.setTitle("Alterar")
                 .setPositiveButton("Aplicar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (test.getText().toString().isEmpty()) Toast.makeText(getActivity(),
-                                "O elemento não pode ser vasio", Toast.LENGTH_SHORT).show();
+                                "O campo é de preenchimento obrigatório!", Toast.LENGTH_SHORT).show();
                         else {
                             Intent intent = new Intent();
                             intent.putExtra(REQUEST, test.getText().toString());

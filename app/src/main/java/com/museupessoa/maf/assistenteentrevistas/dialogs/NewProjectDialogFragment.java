@@ -31,7 +31,7 @@ public class NewProjectDialogFragment extends DialogFragment  {
                 .setPositiveButton("Aplicar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(test.getText().toString().isEmpty())Toast.makeText(getActivity(),
-                                "O nome do projecto não pode ser vasio", Toast.LENGTH_SHORT).show();
+                                "O projeto necessita de nome", Toast.LENGTH_SHORT).show();
                         else {
                             Intent intent = new Intent();
                             intent.putExtra(REQUEST, test.getText().toString());

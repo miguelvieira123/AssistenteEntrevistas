@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_plus"
+            fab:fab_colorNormal="@color/fabPrimary"
+            fab:fab_colorPressed="@color/fabPressed"
+            fab:fab_colorRipple="@color/fabRipple" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -15,7 +26,9 @@
             android:id="@+id/mainPageLogo"
             android:baselineAlignBottom="false"
             android:src="@drawable/logo_museu_da_pessoa"
-            android:layout_gravity="top|center_horizontal" />
-    </LinearLayout>
+            android:layout_gravity="center_horizontal|top"
+            android:layout_margin="23dp" />
+    </FrameLayout>
+
 
 </LinearLayout>

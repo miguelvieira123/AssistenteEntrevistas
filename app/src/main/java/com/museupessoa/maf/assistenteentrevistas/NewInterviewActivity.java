@@ -7,21 +7,26 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.os.Environment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 
 import com.museupessoa.maf.assistenteentrevistas.Fragments.SelectProject;
+import com.museupessoa.maf.assistenteentrevistas.adapters.MainActivityPagerAdapter;
+import com.museupessoa.maf.assistenteentrevistas.newinterview.NewInterviewPagerAdapter;
+import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
 
 public class NewInterviewActivity extends AppCompatActivity {
-
+    private String projects_path;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_interview);
         final Intent intent = getIntent();
-        String projects_path = Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString();
+        projects_path = Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString();
 
 
         FragmentManager fragmentActionManager =  getFragmentManager();
@@ -37,9 +42,30 @@ public class NewInterviewActivity extends AppCompatActivity {
     public void editInterviewMetadata(String projectName){
         if(projectName != null){
             Toast.makeText(this, "Projeto selecionado: "+ projectName, Toast.LENGTH_SHORT).show();
-            //arrancar Activity Editar Interview
+
+            //remover Layout select_project
+            ViewGroup layout = (ViewGroup) findViewById(R.id.select_project_frame);
+            layout.removeAllViews();
+
+            //iniciar SlidingTabs para preencher metadata
+            CharSequence Titles[]={"Escrita","Audio","Foto"};
+            int Numboftabs = 3;
+            NewInterviewPagerAdapter myPagerAdapter = new NewInterviewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
+            ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
+            pager.setAdapter(myPagerAdapter);
+            SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
+            tabs.setDistributeEvenly(true);
+
+            tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                @Override
+                public int getIndicatorColor(int position) {
+                    return getResources().getColor(R.color.tabsCor);
+                }
+
+            });
+            tabs.setViewPager(pager);
         }else{
-            Toast.makeText(this, "Nenhum projeto foi selecionado!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Não tem nenhum projeto selecionado.", Toast.LENGTH_SHORT).show();
         }
     }
 

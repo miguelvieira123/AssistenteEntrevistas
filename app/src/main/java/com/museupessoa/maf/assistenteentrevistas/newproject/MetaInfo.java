@@ -96,7 +96,7 @@ public class MetaInfo extends Fragment   {
                 switch (requestCode) {
                     case 1:
                         NewProjectActivity.metaList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
-                        Toast.makeText(this.getActivity(), "M Novo elemento foi adicionado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this.getActivity(), "Campo foi adicionado", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 break;
@@ -104,7 +104,7 @@ public class MetaInfo extends Fragment   {
                 NewProjectActivity.metaList.remove(requestCode);
                 adapter.RVUpdateListAdapter(NewProjectActivity.metaList);
                 recyclerView.setAdapter(adapter);
-                Toast.makeText(this.getActivity(), "O elemento foi eliminado", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getActivity(), "Campo foi eliminado", Toast.LENGTH_LONG).show();
                 break;
             case NewProjectActivity.EDIT:
                 android.support.v4.app.FragmentManager fragmentEditManager = getFragmentManager();
@@ -116,7 +116,7 @@ public class MetaInfo extends Fragment   {
                 NewProjectActivity.metaList.set(requestCode,data.getStringExtra(NewProjectDialogFragmentEdit.REQUEST));
                 adapter.RVUpdateListAdapter(NewProjectActivity.metaList);
                 recyclerView.setAdapter(adapter);
-                Toast.makeText(this.getActivity(), "O elemento foi alterado", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getActivity(), "Campo foi alterado", Toast.LENGTH_LONG).show();
                 break;
 
         }

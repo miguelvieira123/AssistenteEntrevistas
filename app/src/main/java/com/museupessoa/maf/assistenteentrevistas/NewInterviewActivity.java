@@ -24,8 +24,8 @@ public class NewInterviewActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_interview);
-        final Intent intent = getIntent();
+        setContentView(R.layout.fragment_new_interview_select_project);
+        //final Intent intent = getIntent();
         projects_path = Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString();
 
 
@@ -43,11 +43,10 @@ public class NewInterviewActivity extends AppCompatActivity {
         if(projectName != null){
             Toast.makeText(this, "Projeto selecionado: "+ projectName, Toast.LENGTH_SHORT).show();
 
-            //remover Layout select_project
-            ViewGroup layout = (ViewGroup) findViewById(R.id.select_project_frame);
-            layout.removeAllViews();
-
             //iniciar SlidingTabs para preencher metadata
+            setContentView(R.layout.activity_new_interview);
+
+
             CharSequence Titles[]={"Escrita","Audio","Foto"};
             int Numboftabs = 3;
             NewInterviewPagerAdapter myPagerAdapter = new NewInterviewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);

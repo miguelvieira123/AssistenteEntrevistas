@@ -1,8 +1,12 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.util.Log;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +18,10 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -23,6 +30,8 @@ import javax.xml.transform.stream.StreamResult;
 public class General {
 
     public static final String TAG ="AssistenteEntrevistas";
+
+
     public static boolean createStructOfFolders(String path){
         try {
             File f = new File(path + "/Entrevistas");
@@ -33,13 +42,76 @@ public class General {
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
 
+            f  = new File(path, "config.xml");
+            if (!f.exists()){
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                org.w3c.dom.Element root;
+                root = doc.createElement("appConfig");
+                doc.appendChild(root);
+                org.w3c.dom.Element n1;
+                n1 = doc.createElement("interviews");
+                n1.setAttribute("counter", "2" );
+                root.appendChild(n1);
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(path + "/config.xml");
+                trans.transform(xmlSource, result);
+            }
+
             return true;
         } catch (Exception e1) {
             return false;
         }
     }
 
-    public static boolean createInterview(String path, String personName, String interviewCode){
+
+
+    public static String createNewInterview(String app_path, String project_name, String person_name){
+
+        List<String> meta = new ArrayList<>();
+        List<String> perguntas= new ArrayList<>();
+        List<String> urls = new ArrayList<>();
+
+        // abrir project e sacar info
+        try{
+            File f  = new File(app_path+"/Projetos", project_name+".xml");
+            if(f.exists()){
+                Document doc = null;
+                try {
+                    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                    NodeList n_meta = doc.getElementsByTagName("info");
+                    NodeList n_perguntas = doc.getElementsByTagName("p");
+                    NodeList n_urls = doc.getElementsByTagName("url");
+
+                    for (int i=0; i<n_meta.getLength(); i++) {
+                        meta.add(n_meta.item(i).getFirstChild().getNodeValue());
+                    }
+                    for (int i=0; i<n_perguntas.getLength(); i++) {
+                        perguntas.add(n_perguntas.item(i).getFirstChild().getNodeValue());
+                    }
+                    for (int i=0; i<n_urls.getLength(); i++) {
+                        urls.add(n_urls.item(i).getFirstChild().getNodeValue());
+                    }
+
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch(Exception e){}
+
+        int contador = getContadorFromXML(app_path);
+        contador++;
+        createInterview(app_path, person_name, "e00"+contador, meta, perguntas, urls); 
+        setContadorXML(app_path, contador);
+        return "e00"+contador;
+    }
+
+
+    public static boolean createInterview(String path, String person_name, String interviewCode, List<String> meta, List<String> perguntas, List<String> urls){
         try{
             File f = new File(path + "/Entrevistas/" + interviewCode );
             if (!f.exists())if(!f.mkdirs())return false;
@@ -58,42 +130,35 @@ public class General {
                 root = doc.createElement("manifesto");
                 doc.appendChild(root);
                 org.w3c.dom.Element n1;
-                n1 = doc.createElement("meta");
-
-                // FAKE -----
                 org.w3c.dom.Element n2;
-                n2 = doc.createElement("nome");
-                n2.setTextContent(personName);
-                n1.appendChild(n2);
+
+                n1 = doc.createElement("meta");
+                n1.setAttribute("name", person_name );
+                for (String info: meta) {
+                    n2 = doc.createElement( info );
+                    n1.appendChild(n2);
+                }
                 root.appendChild(n1);
 
                 n1 = doc.createElement("perguntas");
-                n2 = doc.createElement("pergunta");
-                n2.setTextContent("Profissão");
-                n1.appendChild(n2);
-                n2 = doc.createElement("pergunta");
-                n2.setTextContent("Estudos");
-                n1.appendChild(n2);
-                n2 = doc.createElement("pergunta");
-                n2.setTextContent("Namoro");
-                n1.appendChild(n2);
-                n2 = doc.createElement("pergunta");
-                n2.setTextContent("Literatura Favorita");
-                n1.appendChild(n2);
-                n2 = doc.createElement("pergunta");
-                n2.setTextContent("Atividades Desportivas");
-                n1.appendChild(n2);
-                root.appendChild(n1);
-                // FAKE -----
-
-
-                n1 = doc.createElement("audio");
-                n1.setAttribute("count", "0");
+                for (String perg: perguntas) {
+                    n2 = doc.createElement("pergunta");
+                    n2.setTextContent( perg );
+                    n1.appendChild(n2);
+                }
                 root.appendChild(n1);
 
                 n1 = doc.createElement("urls");
-                n2 = doc.createElement("url");
-                n1.appendChild(n2);
+                for (String url : urls ) {
+                    n2 = doc.createElement("url");
+                    n2.setTextContent( url );
+                    n1.appendChild(n2);
+
+                }
+                root.appendChild(n1);
+
+                n1 = doc.createElement("audio");
+                n1.setAttribute("count", "0");
                 root.appendChild(n1);
 
                 Transformer trans = TransformerFactory.newInstance().newTransformer();
@@ -244,5 +309,69 @@ public class General {
         local.add("http://www.museudapessoa.net/submissoes");
         return local;
     }
+
+
+
+    private static int getContadorFromXML(String path){
+        int contador=0;
+        File f  = new File(path, "config.xml");
+        if(f.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList audio = doc.getElementsByTagName("interviews");
+                NamedNodeMap attrs = audio.item(0).getAttributes();
+                contador = Integer.parseInt(attrs.getNamedItem("counter").getNodeValue());
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return contador;
+    }
+
+    private static void setContadorXML(String path, int novaContagem){
+        File f  = new File(path, "config.xml");
+        if(f.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList audio = doc.getElementsByTagName("interviews");
+                NamedNodeMap attrs = audio.item(0).getAttributes();
+                attrs.getNamedItem("counter").setNodeValue(""+novaContagem);
+
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(path + "/config.xml");
+                trans.transform(xmlSource, result);
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 }

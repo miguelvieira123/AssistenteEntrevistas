@@ -109,12 +109,13 @@ public class Projects extends Fragment{
                 Toast.makeText(getActivity(),"EDIT",Toast.LENGTH_LONG).show();
                 break;
             case  Projects.DELETE_PROJECT:
+                String deleted_project = projectUnits.get(requestCode).name;
                 if(ProjectUnit.deleteProject(projectUnits.get(requestCode).name,
                         Environment.getExternalStoragePublicDirectory("/"+getResources().getString(R.string.APP_NAME)).toString())) {
                     projectUnits.remove(requestCode);
                     adapter.RVUpdateListAdapter(projectUnits);
                     recyclerView.setAdapter(adapter);
-                    Toast.makeText(getActivity(), "Este projeto foi eliminado", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Projeto "+deleted_project+" eliminado", Toast.LENGTH_LONG).show();
                 }
                 else Toast.makeText(getActivity(), "Erro", Toast.LENGTH_LONG).show();
                 break;

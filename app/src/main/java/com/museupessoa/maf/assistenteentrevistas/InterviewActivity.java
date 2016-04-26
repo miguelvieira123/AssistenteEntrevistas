@@ -19,12 +19,18 @@ import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -41,6 +47,7 @@ public class InterviewActivity extends AppCompatActivity {
     private int conta_gravacoes;
     private String interview_path;
     private String audio_file_name;
+    private String person_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +55,9 @@ public class InterviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_interview);
         final Intent intent = getIntent();
         interview_path = intent.getStringExtra("path");
-        String n = intent.getStringExtra("name");
+        String nome = getPersonNameFromXML();
         TextView name = (TextView)findViewById(R.id.person_name);
-        name.setText(n);
+        name.setText(nome);
         //Log.d("InterviewActivity", ">>>>>InterviewActivity>>>> var path: " + interview_path);
 
         FragmentManager fragmentActionManager =  getFragmentManager();
@@ -69,6 +76,32 @@ public class InterviewActivity extends AppCompatActivity {
 
         //add Listenners to Buttons
         this.addListennerToButtons();
+    }
+
+    private String getPersonNameFromXML(){
+        File manif_file = new File(interview_path, "manifesto.xml");
+        String nome = "";
+        try {
+            InputStream is = new FileInputStream(manif_file.getPath());
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(new InputSource(is));
+            doc.getDocumentElement().normalize();
+
+            NodeList nodeList = doc.getElementsByTagName("meta");
+            Node n = nodeList.item(0);
+            if(n != null){nome = n.getAttributes().getNamedItem("name").getNodeValue();}
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return nome;
     }
 
     public boolean newAudioTag(String question){

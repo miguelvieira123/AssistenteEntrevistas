@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/metadata_text_form"
+        >
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView" >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/edit_interview_metadata">
+
+            </LinearLayout>
+        </ScrollView>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/acceptInterviewChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_check_circle_outline"
+            fab:fab_colorNormal="@color/fabPrimary"
+            fab:fab_colorPressed="@color/fabPressed"
+            fab:fab_colorRipple="@color/fabRipple"
+            android:adjustViewBounds="false" />
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

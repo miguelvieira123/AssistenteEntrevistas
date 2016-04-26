@@ -3,19 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".NewInterviewActivity">
 
-    <com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout
-        android:id="@+id/new_interview_tabs"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="2dp"
-        android:background="@color/colorAccent" />
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/new_interview_pager"
         android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/new_interview_frameLayout"></FrameLayout>
+
+
 
 
 </LinearLayout>

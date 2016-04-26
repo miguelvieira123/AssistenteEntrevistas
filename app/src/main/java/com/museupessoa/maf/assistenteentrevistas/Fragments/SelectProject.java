@@ -35,7 +35,6 @@ public class SelectProject extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.path = this.getArguments().getString("path");
         View projects = inflater.inflate(R.layout.fragment_new_interview_projects, container, false);
-
         Button ok_button = (Button) projects.findViewById(R.id.confirm_project_selection);
         ok_button.setOnClickListener(new View.OnClickListener() {
             @Override

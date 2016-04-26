@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.NewInterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewInterviewPersonNameDialog;
 
 
 public class Main extends Fragment {
@@ -30,8 +31,10 @@ public class Main extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NewInterviewActivity.class);
-                startActivity(intent);
+                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                NewInterviewPersonNameDialog new_interview_dialog = new NewInterviewPersonNameDialog();
+                new_interview_dialog.setTargetFragment(Main.this, 0);
+                new_interview_dialog.show(fragmentManager, "NewInterviewPersonNameDialog");
             }
         });
     }

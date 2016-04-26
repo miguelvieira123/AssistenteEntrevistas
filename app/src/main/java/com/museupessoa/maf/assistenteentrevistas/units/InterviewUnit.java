@@ -61,9 +61,11 @@ public class InterviewUnit {
                 DocumentBuilder db = dbf.newDocumentBuilder();
                 Document doc = db.parse(new InputSource(is));
                 doc.getDocumentElement().normalize();
-                NodeList nodeList = doc.getElementsByTagName("nome");
+
+                NodeList nodeList = doc.getElementsByTagName("meta");
                 Node n = nodeList.item(0);
-                nome = n.getFirstChild().getNodeValue();
+                if(n != null){nome = n.getAttributes().getNamedItem("name").getNodeValue();}
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ParserConfigurationException e) {

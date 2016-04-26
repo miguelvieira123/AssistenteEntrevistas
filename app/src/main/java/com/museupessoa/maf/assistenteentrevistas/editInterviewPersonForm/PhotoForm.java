@@ -1,4 +1,4 @@
-package com.museupessoa.maf.assistenteentrevistas.newinterview;
+package com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm;
 
 
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import com.museupessoa.maf.assistenteentrevistas.R;
  * Created by Miguel on 24/04/2016.
  */
 public class PhotoForm extends Fragment {
+
+    private String new_interview_path;
+
+    public PhotoForm(String new_interview_path) {
+        this.new_interview_path = new_interview_path;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

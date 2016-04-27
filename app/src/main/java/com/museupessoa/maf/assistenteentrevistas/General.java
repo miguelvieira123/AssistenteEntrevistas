@@ -105,7 +105,7 @@ public class General {
 
         int contador = getContadorFromXML(app_path);
         contador++;
-        createInterview(app_path, person_name, "e00"+contador, meta, perguntas, urls); 
+        createInterview(app_path, person_name, "e00"+contador, meta, perguntas, urls);
         setContadorXML(app_path, contador);
         return "e00"+contador;
     }
@@ -169,7 +169,7 @@ public class General {
             }
             return true;
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }

@@ -3,6 +3,7 @@ package com.museupessoa.maf.assistenteentrevistas.units;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -35,15 +36,15 @@ public class InterviewUnit {
     }
 
     static public List<InterviewUnit> getInterviews(String PATH){
-        String[] list;
+        String[] interview_list;
         List<InterviewUnit> interviews = new ArrayList<>();
-        File f = new File(PATH+"/Entrevistas");
-        list = f.list();
+        File folder = new File(PATH+"/Entrevistas");
+        interview_list = folder.list();
 
-        for(int i=0;i<list.length;i++){
+        for(int i=0;i<interview_list.length;i++){
 
             // imagem ------------------------------------------------------------------------------
-            File imgFile = new  File(PATH+"/Entrevistas/e00"+i+"/Fotos/foto_perfil.jpg");
+            File imgFile = new  File(PATH+"/Entrevistas/"+interview_list[i]+"/Fotos/foto_perfil.jpg");
             Bitmap myBitmap = null;
             if(imgFile.exists()){
                 myBitmap = decodeFile(imgFile);
@@ -52,7 +53,7 @@ public class InterviewUnit {
                 myBitmap = ThumbnailUtils.extractThumbnail(myBitmap, 64, 64);
             }
             // nome do entrevistado (Abrir XML) ----------------------------------------------------
-            String interview_path = PATH + "/Entrevistas/e00" + i;
+            String interview_path = PATH + "/Entrevistas/"+interview_list[i] ;
             File manif_file = new File(interview_path, "manifesto.xml");
             String nome = "";
             try {

@@ -55,7 +55,7 @@ public class MetaInfo extends Fragment   {
         adapter.setOnItemClickListener(new RVNewProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Log.d(TAG,"M2 "+"Pos = "+Integer.toString(position));
+               // Log.d(TAG,"M2 "+"Pos = "+Integer.toString(position));
                 android.support.v4.app.FragmentManager fragmentActionManager = getFragmentManager();
                 NewProjectItemActionDialogFragment dialogAction = new NewProjectItemActionDialogFragment();
                 dialogAction.setTargetFragment(MetaInfo.this, position);
@@ -66,7 +66,7 @@ public class MetaInfo extends Fragment   {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG,"M3");
+               // Log.d(TAG,"M3");
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                 NewProjectDialogFragmentNewItem dialogProjectName = new NewProjectDialogFragmentNewItem();
                 dialogProjectName.setTargetFragment(MetaInfo.this, REQUEST);

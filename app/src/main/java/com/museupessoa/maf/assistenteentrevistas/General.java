@@ -361,6 +361,7 @@ public class General {
             }
 
         }
+<<<<<<< HEAD
     }
 
 
@@ -373,5 +374,109 @@ public class General {
 
 
 
+=======
+
+
+    }
+    public static void addSourceLink(String path, String link){
+        File f  = new File(path, "/links.xml");
+        if(f.exists()){
+            try {
+
+                DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docB = docBF.newDocumentBuilder();
+                Document xmlWrite = docB.parse(f);
+                NodeList root = xmlWrite.getElementsByTagName("links");
+                org.w3c.dom.Element child;
+                child = xmlWrite.createElement("link");
+                child.setTextContent(link);
+                root.item(0).appendChild(child);
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(xmlWrite);
+                StreamResult result = new StreamResult(path + "/links.xml");
+                trans.transform(xmlSource, result);
+
+
+            } catch (Exception e1) {
+
+            }
+        }else{
+
+            General.createSourceLinkFile(path);
+
+        }
+
+    }
+    public static void deleteLink(String path, String link){
+        File f  = new File(path, "/links.xml");
+        if(f.exists()){
+            try {
+                DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docB = docBF.newDocumentBuilder();
+                Document xmlWrite = docB.parse(f);
+                NodeList links = xmlWrite.getElementsByTagName("link");
+                for(int i=0; i<links.getLength();i++){
+                    Node elem = links.item(i);
+                    if(elem.getTextContent().equals(link)){
+                        Node root = elem.getParentNode();
+                        root.removeChild(elem);
+                    }
+
+                }
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(xmlWrite);
+                StreamResult result = new StreamResult(path + "/links.xml");
+                trans.transform(xmlSource, result);
+
+            } catch (Exception e1) {
+
+            }
+        }else{
+
+            General.createSourceLinkFile(path);
+
+        }
+    }
+
+
+    public static List<String> getSourceLinks(String path){
+        List<String> links = new ArrayList<String>();
+        File f  = new File(path, "/links.xml");
+        if(f.exists()){
+            try {
+                DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docB = docBF.newDocumentBuilder();
+                Document xmlRead = docB.parse(f);
+                NodeList link = xmlRead.getElementsByTagName("link");
+                for(int i=0; i<link.getLength();i++){
+                    Node elem = link.item(i);
+                    links.add(elem.getTextContent());
+                 }
+            } catch (Exception e1) {
+
+            }
+        }else{
+            General.createSourceLinkFile(path);
+            return links;
+        }
+        return links;
+    }
+    public static void createSourceLinkFile(String path){
+        try {
+                File f  = new File(path + "/links.xml");
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                org.w3c.dom.Element root;
+                root = doc.createElement("links");
+                doc.appendChild(root);
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(path + "/links.xml");
+                trans.transform(xmlSource, result);
+        } catch (Exception e1) {
+
+        }
+
+    }
+>>>>>>> origin/ImportProjects
 
 }

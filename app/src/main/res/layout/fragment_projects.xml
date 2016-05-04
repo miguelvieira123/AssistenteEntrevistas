@@ -26,5 +26,16 @@
         fab:fab_colorPressed="@color/fabPressed"
         fab:fab_colorRipple="@color/fabRipple" />
 
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fabDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_download"
+        fab:fab_colorNormal="@color/fabPrimary"
+        fab:fab_colorPressed="@color/fabPressed"
+        fab:fab_colorRipple="@color/fabRipple" />
+
 
 </FrameLayout>

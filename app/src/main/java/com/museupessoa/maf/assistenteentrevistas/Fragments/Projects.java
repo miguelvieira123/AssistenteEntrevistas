@@ -16,6 +16,10 @@ import android.widget.Toast;
 
 
 import com.melnykov.fab.FloatingActionButton;
+<<<<<<< HEAD:app/src/main/java/com/museupessoa/maf/assistenteentrevistas/Fragments/Projects.java
+=======
+import com.museupessoa.maf.assistenteentrevistas.DownloadProjectsActivity;
+>>>>>>> origin/ImportProjects:app/src/main/java/com/museupessoa/maf/assistenteentrevistas/Fragments/Projects.java
 import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
@@ -32,6 +36,7 @@ public class Projects extends Fragment{
     private List<ProjectUnit> projectUnits;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
+    private FloatingActionButton fabD;
     private final  String TAG="AssistenteEntrevistas";
     public static final int NEW_PROJECT = 1;
     public static final int DELETE_PROJECT = 2;
@@ -44,6 +49,7 @@ public class Projects extends Fragment{
         View project = inflater.inflate(R.layout.fragment_projects,container,false);
         recyclerView = (RecyclerView) project.findViewById(R.id.recyclerView);
         fab = (FloatingActionButton) project.findViewById(R.id.fab);
+        fabD = (FloatingActionButton) project.findViewById(R.id.fabDownload);
         return project;
     }
 
@@ -67,6 +73,13 @@ public class Projects extends Fragment{
                dialogProjectName.show(fragmentManager, "NewProjectDialogFragment");
            }
        });
+        fabD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DownloadProjectsActivity.class);
+                startActivity(intent);
+            }
+        });
         adapter.setOnItemClickListener((new RVProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {

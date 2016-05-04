@@ -3,7 +3,10 @@
     package="com.museupessoa.maf.assistenteentrevistas">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +21,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewProject"
-            android:label="New Project"
-            ></activity>
+        <activity
+            android:name=".NewProjectActivity"
+            android:label="New Project" />
+        <activity
+            android:name=".NewInterviewActivity"
+            android:label="New Interview" />
+        <activity
+            android:name=".InterviewActivity"
+            android:label="Interview"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".DownloadProjectsActivity"></activity>
     </application>
 
 </manifest>

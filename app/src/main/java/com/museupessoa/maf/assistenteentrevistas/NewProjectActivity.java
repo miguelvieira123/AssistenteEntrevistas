@@ -18,7 +18,7 @@ import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewProject extends AppCompatActivity  {
+public class NewProjectActivity extends AppCompatActivity  {
     public static List<String> metaList;
     public static List<String> questionsList;
     public static List<String> urlsList;

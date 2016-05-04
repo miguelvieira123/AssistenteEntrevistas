@@ -1,6 +1,5 @@
 package com.museupessoa.maf.assistenteentrevistas.newproject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,19 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVNewProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentEdit;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectItemActionDialogFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Questions extends Fragment {
 
@@ -37,7 +32,7 @@ public class Questions extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View questions = inflater.inflate(R.layout.newproject_questions, container, false);
+        View questions = inflater.inflate(R.layout.fragment_newproject_questions, container, false);
         recyclerView = (RecyclerView) questions.findViewById(R.id.NewProjectRV);
         fab = (FloatingActionButton) questions.findViewById(R.id.NewProjectfab);
 
@@ -50,7 +45,7 @@ public class Questions extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
-        adapter = new RVNewProjectAdapter(NewProject.questionsList);
+        adapter = new RVNewProjectAdapter(NewProjectActivity.questionsList);
         recyclerView.setAdapter(adapter);
         Log.d(TAG, "Q1");
 
@@ -95,30 +90,30 @@ public class Questions extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode){
-            case NewProject.ADD:
+            case NewProjectActivity.ADD:
                 switch (requestCode) {
                     case 1:
-                        NewProject.questionsList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
+                        NewProjectActivity.questionsList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
                         Toast.makeText(this.getActivity(), "Q Novo elemento foi adicionado", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 break;
-            case  NewProject.DELETE:
-                NewProject.questionsList.remove(requestCode);
-                adapter.RVUpdateListAdapter(NewProject.questionsList);
+            case  NewProjectActivity.DELETE:
+                NewProjectActivity.questionsList.remove(requestCode);
+                adapter.RVUpdateListAdapter(NewProjectActivity.questionsList);
                 recyclerView.setAdapter(adapter);
                 Toast.makeText(this.getActivity(), "O elemento foi eliminado", Toast.LENGTH_LONG).show();
                 break;
 
-            case NewProject.EDIT:
+            case NewProjectActivity.EDIT:
                 android.support.v4.app.FragmentManager fragmentEditManager = getFragmentManager();
-                NewProjectDialogFragmentEdit dialogEdit = new NewProjectDialogFragmentEdit(NewProject.questionsList.get(requestCode));
+                NewProjectDialogFragmentEdit dialogEdit = new NewProjectDialogFragmentEdit(NewProjectActivity.questionsList.get(requestCode));
                 dialogEdit.setTargetFragment(Questions.this, requestCode);
                 dialogEdit.show(fragmentEditManager, "NewProjectItemEditDialogFragment");
                 break;
-            case  NewProject.CHANGE:
-                NewProject.questionsList.set(requestCode,data.getStringExtra(NewProjectDialogFragmentEdit.REQUEST));
-                adapter.RVUpdateListAdapter(NewProject.questionsList);
+            case  NewProjectActivity.CHANGE:
+                NewProjectActivity.questionsList.set(requestCode,data.getStringExtra(NewProjectDialogFragmentEdit.REQUEST));
+                adapter.RVUpdateListAdapter(NewProjectActivity.questionsList);
                 recyclerView.setAdapter(adapter);
                 Toast.makeText(this.getActivity(), "O elemento foi alterado", Toast.LENGTH_LONG).show();
                 break;

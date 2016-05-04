@@ -7,8 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
-import com.museupessoa.maf.assistenteentrevistas.main.Projects;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Projects;
 
 public class ProjectActionDialogFragment extends DialogFragment {
     @Override

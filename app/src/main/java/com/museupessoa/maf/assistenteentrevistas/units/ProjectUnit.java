@@ -20,6 +20,11 @@ public class ProjectUnit {
         for(int i=0;i<list.length;i++)projects.add(new ProjectUnit(list[i].substring(0,list[i].length()-4)));
         return  projects;
     }
+    static public  List<ProjectUnit> convert(List<String> prs){
+        List<ProjectUnit> projects = new ArrayList<>();
+        for(int i=0;i<prs.size();i++)projects.add(new ProjectUnit(prs.get(i).substring(0,prs.get(i).length()-4)));
+        return  projects;
+    }
 
     static  public boolean deleteProject(String nameProject, String PATH){
         File f = new File(PATH+"/Projetos/"+nameProject+".xml");

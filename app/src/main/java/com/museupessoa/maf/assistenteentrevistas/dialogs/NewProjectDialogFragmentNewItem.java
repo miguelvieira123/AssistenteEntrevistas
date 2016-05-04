@@ -1,26 +1,18 @@
 package com.museupessoa.maf.assistenteentrevistas.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
-import com.museupessoa.maf.assistenteentrevistas.newproject.MetaInfo;
-
-
 
 
 public class NewProjectDialogFragmentNewItem extends DialogFragment {
@@ -31,7 +23,7 @@ public class NewProjectDialogFragmentNewItem extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.newproject_dialog_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_dialog_newproject, null);
         test = (EditText) view.findViewById(R.id.NewProjectNameEdit);
         builder.setView(view);
         builder.setTitle("Novo Elemento")
@@ -42,7 +34,7 @@ public class NewProjectDialogFragmentNewItem extends DialogFragment {
                         else {
                             Intent intent = new Intent();
                             intent.putExtra(REQUEST, test.getText().toString());
-                            getTargetFragment().onActivityResult(getTargetRequestCode(),NewProject.ADD, intent);
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), NewProjectActivity.ADD, intent);
 
                         }
 

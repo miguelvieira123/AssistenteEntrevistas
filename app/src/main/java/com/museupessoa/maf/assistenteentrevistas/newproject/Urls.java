@@ -1,6 +1,5 @@
 package com.museupessoa.maf.assistenteentrevistas.newproject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,19 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVNewProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentEdit;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectItemActionDialogFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Urls extends Fragment {
@@ -36,7 +31,7 @@ public class Urls extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View urls = inflater.inflate(R.layout.newproject_urls,container,false);
+        View urls = inflater.inflate(R.layout.fragment_newproject_urls,container,false);
         recyclerView = (RecyclerView) urls.findViewById(R.id.NewProjectRV);
         fab = (FloatingActionButton) urls.findViewById(R.id.NewProjectfab);
 
@@ -48,7 +43,7 @@ public class Urls extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
-        adapter = new RVNewProjectAdapter(NewProject.urlsList);
+        adapter = new RVNewProjectAdapter(NewProjectActivity.urlsList);
         recyclerView.setAdapter(adapter);
         Log.d(TAG, "U1");
 
@@ -92,29 +87,29 @@ public class Urls extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode){
-            case NewProject.ADD:
+            case NewProjectActivity.ADD:
                 switch (requestCode) {
                     case 1:
-                        NewProject.urlsList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
+                        NewProjectActivity.urlsList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
                         Toast.makeText(this.getActivity(), "U Novo elemento foi adicionado", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 break;
-            case  NewProject.DELETE:
-                NewProject.urlsList.remove(requestCode);
-                adapter.RVUpdateListAdapter(NewProject.urlsList);
+            case  NewProjectActivity.DELETE:
+                NewProjectActivity.urlsList.remove(requestCode);
+                adapter.RVUpdateListAdapter(NewProjectActivity.urlsList);
                 recyclerView.setAdapter(adapter);
                 Toast.makeText(this.getActivity(), "O elemento foi eliminado", Toast.LENGTH_LONG).show();
                 break;
-            case NewProject.EDIT:
+            case NewProjectActivity.EDIT:
                 android.support.v4.app.FragmentManager fragmentEditManager = getFragmentManager();
-                NewProjectDialogFragmentEdit dialogEdit = new NewProjectDialogFragmentEdit(NewProject.urlsList.get(requestCode));
+                NewProjectDialogFragmentEdit dialogEdit = new NewProjectDialogFragmentEdit(NewProjectActivity.urlsList.get(requestCode));
                 dialogEdit.setTargetFragment(Urls.this, requestCode);
                 dialogEdit.show(fragmentEditManager, "NewProjectItemEditDialogFragment");
                 break;
-            case  NewProject.CHANGE:
-                NewProject.urlsList.set(requestCode,data.getStringExtra(NewProjectDialogFragmentEdit.REQUEST));
-                adapter.RVUpdateListAdapter(NewProject.urlsList);
+            case  NewProjectActivity.CHANGE:
+                NewProjectActivity.urlsList.set(requestCode,data.getStringExtra(NewProjectDialogFragmentEdit.REQUEST));
+                adapter.RVUpdateListAdapter(NewProjectActivity.urlsList);
                 recyclerView.setAdapter(adapter);
                 Toast.makeText(this.getActivity(), "O elemento foi alterado", Toast.LENGTH_LONG).show();
                 break;

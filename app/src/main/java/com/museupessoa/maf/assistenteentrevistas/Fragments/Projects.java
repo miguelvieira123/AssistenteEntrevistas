@@ -1,7 +1,5 @@
-package com.museupessoa.maf.assistenteentrevistas.main;
+package com.museupessoa.maf.assistenteentrevistas.Fragments;
 
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,28 +7,21 @@ import android.support.annotation.Nullable;
 
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.melnykov.fab.FloatingActionButton;
-import com.museupessoa.maf.assistenteentrevistas.NewProject;
+import com.museupessoa.maf.assistenteentrevistas.DownloadProjectsActivity;
+import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
-import com.museupessoa.maf.assistenteentrevistas.adapters.RVNewProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragment;
-import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
-import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectItemActionDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.ProjectActionDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
@@ -42,6 +33,7 @@ public class Projects extends Fragment{
     private List<ProjectUnit> projectUnits;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
+    private FloatingActionButton fabD;
     private final  String TAG="AssistenteEntrevistas";
     public static final int NEW_PROJECT = 1;
     public static final int DELETE_PROJECT = 2;
@@ -51,9 +43,10 @@ public class Projects extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View project = inflater.inflate(R.layout.projects,container,false);
+        View project = inflater.inflate(R.layout.fragment_projects,container,false);
         recyclerView = (RecyclerView) project.findViewById(R.id.recyclerView);
         fab = (FloatingActionButton) project.findViewById(R.id.fab);
+        fabD = (FloatingActionButton) project.findViewById(R.id.fabDownload);
         return project;
     }
 
@@ -77,6 +70,13 @@ public class Projects extends Fragment{
                dialogProjectName.show(fragmentManager, "NewProjectDialogFragment");
            }
        });
+        fabD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DownloadProjectsActivity.class);
+                startActivity(intent);
+            }
+        });
         adapter.setOnItemClickListener((new RVProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -103,7 +103,7 @@ public class Projects extends Fragment{
                             Toast.makeText(getActivity(),"Este projeto já existe", Toast.LENGTH_LONG).show();
                         }
                         else{
-                            Intent intent = new Intent(getActivity(), NewProject.class);
+                            Intent intent = new Intent(getActivity(), NewProjectActivity.class);
                             intent.putExtra("name",data.getStringExtra(NewProjectDialogFragment.REQUEST));
                             intent.putExtra("status",1);
                             startActivity(intent);
@@ -112,19 +112,20 @@ public class Projects extends Fragment{
                 }
                 break;
             case Projects.EDIT_PROJECT:
-                Intent intent = new Intent(getActivity(), NewProject.class);
+                Intent intent = new Intent(getActivity(), NewProjectActivity.class);
                 intent.putExtra("name",projectUnits.get(requestCode).name);
                 intent.putExtra("status",2);
                 startActivity(intent);
                 Toast.makeText(getActivity(),"EDIT",Toast.LENGTH_LONG).show();
                 break;
             case  Projects.DELETE_PROJECT:
+                String deleted_project = projectUnits.get(requestCode).name;
                 if(ProjectUnit.deleteProject(projectUnits.get(requestCode).name,
                         Environment.getExternalStoragePublicDirectory("/"+getResources().getString(R.string.APP_NAME)).toString())) {
                     projectUnits.remove(requestCode);
                     adapter.RVUpdateListAdapter(projectUnits);
                     recyclerView.setAdapter(adapter);
-                    Toast.makeText(getActivity(), "Este projeto foi eliminado", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Projeto "+deleted_project+" eliminado", Toast.LENGTH_LONG).show();
                 }
                 else Toast.makeText(getActivity(), "Erro", Toast.LENGTH_LONG).show();
                 break;

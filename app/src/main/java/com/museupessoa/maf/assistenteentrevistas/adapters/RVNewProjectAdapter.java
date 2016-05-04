@@ -3,16 +3,12 @@ package com.museupessoa.maf.assistenteentrevistas.adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
-import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.List;
 public class RVNewProjectAdapter extends RecyclerView.Adapter<RVNewProjectAdapter.NewProjetViewHolder> {
@@ -63,7 +59,7 @@ public class RVNewProjectAdapter extends RecyclerView.Adapter<RVNewProjectAdapte
     }
     @Override
     public RVNewProjectAdapter.NewProjetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.newproject_item_cv, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cv_newproject_item, parent, false);
         NewProjetViewHolder pvh = new NewProjetViewHolder(v,listener);
         return pvh;
     }

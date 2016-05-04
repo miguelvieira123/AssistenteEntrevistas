@@ -4,10 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.museupessoa.maf.assistenteentrevistas.main.Configuration;
-import com.museupessoa.maf.assistenteentrevistas.main.Interviews;
-import com.museupessoa.maf.assistenteentrevistas.main.Main;
-import com.museupessoa.maf.assistenteentrevistas.main.Projects;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Configuration;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Main;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Projects;
 
 
 public  class MainActivityPagerAdapter extends FragmentStatePagerAdapter{

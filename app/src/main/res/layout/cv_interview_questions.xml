@@ -3,25 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/CV_Project"
+    android:id="@+id/InterviewQuestionsCV"
+    android:descendantFocusability="blocksDescendants"
+    android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:focusableInTouchMode="true"
-
+    android:focusable="true"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        >
-
+       >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ProjectName"
+            android:id="@+id/InterviewQuestion"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:layout_gravity="center|center"
             />
 
     </RelativeLayout>

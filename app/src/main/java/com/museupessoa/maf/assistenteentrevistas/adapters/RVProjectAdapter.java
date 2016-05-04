@@ -1,8 +1,6 @@
 package com.museupessoa.maf.assistenteentrevistas.adapters;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,10 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
-import com.museupessoa.maf.assistenteentrevistas.main.Configuration;
-import com.museupessoa.maf.assistenteentrevistas.main.Interviews;
-import com.museupessoa.maf.assistenteentrevistas.main.Main;
-import com.museupessoa.maf.assistenteentrevistas.main.Projects;
 import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.List;
@@ -22,7 +16,7 @@ import java.util.List;
 
 public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.ProjectViewHolder> {
     private OnItemClickListener listener;
-    public static class ProjectViewHolder extends RecyclerView.ViewHolder  implements View.OnLongClickListener {
+    public static class ProjectViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
 
         CardView cv;
         TextView projectName;
@@ -34,25 +28,24 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.CV_Project);
             projectName = (TextView)itemView.findViewById(R.id.ProjectName);
-            cv.setOnLongClickListener(new View.OnLongClickListener() {
+            cv.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
+                public void onClick(View v) {
                     if(listener!=null)
                         listener.onItemClick(v,position);
-                    return  false;
                 }
             });
 
         }
 
         @Override
-        public boolean onLongClick(View v) {
-            return false;
-        }
+        public void onClick(View v) {}
         public void setOnItemClickListener(OnItemClickListener listener,int position ){
             this.listener = listener;
             this.position = position;
         }
+
+
     }
 
     List<ProjectUnit> projects;
@@ -66,7 +59,7 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
 
     @Override
     public RVProjectAdapter.ProjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item_cv, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cv_project_item, parent, false);
         ProjectViewHolder pvh = new ProjectViewHolder(v);
         return pvh;
     }

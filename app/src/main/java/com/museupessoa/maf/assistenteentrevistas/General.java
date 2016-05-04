@@ -361,23 +361,10 @@ public class General {
             }
 
         }
-<<<<<<< HEAD
     }
 
 
 
-
-
-
-
-
-
-
-
-=======
-
-
-    }
     public static void addSourceLink(String path, String link){
         File f  = new File(path, "/links.xml");
         if(f.exists()){
@@ -477,6 +464,6 @@ public class General {
         }
 
     }
->>>>>>> origin/ImportProjects
+
 
 }

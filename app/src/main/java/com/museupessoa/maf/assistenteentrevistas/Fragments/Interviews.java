@@ -19,10 +19,7 @@ import com.museupessoa.maf.assistenteentrevistas.adapters.RVInterviewAdapter;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewInterviewPersonNameDialog;
 import com.museupessoa.maf.assistenteentrevistas.units.InterviewUnit;
 
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
->>>>>>> origin/ImportProjects
 import java.util.List;
 
 
@@ -49,12 +46,10 @@ public class Interviews extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
-<<<<<<< HEAD
+
         interviewUnits = InterviewUnit.getInterviews(Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString());
-=======
-        interviewUnits = new ArrayList<InterviewUnit>();
-        //interviewUnits = InterviewUnit.getInterviews(Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString());
->>>>>>> origin/ImportProjects
+        //interviewUnits = new ArrayList<InterviewUnit>();
+
         adapter = new RVInterviewAdapter(interviewUnits);
         recyclerView.setAdapter(adapter);
 

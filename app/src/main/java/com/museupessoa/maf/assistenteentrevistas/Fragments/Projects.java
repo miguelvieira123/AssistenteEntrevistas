@@ -16,10 +16,7 @@ import android.widget.Toast;
 
 
 import com.melnykov.fab.FloatingActionButton;
-<<<<<<< HEAD:app/src/main/java/com/museupessoa/maf/assistenteentrevistas/Fragments/Projects.java
-=======
 import com.museupessoa.maf.assistenteentrevistas.DownloadProjectsActivity;
->>>>>>> origin/ImportProjects:app/src/main/java/com/museupessoa/maf/assistenteentrevistas/Fragments/Projects.java
 import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;

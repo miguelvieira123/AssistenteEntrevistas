@@ -26,6 +26,15 @@
             android:id="@+id/mainPageLogo"
             android:baselineAlignBottom="false"
             android:src="@drawable/logo_museu_da_pessoa"
+            android:layout_gravity="center_horizontal|center"
+            android:layout_margin="23dp" />
+
+        <ImageView
+            android:layout_width="142dp"
+            android:layout_height="88dp"
+            android:id="@+id/mainPageLogo1"
+            android:baselineAlignBottom="false"
+            android:src="@drawable/um_ee"
             android:layout_gravity="center_horizontal|top"
             android:layout_margin="23dp" />
     </FrameLayout>

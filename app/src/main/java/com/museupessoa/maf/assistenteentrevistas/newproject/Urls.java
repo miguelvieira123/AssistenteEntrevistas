@@ -91,7 +91,7 @@ public class Urls extends Fragment {
                 switch (requestCode) {
                     case 1:
                         NewProjectActivity.urlsList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
-                        Toast.makeText(this.getActivity(), "U Novo elemento foi adicionado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this.getActivity(), "Novo elemento foi adicionado", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 break;

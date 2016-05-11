@@ -29,11 +29,11 @@ public class AddSrcLinkDialogFragment extends DialogFragment  {
         link = (EditText) view.findViewById(R.id.AddSrcLinkDF);
         link.setText("http://");
         builder.setView(view);
-        builder.setTitle("Criar nova referencia")
+        builder.setTitle("Criar nova referência")
                 .setPositiveButton("Aplicar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (link.getText().toString().isEmpty()) Toast.makeText(getActivity(),
-                                "A referencia tem que ser", Toast.LENGTH_SHORT).show();
+                                "A referência tem que ser", Toast.LENGTH_SHORT).show();
                         else {
 
                             DownloadProjectsActivity callingActivity = (DownloadProjectsActivity) getActivity();

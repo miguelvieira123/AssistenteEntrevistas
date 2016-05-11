@@ -25,7 +25,7 @@ public class DowloadProjectDialogFragment  extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Queria guardar este projeto?")
+        builder.setTitle("Quer guardar este projeto?")
                 .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Toast.makeText(getActivity(), "Guardado "+ Integer.toString(position), Toast.LENGTH_SHORT).show();

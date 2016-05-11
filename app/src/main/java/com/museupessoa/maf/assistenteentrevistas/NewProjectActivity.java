@@ -32,7 +32,7 @@ public class NewProjectActivity extends AppCompatActivity  {
     ViewPager pager;
     NewProjectPagerAdapter newProjectPagerAdapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Metainfo","Perguntas","Referencias"};
+    CharSequence Titles[]={"MetaInfo","Perguntas","Referências"};
     int Numboftabs =3;
     public final  String APP_NAME = "AssistenteEntrevistas";
     @Override
@@ -77,18 +77,18 @@ public class NewProjectActivity extends AppCompatActivity  {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
             if(status==1)
-        Toast.makeText(getApplicationContext(), "Novo projecto foi criado",
+        Toast.makeText(getApplicationContext(), "Novo projeto foi criado",
                 Toast.LENGTH_LONG).show();
             else if(status==2)
-                Toast.makeText(getApplicationContext(), "O projecto foi alterado",
+                Toast.makeText(getApplicationContext(), "O projeto foi alterado",
                         Toast.LENGTH_LONG).show();
         }
         else {
             if(status==1)
-            Toast.makeText(getApplicationContext(), "Novo projecto não foi criado",
+            Toast.makeText(getApplicationContext(), "Novo projeto não foi criado",
                     Toast.LENGTH_LONG).show();
             else if(status==2)
-                Toast.makeText(getApplicationContext(), "O projecto não foi alterado",
+                Toast.makeText(getApplicationContext(), "O projeto não foi alterado",
                         Toast.LENGTH_LONG).show();
         }
     }

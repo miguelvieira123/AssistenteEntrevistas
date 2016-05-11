@@ -50,7 +50,7 @@ public class NewInterviewActivity extends AppCompatActivity {
             fragmentTransaction.commit();
         }else{
             setContentView(R.layout.fragment_interview_metadata);
-            CharSequence Titles[]={"Escrita","Audio","Foto"};
+            CharSequence Titles[]={"Aplicação","Audio","Foto"};
             int Numboftabs = 3;
             EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path);
             ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
@@ -94,7 +94,7 @@ public class NewInterviewActivity extends AppCompatActivity {
             setContentView(R.layout.fragment_interview_metadata);
 
 
-            CharSequence Titles[]={"Escrita","Audio","Foto"};
+            CharSequence Titles[]={"Aplicação","Audio","Foto"};
             int Numboftabs = 3;
             EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path);
             ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);

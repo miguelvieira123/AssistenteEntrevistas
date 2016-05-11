@@ -30,7 +30,7 @@ public class NewProjectDialogFragmentNewItem extends DialogFragment {
                 .setPositiveButton("Adicionar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(test.getText().toString().isEmpty())Toast.makeText(getActivity(),
-                                "O elemento não pode ser vasio", Toast.LENGTH_SHORT).show();
+                                "O elemento não pode ser vazio", Toast.LENGTH_SHORT).show();
                         else {
                             Intent intent = new Intent();
                             intent.putExtra(REQUEST, test.getText().toString());

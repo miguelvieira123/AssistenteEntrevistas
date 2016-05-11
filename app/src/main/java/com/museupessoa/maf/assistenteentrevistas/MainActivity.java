@@ -87,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //createAppFolders();
                 } else {
-                    Toast.makeText(this, "App can not create Folders", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Aplicação não consegue criar as Pastas", Toast.LENGTH_LONG).show();
                 }
                 if (grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
                 } else {
-                    Toast.makeText(this, "App can not record audio", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Aplicação não consegue gravar áudio", Toast.LENGTH_LONG).show();
                 }
             }
         }

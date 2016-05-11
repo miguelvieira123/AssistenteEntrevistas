@@ -15,8 +15,8 @@ public class DeleteSrcLinkDialogFragment  extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Queria eleminar este link?")
-                .setPositiveButton("Eleminar", new DialogInterface.OnClickListener() {
+        builder.setTitle("Queria eliminar este link?")
+                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         DownloadProjectsActivity callingActivity = (DownloadProjectsActivity) getActivity();
                         callingActivity.deleteLink();

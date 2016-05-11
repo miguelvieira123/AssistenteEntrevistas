@@ -54,7 +54,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
         lastPos=0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_projects);
-        setTitle("Download Projetos");
+        setTitle("Download de Projetos");
         recyclerView = (RecyclerView) findViewById(R.id.remoteProjectsRV);
         LinearLayoutManager llm = new LinearLayoutManager(DownloadProjectsActivity.this);
         recyclerView.setLayoutManager(llm);
@@ -66,7 +66,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
         src = (Spinner) findViewById(R.id.Sources);
         PATH = Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString();
         links = General.getSourceLinks(PATH);
-        if(links.size()==0) Toast.makeText(DownloadProjectsActivity.this,"Ainda não há os links",Toast.LENGTH_LONG).show();
+        if(links.size()==0) Toast.makeText(DownloadProjectsActivity.this,"Ainda não existem links",Toast.LENGTH_LONG).show();
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, links);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         src.setAdapter(dataAdapter);
@@ -75,7 +75,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FragmentManager fm = getSupportFragmentManager();
                 AddSrcLinkDialogFragment newSrcLink = new AddSrcLinkDialogFragment();
-                newSrcLink.show(fm, "Add_new_source_link");
+                newSrcLink.show(fm, "Adicionar novo link");
             }
         });
 
@@ -116,7 +116,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
                     public void onItemClick(View v, int position) {
                         FragmentManager fm = getSupportFragmentManager();
                         DowloadProjectDialogFragment dialogAction = new DowloadProjectDialogFragment(position);
-                        dialogAction.show(fm, "DowloadProject");
+                        dialogAction.show(fm, "Download do Projeto");
                     }
                 }));
 
@@ -140,7 +140,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
         case R.id.Delete:
             FragmentManager fm = getSupportFragmentManager();
             DeleteSrcLinkDialogFragment deleteAction = new DeleteSrcLinkDialogFragment();
-            deleteAction.show(fm, "DeleteLink");
+            deleteAction.show(fm, "Eliminar Link");
             return(true);
     }
         return(super.onOptionsItemSelected(item));

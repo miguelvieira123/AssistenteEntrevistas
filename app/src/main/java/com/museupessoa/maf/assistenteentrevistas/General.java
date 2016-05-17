@@ -112,8 +112,6 @@ public class General {
         setContadorXML(app_path, contador);
         return "e00"+contador;
     }
-
-
     public static boolean createInterview(String path, String person_name, String interviewCode, List<String> meta, List<String> perguntas, List<String> urls){
         try{
             File f = new File(path + "/Entrevistas/" + interviewCode );
@@ -138,7 +136,10 @@ public class General {
                 n1 = doc.createElement("meta");
                 n1.setAttribute("name", person_name );
                 for (String info: meta) {
-                    n2 = doc.createElement( info );
+                    //n2 = doc.createElement( info );
+
+                    n2 = doc.createElement( "info" );
+                    n2.setAttribute("name", info );
                     n1.appendChild(n2);
                 }
                 root.appendChild(n1);
@@ -176,9 +177,6 @@ public class General {
             return false;
         }
     }
-
-
-
     public static boolean createProject(String path,String projectName,List<String> info, List<String> questions, List<String> urls, int status){
         try {
             File f  = new File(path + "/Projetos/" + projectName + ".xml");
@@ -314,7 +312,6 @@ public class General {
     }
 
 
-
     private static int getContadorFromXML(String path){
         int contador=0;
         File f  = new File(path, "config.xml");
@@ -335,7 +332,6 @@ public class General {
         }
         return contador;
     }
-
     private static void setContadorXML(String path, int novaContagem){
         File f  = new File(path, "config.xml");
         if(f.exists()){

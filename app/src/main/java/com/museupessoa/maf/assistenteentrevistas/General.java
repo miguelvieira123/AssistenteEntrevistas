@@ -1,5 +1,6 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.os.Environment;
 import android.util.Log;
 
 import org.w3c.dom.Document;
@@ -30,6 +31,8 @@ import javax.xml.transform.stream.StreamResult;
 public class General {
 
     public static final String TAG ="AssistenteEntrevistas";
+    public static  String APP_NAME = "AssistenteEntrevistas";
+    public static String PATH = null;
 
 
     public static boolean createStructOfFolders(String path){

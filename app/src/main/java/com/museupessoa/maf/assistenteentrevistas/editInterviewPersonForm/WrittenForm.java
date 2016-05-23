@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -27,10 +28,15 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 
 public class WrittenForm extends Fragment {
@@ -41,7 +47,7 @@ public class WrittenForm extends Fragment {
     LinearLayout linearLayout;
     LinearLayout.LayoutParams layout_params;
     private static int viewsCount = 0;
-    private List<View> allViews = new ArrayList<View>();
+    private HashMap<String,EditText> allViews = new HashMap<String,EditText>();
 
     public Class<? extends WrittenForm> getFragmentClass() {
         return this.getClass();
@@ -58,12 +64,8 @@ public class WrittenForm extends Fragment {
         layout_params = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,
                                                 LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_params.setMargins(5, 5, 5, 5);
-
         linearLayout = (LinearLayout) metainfo.findViewById(R.id.edit_interview_metadata);
-
-        //createEditText("Nome");
-        createEditTextForm();
-
+        this.createEditTextForm();
 
         return metainfo;
     }
@@ -74,6 +76,7 @@ public class WrittenForm extends Fragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveFormContent();
                 Intent intent = new Intent(getActivity(), InterviewActivity.class);
                 intent.putExtra("path",new_interview_path);
                 startActivity(intent);
@@ -81,19 +84,67 @@ public class WrittenForm extends Fragment {
         });
     }
 
+    private void saveFormContent(){
+        HashMap<String, String> info = new HashMap<>();
+        for (String key: allViews.keySet()) {
+            info.put(key, allViews.get(key).getText().toString());
+        }
+        savePersonMetainfo(info);
+    }
+
+    private void savePersonMetainfo( HashMap<String, String> info){
+        try{
+            File f  = new File(new_interview_path, "manifesto.xml");
+            if(f.exists()){
+                Document doc = null;
+                try {
+                    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                    NodeList nodeList_meta = doc.getElementsByTagName("meta");
+                    String person_name = nodeList_meta.item(0).getAttributes().getNamedItem("name").getNodeValue();
+                    doc.getFirstChild().removeChild(nodeList_meta.item(0));
+                    Node root = doc.getElementsByTagName("manifesto").item(0);
+
+                    org.w3c.dom.Element n1;
+                    org.w3c.dom.Element n2;
+
+                    n1 = doc.createElement("meta");
+                    n1.setAttribute("name", person_name );
+                    for (String key: info.keySet()) {
+                        n2 = doc.createElement( "info" );
+                        n2.setAttribute("name", key );
+                        n2.setTextContent(info.get(key));
+                        n1.appendChild(n2);
+                    }
+                    root.appendChild(n1);
+
+                    Transformer trans = TransformerFactory.newInstance().newTransformer();
+                    DOMSource xmlSource = new DOMSource(doc);
+                    StreamResult result = new StreamResult(new_interview_path + "/manifesto.xml");
+                    trans.transform(xmlSource, result);
+
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch(Exception e){e.printStackTrace();}
+    }
 
     private void createEditText(String hint) {
         EditText editText = new EditText(this.getContext());
         editText.setId(viewsCount++);
         editText.setHint(hint);
         editText.setSingleLine();
-        allViews.add(editText);
+        allViews.put(hint, editText);//para mais tarde recolher o input
         linearLayout.addView(editText, layout_params);
-
     }
 
-    private void createEditTextForm(){
 
+
+    private void createEditTextForm(){
         try{
             File f  = new File(new_interview_path, "manifesto.xml");
             if(f.exists()){
@@ -104,11 +155,8 @@ public class WrittenForm extends Fragment {
                     NodeList node_meta = nodeList_meta.item(0).getChildNodes();
 
                     for (int i=0; i< node_meta.getLength(); i++) {
-                        createEditText(node_meta.item(i).getNodeName());
+                        createEditText(node_meta.item(i).getAttributes().getNamedItem("name").getNodeValue());
                     }
-
-                    //NamedNodeMap attrs = audio.item(0).getAttributes();
-                    //contador = Integer.parseInt(attrs.getNamedItem("count").getNodeValue());
                 } catch (SAXException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

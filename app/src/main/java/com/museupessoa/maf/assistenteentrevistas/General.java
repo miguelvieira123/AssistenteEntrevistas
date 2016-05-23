@@ -31,8 +31,10 @@ import javax.xml.transform.stream.StreamResult;
 public class General {
 
     public static final String TAG ="AssistenteEntrevistas";
+    public  static String PATH = Environment.getExternalStoragePublicDirectory("/AssistenteEntrevistas").toString();
     public static  String APP_NAME = "AssistenteEntrevistas";
-    public static String PATH = null;
+
+
 
 
     public static boolean createStructOfFolders(String path){

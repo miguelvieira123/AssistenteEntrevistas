@@ -4,6 +4,8 @@ package com.museupessoa.maf.assistenteentrevistas;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import android.os.Environment;
@@ -22,6 +24,7 @@ public class NewInterviewActivity extends AppCompatActivity {
     private String selected_project;
     private String person_name;
     private String new_interview_path;
+    public static Bitmap bitmapFormPhoto=null;
 
 
     @Override

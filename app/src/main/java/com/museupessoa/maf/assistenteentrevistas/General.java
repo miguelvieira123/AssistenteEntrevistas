@@ -2,6 +2,8 @@ package com.museupessoa.maf.assistenteentrevistas;
 
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,6 @@ public class General {
 
 
 
-
     public static boolean createStructOfFolders(String path){
         try {
             File f = new File(path + "/Entrevistas");
@@ -44,6 +45,10 @@ public class General {
             f.setWritable(true);
 
             f = new File(path + "/Projetos");
+            if (!f.exists())if(!f.mkdirs())return false;
+            f.setWritable(true);
+
+            f = new File(path + "/Zips");
             if (!f.exists())if(!f.mkdirs())return false;
             f.setWritable(true);
 

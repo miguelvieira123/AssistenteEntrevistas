@@ -9,11 +9,18 @@
         android:layout_width="fill_parent"
         android:id="@+id/photo_meta_view"
         />
-    <ImageButton
-        android:layout_width="wrap_content"
+
+    <Button
+        android:layout_width="183dp"
         android:layout_height="wrap_content"
-        android:id="@+id/photo_meta"
-        android:layout_gravity="right|bottom"
-        android:background="@android:color/transparent"
-        android:src="@mipmap/photo_button" />
+        android:text="Prefil"
+        android:id="@+id/BPrefil"
+        android:layout_gravity="left|bottom" />
+
+    <Button
+        android:layout_width="185dp"
+        android:layout_height="wrap_content"
+        android:text="From"
+        android:id="@+id/BFrom"
+        android:layout_gravity="right|bottom" />
 </FrameLayout>

@@ -1,12 +1,21 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
@@ -16,6 +25,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
+import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteSrcLinkDialogFragment;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -29,6 +40,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -48,6 +62,11 @@ public class InterviewActivity extends AppCompatActivity {
     private String interview_path;
     private String audio_file_name;
     private String person_name;
+    private final int CAMERA_RESULT = 0;
+    SimpleDateFormat sdf;
+    private String fotoName;
+    DisplayMetrics metricsB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +77,9 @@ public class InterviewActivity extends AppCompatActivity {
         String nome = getPersonNameFromXML();
         TextView name = (TextView)findViewById(R.id.person_name);
         name.setText(nome);
+        metricsB = getResources().getDisplayMetrics();
+        sdf = new SimpleDateFormat("ddMMyy_HHmmss");
         //Log.d("InterviewActivity", ">>>>>InterviewActivity>>>> var path: " + interview_path);
-
         FragmentManager fragmentActionManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
         Interview interview = new Interview();
@@ -72,11 +92,13 @@ public class InterviewActivity extends AppCompatActivity {
         conta_gravacoes = getContadorFromXML(interview_path);
         rec_time = (Chronometer) findViewById(R.id.rec_chronometer);
 
-
-
         //add Listenners to Buttons
         this.addListennerToButtons();
+
+
     }
+
+
 
     private String getPersonNameFromXML(){
         File manif_file = new File(interview_path, "manifesto.xml");
@@ -131,7 +153,6 @@ public class InterviewActivity extends AppCompatActivity {
             return false;
         }
     }
-
     private boolean createAudioMetaInfo(String audioFileName){
         try{
             File outputFile = new File(interview_path + "/Audio/" + audioFileName + ".xml" );
@@ -157,13 +178,13 @@ public class InterviewActivity extends AppCompatActivity {
         rec.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     rec_time.setBase(SystemClock.elapsedRealtime());
                     rec_time.start();
                     startRecording(interview_path);
-                    audio_file_name = "gravacao_"+conta_gravacoes;
-                    createAudioMetaInfo("gravacao_"+conta_gravacoes);
-                }else{
+                    audio_file_name = "gravacao_" + conta_gravacoes;
+                    createAudioMetaInfo("gravacao_" + conta_gravacoes);
+                } else {
                     rec_time.stop();
                     stopRecording();
                     setContadorXML(interview_path, conta_gravacoes);
@@ -175,7 +196,10 @@ public class InterviewActivity extends AppCompatActivity {
         photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "taking photo", Toast.LENGTH_LONG).show();
+                fotoName = interview_path + "/Fotos/"+sdf.format(new Date())+".jpg";
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(fotoName)));
+                startActivityForResult(cameraIntent, CAMERA_RESULT);
             }
         });
     }
@@ -257,5 +281,51 @@ public class InterviewActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_RESULT) {
+            try{
+                Pic(fotoName);
+            }
+            catch (Exception e ){
+                Toast.makeText(this,"Tenta outra vez", Toast.LENGTH_LONG).show();
+            }
 
+        }
+
+    }
+
+    private void Pic(String PATH) {
+        int targetW = (int)metricsB.widthPixels;
+        int targetH =(int) metricsB.heightPixels;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(PATH, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+        BitmapFactory.decodeFile(PATH, bmOptions);
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_interview, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.Zip:
+                    Zip.zip(interview_path, General.PATH + "/Zips",
+                            interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip",true);
+                    Toast.makeText(this,"O arqivo foi criado",Toast.LENGTH_LONG).show();
+                return true;
+    }
+        return(super.onOptionsItemSelected(item));
+    }
 }

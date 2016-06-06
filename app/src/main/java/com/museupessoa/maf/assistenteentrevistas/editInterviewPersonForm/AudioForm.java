@@ -80,7 +80,7 @@ public class AudioForm extends Fragment {
                     posStatus=-1;
                 }
                 else {
-                    //cv.setCardBackgroundColor(Color.rgb(122,122,122));
+
                     stopRecording();
                     startRecording(new_interview_path, formNames.get(position));
                     posStatus=position;
@@ -125,7 +125,7 @@ public class AudioForm extends Fragment {
                     NodeList node_meta = nodeList_meta.item(0).getChildNodes();
 
                     for (int i=0; i< node_meta.getLength(); i++) {
-                        forms.add(node_meta.item(i).getNodeName());
+                        forms.add(node_meta.item(i).getAttributes().getNamedItem("name").getNodeValue());
                     }
 
                 } catch (SAXException e) {

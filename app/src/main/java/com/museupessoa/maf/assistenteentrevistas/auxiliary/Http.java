@@ -45,8 +45,7 @@ public class Http {
             NodeList list = xmlRead.getElementsByTagName("p");
             for(int i=0; i<list.getLength();i++){
                 Node elem = list.item(i);
-                remoteProjects.add(elem.getTextContent().substring(0,
-                        elem.getTextContent().length() - 4));
+                remoteProjects.add(elem.getTextContent());
             }
             return remoteProjects;
         } catch (ParserConfigurationException e) {

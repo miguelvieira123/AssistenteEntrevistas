@@ -9,6 +9,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -17,6 +18,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -27,6 +29,8 @@ import android.widget.ToggleButton;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteSrcLinkDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
+import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -75,10 +79,39 @@ public class InterviewActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         interview_path = intent.getStringExtra("path");
         String nome = getPersonNameFromXML();
-        TextView name = (TextView)findViewById(R.id.person_name);
+        Button name = (Button)findViewById(R.id.person_name);
         name.setText(nome);
+
         metricsB = getResources().getDisplayMetrics();
         sdf = new SimpleDateFormat("ddMMyy_HHmmss");
+
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //iniciar SlidingTabs para preencher metadata
+                setContentView(R.layout.fragment_interview_metadata);
+
+
+                CharSequence Titles[]={"Aplicação","Audio","Foto"};
+                int Numboftabs = 3;
+                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
+                ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
+                pager.setAdapter(myPagerAdapter);
+                SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
+                tabs.setDistributeEvenly(true);
+
+                tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                    @Override
+                    public int getIndicatorColor(int position) {
+                        return getResources().getColor(R.color.tabsCor);
+                    }
+
+                });
+                tabs.setViewPager(pager);
+            }
+        });
+
+
         //Log.d("InterviewActivity", ">>>>>InterviewActivity>>>> var path: " + interview_path);
         FragmentManager fragmentActionManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();

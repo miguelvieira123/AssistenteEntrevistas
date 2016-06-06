@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,10 +30,13 @@ import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectItemActionDia
 import java.io.File;
 
 public class PhotoForm extends Fragment {
-    private final int CAMERA_RESULT = 0;
+    private final int CAMERA_RESULT_F = 0;
+    private final int CAMERA_RESULT_P = 1;
     private String new_interview_path;
     private String formPhoto;
-    ImageButton photo;
+    private String prefilPhoto;
+    Button photoForm;
+    Button photoPrefil;
     ImageView MetaPhoto;
     public PhotoForm(String new_interview_path) {
         this.new_interview_path = new_interview_path;
@@ -41,9 +45,11 @@ public class PhotoForm extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View metainfo = inflater.inflate(R.layout.fragment_new_interview_metainfo_photo,container,false);
-        photo = (ImageButton) metainfo.findViewById(R.id.photo_meta);
+        photoForm = (Button) metainfo.findViewById(R.id.BFrom);
+        photoPrefil = (Button) metainfo.findViewById(R.id.BPrefil);
         MetaPhoto = (ImageView) metainfo.findViewById(R.id.photo_meta_view);
         formPhoto = new_interview_path + "/Fotos/form.jpg";
+        prefilPhoto  = new_interview_path + "/Fotos/foto_perfil.jpg";
         if(NewInterviewActivity.bitmapFormPhoto!=null)MetaPhoto.setImageBitmap(NewInterviewActivity.bitmapFormPhoto);
         return metainfo;
     }
@@ -52,12 +58,21 @@ public class PhotoForm extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        photo.setOnClickListener(new View.OnClickListener() {
+        photoForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(formPhoto)));
-                startActivityForResult(cameraIntent,CAMERA_RESULT);
+                startActivityForResult(cameraIntent, CAMERA_RESULT_F);
+
+            }
+        });
+        photoPrefil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(prefilPhoto)));
+                startActivityForResult(cameraIntent,CAMERA_RESULT_P);
 
             }
         });
@@ -66,9 +81,18 @@ public class PhotoForm extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_RESULT) {
+        if (requestCode == CAMERA_RESULT_F) {
             try{
                 Pic(formPhoto);
+            }
+            catch (Exception e ){
+                Toast.makeText(getActivity(),"Tenta outra vez", Toast.LENGTH_LONG).show();
+            }
+
+        }
+        else if (requestCode == CAMERA_RESULT_P){
+            try{
+                Pic(prefilPhoto);
             }
             catch (Exception e ){
                 Toast.makeText(getActivity(),"Tenta outra vez", Toast.LENGTH_LONG).show();

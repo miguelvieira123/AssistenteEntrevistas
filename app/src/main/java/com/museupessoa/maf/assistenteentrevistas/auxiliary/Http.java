@@ -46,11 +46,6 @@ public class Http {
             for(int i=0; i<list.getLength();i++){
                 Node elem = list.item(i);
                 remoteProjects.add(elem.getTextContent());
-<<<<<<< HEAD
-                //remoteProjects.add(elem.getTextContent().substring(0,
-                //        elem.getTextContent().length() - 4));
-=======
->>>>>>> main_foto
             }
             return remoteProjects;
         } catch (ParserConfigurationException e) {

@@ -50,7 +50,14 @@ public class PhotoForm extends Fragment {
         MetaPhoto = (ImageView) metainfo.findViewById(R.id.photo_meta_view);
         formPhoto = new_interview_path + "/Fotos/form.jpg";
         prefilPhoto  = new_interview_path + "/Fotos/foto_perfil.jpg";
-        if(NewInterviewActivity.bitmapFormPhoto!=null)MetaPhoto.setImageBitmap(NewInterviewActivity.bitmapFormPhoto);
+        if(NewInterviewActivity.bitmapFormPhoto!=null){
+            Log.e("MSG","1");
+            MetaPhoto.setImageBitmap(NewInterviewActivity.bitmapFormPhoto);
+        }
+        else{
+            Log.e("MSG","2");
+            MetaPhoto.setImageBitmap(null);
+        }
         return metainfo;
     }
 

@@ -356,7 +356,7 @@ public class InterviewActivity extends AppCompatActivity {
             case R.id.Zip:
                     Zip.zip(interview_path, General.PATH + "/Zips",
                             interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip",true);
-                    Toast.makeText(this,"O arqivo foi criado",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"O arquivo foi criado",Toast.LENGTH_LONG).show();
                 return true;
     }
         return(super.onOptionsItemSelected(item));

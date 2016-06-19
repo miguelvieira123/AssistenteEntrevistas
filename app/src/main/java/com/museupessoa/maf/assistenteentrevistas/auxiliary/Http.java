@@ -46,6 +46,7 @@ public class Http {
             for(int i=0; i<list.getLength();i++){
                 Node elem = list.item(i);
                 remoteProjects.add(elem.getTextContent());
+
             }
             return remoteProjects;
         } catch (ParserConfigurationException e) {

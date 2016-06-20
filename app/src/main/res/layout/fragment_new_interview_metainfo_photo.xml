@@ -13,14 +13,14 @@
     <Button
         android:layout_width="183dp"
         android:layout_height="wrap_content"
-        android:text="Prefil"
+        android:text="Perfil"
         android:id="@+id/BPrefil"
         android:layout_gravity="left|bottom" />
 
     <Button
         android:layout_width="185dp"
         android:layout_height="wrap_content"
-        android:text="From"
+        android:text="Procurar"
         android:id="@+id/BFrom"
         android:layout_gravity="right|bottom" />
 </FrameLayout>

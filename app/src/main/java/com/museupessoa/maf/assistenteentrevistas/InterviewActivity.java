@@ -426,7 +426,7 @@ public class InterviewActivity extends AppCompatActivity {
                     }
                     });
                     thrd.start();
-
+                    Toast.makeText(this,"O arquivo foi criado",Toast.LENGTH_LONG).show();
                 return true;
             case R.id.E_Eliminar:
                 General.deleteDirectory(new File(interview_path));

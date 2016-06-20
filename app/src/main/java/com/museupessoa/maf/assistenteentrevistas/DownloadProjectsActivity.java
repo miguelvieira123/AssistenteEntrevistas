@@ -1,5 +1,7 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -54,6 +56,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
         lastPos=0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_projects);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         setTitle("Download de Projetos");
         recyclerView = (RecyclerView) findViewById(R.id.remoteProjectsRV);
         LinearLayoutManager llm = new LinearLayoutManager(DownloadProjectsActivity.this);

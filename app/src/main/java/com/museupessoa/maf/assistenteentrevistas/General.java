@@ -35,8 +35,9 @@ public class General {
     public static final String TAG ="AssistenteEntrevistas";
     public  static String PATH = Environment.getExternalStoragePublicDirectory("/AssistenteEntrevistas").toString();
     public static  String APP_NAME = "AssistenteEntrevistas";
-
-
+    public static int CR=227;
+    public static int CG=110;
+    public static int CB=20;
 
     public static boolean createStructOfFolders(String path){
         try {
@@ -471,5 +472,19 @@ public class General {
 
     }
 
+    public static boolean deleteDirectory(File path) {
+        if( path.exists() ) {
+            File[] files = path.listFiles();
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                }
+                else {
+                    files[i].delete();
+                }
+            }
+        }
+        return(path.delete());
+    }
 
 }

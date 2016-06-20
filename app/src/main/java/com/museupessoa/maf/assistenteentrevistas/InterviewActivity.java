@@ -5,34 +5,46 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
+import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteSrcLinkDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -46,7 +58,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,6 +82,7 @@ public class InterviewActivity extends AppCompatActivity {
     private String person_name;
     private final int CAMERA_RESULT = 0;
     SimpleDateFormat sdf;
+    private String fullFotoName;
     private String fotoName;
     DisplayMetrics metricsB;
 
@@ -81,10 +96,9 @@ public class InterviewActivity extends AppCompatActivity {
         String nome = getPersonNameFromXML();
         Button name = (Button)findViewById(R.id.person_name);
         name.setText(nome);
-
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         metricsB = getResources().getDisplayMetrics();
         sdf = new SimpleDateFormat("ddMMyy_HHmmss");
-
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +106,7 @@ public class InterviewActivity extends AppCompatActivity {
                 setContentView(R.layout.fragment_interview_metadata);
 
 
-                CharSequence Titles[]={"Aplicação","Audio","Foto"};
+                CharSequence Titles[] = {"Aplicação", "Audio", "Foto"};
                 int Numboftabs = 3;
                 EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
                 ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
@@ -113,6 +127,13 @@ public class InterviewActivity extends AppCompatActivity {
 
 
         //Log.d("InterviewActivity", ">>>>>InterviewActivity>>>> var path: " + interview_path);
+        LinearLayout LQList = (LinearLayout) findViewById(R.id.interview_activity_questions_list);
+        FrameLayout.LayoutParams paramsLayout = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                (metricsB.heightPixels-350)
+        );
+
+        LQList.setLayoutParams(paramsLayout);
         FragmentManager fragmentActionManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
         Interview interview = new Interview();
@@ -127,7 +148,6 @@ public class InterviewActivity extends AppCompatActivity {
 
         //add Listenners to Buttons
         this.addListennerToButtons();
-
 
     }
 
@@ -225,13 +245,14 @@ public class InterviewActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton photo = (ImageButton) findViewById(R.id.photo_button);
+        FloatingActionButton photo = (FloatingActionButton) findViewById(R.id.photo_button);
         photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fotoName = interview_path + "/Fotos/"+sdf.format(new Date())+".jpg";
+                fotoName = sdf.format(new Date()) + ".jpg";
+                fullFotoName = interview_path + "/Fotos/" + fotoName ;
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(fotoName)));
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(fullFotoName)));
                 startActivityForResult(cameraIntent, CAMERA_RESULT);
             }
         });
@@ -318,7 +339,7 @@ public class InterviewActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_RESULT) {
             try{
-                Pic(fotoName);
+                Pic(fullFotoName);
             }
             catch (Exception e ){
                 Toast.makeText(this,"Tenta outra vez", Toast.LENGTH_LONG).show();
@@ -336,29 +357,117 @@ public class InterviewActivity extends AppCompatActivity {
         BitmapFactory.decodeFile(PATH, bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
-
         int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
         BitmapFactory.decodeFile(PATH, bmOptions);
+        File f  = new File(interview_path, "/manifesto.xml");
+        if(f.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList photos = doc.getElementsByTagName("photos");
+                org.w3c.dom.Element photo = doc.createElement("photo");
+                photo.setAttribute("name", fotoName);
+                photo.setAttribute("time", rec_time.getText().toString());
+                if(audio_file_name==null) photo.setAttribute("audio","");
+                else photo.setAttribute("audio",audio_file_name+".mp3");
+                if(photos.getLength()==0){
+                    NodeList root = doc.getElementsByTagName("manifesto");
+                    org.w3c.dom.Element photosN = doc.createElement("photos");
+                    photosN.appendChild(photo);
+                    root.item(0).appendChild(photosN);
+                }else{
+                    photos.item(0).appendChild(photo);
+                }
+
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(interview_path + "/manifesto.xml");
+                trans.transform(xmlSource, result);
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_interview, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.Zip:
+            case R.id.E_Enviar:
+                    final String arq =  General.PATH + "/Zips/"+interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip";
                     Zip.zip(interview_path, General.PATH + "/Zips",
                             interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip",true);
+                    Thread thrd = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List <String> links = getLinks(interview_path);
+                        for(int i=0;i<links.size();i++){
+                            UploadingFileToServer.uploadingFileToTheServer(arq, links.get(i));
+                        }
+                        new File(arq).delete();
+                    }
+                    });
+                    thrd.start();
                     Toast.makeText(this,"O arquivo foi criado",Toast.LENGTH_LONG).show();
                 return true;
+            case R.id.E_Eliminar:
+                General.deleteDirectory(new File(interview_path));
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.E_Accept:
+                Toast.makeText(this,"asd",Toast.LENGTH_LONG).show();
+                break;
     }
         return(super.onOptionsItemSelected(item));
     }
+
+    public List<String> getLinks(String PATH){
+        File f  = new File(PATH, "/manifesto.xml");
+        List <String> list = new ArrayList<String>();
+        if(f.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList links = doc.getElementsByTagName("url");
+                for (int i=0;i<links.getLength();i++){
+                    list.add(links.item(i).getTextContent());
+                }
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return  list;
+    }
+
+    @Override
+    public void onBackPressed() {
+     Toast.makeText(this,"lk",Toast.LENGTH_LONG).show();
+        this.finish();
+    }
+
 }

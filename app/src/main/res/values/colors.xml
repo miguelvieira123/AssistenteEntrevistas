@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#c7c5c3</color>
     <color name="colorAccent">#e7e6e6</color>
     <color name="tabsCor">#f2ab4d</color>
-    <color name="fabPrimary">#ff7054</color>
+    <color name="fabPrimary">#ce6f26</color>
     <color name="fabPressed">#dab1a5</color>
     <color name="fabRipple">#8f8e8d</color>
-
     <color name="grey_ultra_light">#dee4d0</color>
+    <color name="white">#ffffff</color>
+    <color name="red">#d95049</color>
+    <color name="green">#679b65</color>
+    <color name="grey">#afafaf</color>
 
 </resources>

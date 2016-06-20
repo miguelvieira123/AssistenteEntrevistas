@@ -15,20 +15,26 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
@@ -90,7 +96,7 @@ public class InterviewActivity extends AppCompatActivity {
         String nome = getPersonNameFromXML();
         Button name = (Button)findViewById(R.id.person_name);
         name.setText(nome);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG,General.CB )));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         metricsB = getResources().getDisplayMetrics();
         sdf = new SimpleDateFormat("ddMMyy_HHmmss");
         name.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +106,7 @@ public class InterviewActivity extends AppCompatActivity {
                 setContentView(R.layout.fragment_interview_metadata);
 
 
-                CharSequence Titles[]={"Aplicação","Audio","Foto"};
+                CharSequence Titles[] = {"Aplicação", "Audio", "Foto"};
                 int Numboftabs = 3;
                 EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
                 ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
@@ -121,6 +127,13 @@ public class InterviewActivity extends AppCompatActivity {
 
 
         //Log.d("InterviewActivity", ">>>>>InterviewActivity>>>> var path: " + interview_path);
+        LinearLayout LQList = (LinearLayout) findViewById(R.id.interview_activity_questions_list);
+        FrameLayout.LayoutParams paramsLayout = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                (metricsB.heightPixels-350)
+        );
+
+        LQList.setLayoutParams(paramsLayout);
         FragmentManager fragmentActionManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
         Interview interview = new Interview();
@@ -232,7 +245,7 @@ public class InterviewActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton photo = (ImageButton) findViewById(R.id.photo_button);
+        FloatingActionButton photo = (FloatingActionButton) findViewById(R.id.photo_button);
         photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -449,6 +462,12 @@ public class InterviewActivity extends AppCompatActivity {
 
         }
         return  list;
+    }
+
+    @Override
+    public void onBackPressed() {
+     Toast.makeText(this,"lk",Toast.LENGTH_LONG).show();
+        this.finish();
     }
 
 }

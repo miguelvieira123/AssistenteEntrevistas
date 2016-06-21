@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.InterviewActivity;
@@ -27,7 +28,8 @@ public class Interviews extends Fragment {
     private List<InterviewUnit> interviewUnits;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
-    RVInterviewAdapter adapter;
+    private TextView info;
+    private RVInterviewAdapter adapter;
 
 
     @Override
@@ -35,6 +37,7 @@ public class Interviews extends Fragment {
         View interview  = inflater.inflate(R.layout.fragment_interviews,container,false);
         recyclerView = (RecyclerView) interview.findViewById(R.id.recyclerView);
         fab = (FloatingActionButton) interview.findViewById(R.id.fab);
+        info = (TextView) interview.findViewById(R.id.textView);
         return interview;
     }
 
@@ -49,6 +52,11 @@ public class Interviews extends Fragment {
 
         interviewUnits = InterviewUnit.getInterviews(Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString());
         //interviewUnits = new ArrayList<InterviewUnit>();
+        if (interviewUnits.size()>0){
+            info.setText("");
+        }else{
+            info.setText("A lista de Entrevistas está vazia");
+        }
 
         adapter = new RVInterviewAdapter(interviewUnits);
         recyclerView.setAdapter(adapter);

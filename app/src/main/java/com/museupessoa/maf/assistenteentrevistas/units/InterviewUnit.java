@@ -44,14 +44,9 @@ public class InterviewUnit {
         for(int i=0;i<interview_list.length;i++){
 
             // imagem ------------------------------------------------------------------------------
-            File imgFile = new  File(PATH+"/Entrevistas/"+interview_list[i]+"/Fotos/foto_perfil.jpg");
             Bitmap myBitmap = null;
-            if(imgFile.exists()){
-                myBitmap = decodeFile(imgFile);
-                //Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
-                //int dimension = getSquareCropDimensionForBitmap(myBitmap);
-                myBitmap = ThumbnailUtils.extractThumbnail(myBitmap, 64, 64);
-            }
+            myBitmap = BitmapFactory.decodeFile(PATH+"/Entrevistas/"+interview_list[i]+"/Fotos/foto_perfil_thumbnail.jpg");
+
             // nome do entrevistado (Abrir XML) ----------------------------------------------------
             String interview_path = PATH + "/Entrevistas/"+interview_list[i] ;
             File manif_file = new File(interview_path, "manifesto.xml");
@@ -81,41 +76,6 @@ public class InterviewUnit {
         }
         return  interviews;
     }
-
-
-    public static int getSquareCropDimensionForBitmap(Bitmap bitmap)
-    {
-        //use the smallest dimension of the image to crop to
-        return Math.min(bitmap.getWidth(), bitmap.getHeight());
-    }
-
-    // Decodes image and scales it to reduce memory consumption
-    private static Bitmap decodeFile(File f) {
-        try {
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-            // The new size we want to scale to
-            final int REQUIRED_SIZE=30;
-            // Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
-                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
-                scale *= 2;
-            }
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {}
-        return null;
-    }
-
-
-
-
-
 
 
 }

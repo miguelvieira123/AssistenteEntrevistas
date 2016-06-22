@@ -1,5 +1,6 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,14 +10,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
+import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectAddDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentEdit;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
 import com.museupessoa.maf.assistenteentrevistas.newproject.MetaInfo;
 import com.museupessoa.maf.assistenteentrevistas.newproject.NewProjectPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,8 +85,8 @@ public class NewProjectActivity extends AppCompatActivity  {
     public void okClicked() {
         if(General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
                 name,metaList,questionsList,urlsList,status)){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
             if(status==1)
         Toast.makeText(getApplicationContext(), "Novo projeto foi criado",
                 Toast.LENGTH_LONG).show();
@@ -94,12 +102,53 @@ public class NewProjectActivity extends AppCompatActivity  {
                 Toast.makeText(getApplicationContext(), "O projeto não foi alterado",
                         Toast.LENGTH_LONG).show();
         }
+        this.finish();
     }
 
     public void cancelClicked() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+        this.finish();
         Toast.makeText(getApplicationContext(), "Cancelado",
                 Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_new_project, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.P_Accept:
+                FragmentManager addProject = getSupportFragmentManager();
+                NewProjectAddDialogFragment dialogProjectName = new NewProjectAddDialogFragment();
+                dialogProjectName.show(addProject, "NewProjectAddDialogFragment");
+                break;
+        }
+        return(super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode){
+            case NewProjectActivity.ADD:
+                switch (requestCode) {
+                    case 1:
+                        NewProjectActivity.metaList.add(data.getStringExtra(NewProjectDialogFragmentNewItem.REQUEST));
+                        Toast.makeText(this, "Campo foi adicionado", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+        }
+
+    }
+    @Override
+    public void onBackPressed() {
+    }
+
 }

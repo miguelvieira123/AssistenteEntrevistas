@@ -24,6 +24,9 @@ import android.widget.Toast;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.SelectProject;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.ConfirmFinishFormDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectAddDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.AudioForm;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.PhotoForm;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.WrittenForm;
@@ -52,6 +55,8 @@ public class NewInterviewActivity extends AppCompatActivity {
     private String selected_project;
     private String person_name;
     private String new_interview_path;
+    public static Bitmap bitmapFormPhoto;
+    public int status=0;
     private HashMap<String,EditText> allViews = new HashMap<String,EditText>();
 
     @Override
@@ -108,7 +113,7 @@ public class NewInterviewActivity extends AppCompatActivity {
 
     public void editInterviewMetadata(String projectName){
         if(projectName != null){
-
+            status=1;
             Toast.makeText(this, "Projeto selecionado: " + projectName, Toast.LENGTH_SHORT).show();
             this.selected_project = projectName;
 
@@ -148,6 +153,13 @@ public class NewInterviewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.E_Accept:
+                if(status==1) {
+                    if(AudioForm.REC==1) AudioForm.stopRecording();
+                    FragmentManager addInterview = getFragmentManager();
+                    ConfirmFinishFormDialogFragment dialogProjectName = new ConfirmFinishFormDialogFragment();
+                    dialogProjectName.show(addInterview, "AcceptNewInterview");
+
+                }
                 //NewInterviewActivity.bitmapFormPhoto=null;
                 saveFormContent();
                 Intent intent = new Intent(this, InterviewActivity.class);
@@ -207,6 +219,22 @@ public class NewInterviewActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+    }
+
+
+    public void okClicked() {
+        NewInterviewActivity.bitmapFormPhoto=null;
+        saveFormContent();
+        Intent intent = new Intent(this, InterviewActivity.class);
+        intent.putExtra("path",new_interview_path);
+        startActivity(intent);
+    }
+
+    public void cancelClicked() {
+        Toast.makeText(getApplicationContext(), "Cancelado", Toast.LENGTH_LONG).show();
+        this.finish();
+    }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
             List<Fragment> fragments =  getSupportFragmentManager().getFragments();
             if (fragments != null) {
@@ -217,7 +245,5 @@ public class NewInterviewActivity extends AppCompatActivity {
                     }
                 }
             }
-
-
     }
 }

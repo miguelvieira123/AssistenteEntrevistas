@@ -1,6 +1,7 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.adapters.MainActivityPagerAdapter;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -61,12 +63,11 @@ public class MainActivity extends AppCompatActivity {
             General.createProject(Environment.getExternalStorageDirectory() + "/" + APP_NAME,
                     "Geral", General.defaultMetaListInit(), General.defaultQuestionsListInit(), General.defaultLinksListInit(), 1);
 
-            //General.createInterview(Environment.getExternalStorageDirectory() + "/" + APP_NAME, "Dionísio Silva", "e000");
-            //General.createInterview(Environment.getExternalStorageDirectory() + "/" + APP_NAME, "Ana Clara Pereira", "e001");
-
             myPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
             pager = (ViewPager) findViewById(R.id.pager);
             pager.setAdapter(myPagerAdapter);
+            pager.setCurrentItem(General.CURR_TAB);
+
             tabs = (SlidingTabLayout) findViewById(R.id.tabs);
             tabs.setDistributeEvenly(true);
 
@@ -78,6 +79,22 @@ public class MainActivity extends AppCompatActivity {
 
             });
             tabs.setViewPager(pager);
+            tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                   General.CURR_TAB=position;
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
         }
     }
 
@@ -98,6 +115,19 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Aplicação não consegue gravar áudio", Toast.LENGTH_LONG).show();
                 }
             }
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode){
+            default:
+               Log.e("EE","asd");
+                break;
         }
 
     }

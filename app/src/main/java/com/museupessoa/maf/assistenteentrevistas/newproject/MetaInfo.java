@@ -27,7 +27,7 @@ public class MetaInfo extends Fragment   {
     private RecyclerView recyclerView;
     RVNewProjectAdapter adapter;
     private FloatingActionButton fab;
-    private FloatingActionButton add;
+
     private final  String TAG="AssistenteEntrevistas";
     private static final int REQUEST = 1;
 
@@ -40,7 +40,7 @@ public class MetaInfo extends Fragment   {
         View metainfo = inflater.inflate(R.layout.fragment_newproject_metainfo,container,false);
         recyclerView = (RecyclerView) metainfo.findViewById(R.id.NewProjectRV);
         fab = (FloatingActionButton) metainfo.findViewById(R.id.NewProjectfab);
-        add = (FloatingActionButton) metainfo.findViewById(R.id.NewProjectAdd);
+
         return metainfo;
     }
 
@@ -74,14 +74,7 @@ public class MetaInfo extends Fragment   {
 
             }
         });
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                android.support.v4.app.FragmentManager addProject = getFragmentManager();
-                NewProjectAddDialogFragment dialogProjectName = new NewProjectAddDialogFragment();
-                dialogProjectName.show(addProject, "NewProjectAddDialogFragment");
-            }
-        });
+
     }
 
 

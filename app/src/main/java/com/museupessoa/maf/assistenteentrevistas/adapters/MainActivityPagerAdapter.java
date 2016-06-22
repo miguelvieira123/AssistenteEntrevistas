@@ -3,11 +3,13 @@ package com.museupessoa.maf.assistenteentrevistas.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Configuration;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Main;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Projects;
+import com.museupessoa.maf.assistenteentrevistas.General;
 
 
 public  class MainActivityPagerAdapter extends FragmentStatePagerAdapter{
@@ -24,12 +26,16 @@ public  class MainActivityPagerAdapter extends FragmentStatePagerAdapter{
     public Fragment getItem(int position) {
         switch (position){
             case 0:
+
                 return new Main();
             case 1:
+
                 return new Projects();
             case 2:
+
                 return new Interviews();
             case 3:
+
                 return new Configuration();
         }
         return null;
@@ -43,5 +49,9 @@ public  class MainActivityPagerAdapter extends FragmentStatePagerAdapter{
     @Override
     public int getCount() {
         return NumbOfTabs;
+    }
+
+    private void setCurrTab(int pos){
+
     }
 }

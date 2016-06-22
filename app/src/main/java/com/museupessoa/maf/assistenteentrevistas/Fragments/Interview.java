@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.museupessoa.maf.assistenteentrevistas.General;
 import com.museupessoa.maf.assistenteentrevistas.InterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVQuestionAdapter;
@@ -53,7 +54,6 @@ public class Interview extends Fragment {
         adapter.setOnItemClickListener(new RVQuestionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-
                 Activity activity = getActivity();
                 if (activity instanceof InterviewActivity){
                     ((InterviewActivity) activity).newAudioTag(questionUnits.get(position).question);

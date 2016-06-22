@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.museupessoa.maf.assistenteentrevistas.General;
 import com.museupessoa.maf.assistenteentrevistas.InterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.NewInterviewActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;

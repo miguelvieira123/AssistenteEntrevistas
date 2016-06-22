@@ -87,7 +87,7 @@ public class InterviewActivity extends AppCompatActivity {
     private String audio_file_name;
     private String person_name;
     private final int CAMERA_RESULT = 89;
-    SimpleDateFormat sdf;
+    private SimpleDateFormat sdf;
     private String fullFotoName;
     private String fotoName;
     DisplayMetrics metricsB;
@@ -100,42 +100,23 @@ public class InterviewActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         interview_path = intent.getStringExtra("path");
         String nome = getPersonNameFromXML();
-        Button name = (Button)findViewById(R.id.person_name);
+        TextView name = (TextView)findViewById(R.id.person_name);
         name.setText(nome);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         metricsB = getResources().getDisplayMetrics();
         sdf = new SimpleDateFormat("ddMMyy_HHmmss");
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //iniciar SlidingTabs para preencher metadata
-                setContentView(R.layout.fragment_interview_metadata);
 
-                CharSequence Titles[] = {"Texto", "Audio", "Foto"};
-                int Numboftabs = 3;
-                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
-                ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
-                pager.setAdapter(myPagerAdapter);
-                SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
-                tabs.setDistributeEvenly(true);
-                tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-                    @Override
-                    public int getIndicatorColor(int position) {
-                        return getResources().getColor(R.color.tabsCor);
-                    }
 
-                });
-                tabs.setViewPager(pager);
-            }
-        });
-
+        /*
         LinearLayout LQList = (LinearLayout) findViewById(R.id.interview_activity_questions_list);
+
         FrameLayout.LayoutParams paramsLayout = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                (metricsB.heightPixels-350)
+                (metricsB.heightPixels-(int)(metricsB.heightPixels*0.47))
         );
 
         LQList.setLayoutParams(paramsLayout);
+        */
         FragmentManager fragmentActionManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
         Interview interview = new Interview();
@@ -277,8 +258,6 @@ public class InterviewActivity extends AppCompatActivity {
         }
         mRecorder.start();
     }
-
-
     private void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
@@ -305,7 +284,6 @@ public class InterviewActivity extends AppCompatActivity {
         }
         return contador;
     }
-
     private void setContadorXML(String path, int novaContagem){
         File f  = new File(path, "manifesto.xml");
         if(f.exists()){
@@ -424,6 +402,25 @@ public class InterviewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.E_Editar:
+                setContentView(R.layout.fragment_interview_metadata);
+
+                CharSequence Titles[] = {"Texto", "Audio", "Foto"};
+                int Numboftabs = 3;
+                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
+                ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
+                pager.setAdapter(myPagerAdapter);
+                SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
+                tabs.setDistributeEvenly(true);
+                tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                    @Override
+                    public int getIndicatorColor(int position) {
+                        return getResources().getColor(R.color.tabsCor);
+                    }
+
+                });
+                tabs.setViewPager(pager);
+                return true;
             case R.id.E_Enviar:
                     final String arq =  General.PATH + "/Zips/"+interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip";
                     Zip.zip(interview_path, General.PATH + "/Zips",

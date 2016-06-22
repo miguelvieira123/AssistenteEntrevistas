@@ -51,7 +51,6 @@ public class Interviews extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         interviewUnits = InterviewUnit.getInterviews(Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString());
-        //interviewUnits = new ArrayList<InterviewUnit>();
         if (interviewUnits.size()>0){
             info.setText("");
         }else{
@@ -77,7 +76,6 @@ public class Interviews extends Fragment {
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(getActivity(), InterviewActivity.class);
                 intent.putExtra("path",interviewUnits.get(position).path);
-                //intent.putExtra("name",interviewUnits.get(position).name);
                 startActivity(intent);
             }
         });

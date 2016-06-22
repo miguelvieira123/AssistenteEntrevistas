@@ -35,9 +35,9 @@ public class General {
     public static final String TAG ="AssistenteEntrevistas";
     public  static String PATH = Environment.getExternalStoragePublicDirectory("/AssistenteEntrevistas").toString();
     public static  String APP_NAME = "AssistenteEntrevistas";
-    public static int CR=227;
-    public static int CG=110;
-    public static int CB=20;
+    public static int CR=212;
+    public static int CG=79;
+    public static int CB=22;
 
     public static boolean createStructOfFolders(String path){
         try {

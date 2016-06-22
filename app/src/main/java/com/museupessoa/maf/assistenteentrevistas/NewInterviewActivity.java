@@ -26,6 +26,7 @@ import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.PhotoForm;
+import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.WrittenForm;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
 import org.w3c.dom.Document;
@@ -159,8 +160,8 @@ public class NewInterviewActivity extends AppCompatActivity {
 
     private void saveFormContent(){
         HashMap<String, String> info = new HashMap<>();
-        for (String key: allViews.keySet()) {
-            info.put(key, allViews.get(key).getText().toString());
+        for (String key: WrittenForm.allViews.keySet()) {
+            info.put(key, WrittenForm.allViews.get(key).getText().toString());
         }
         savePersonMetainfo(info);
     }

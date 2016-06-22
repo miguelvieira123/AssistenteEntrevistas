@@ -61,7 +61,6 @@ public class WrittenForm extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View metainfo = inflater.inflate(R.layout.fragment_new_interview_metainfo_text,container,false);
-       // add = (FloatingActionButton) metainfo.findViewById(R.id.acceptInterviewChanges );
         layout_params = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,
                                                 LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_params.setMargins(5, 5, 5, 5);
@@ -73,7 +72,7 @@ public class WrittenForm extends Fragment {
 
 
 
-    private void createEditText(String hint) {
+    private void createEditText(String hint, String value) {
         EditText editText = new EditText(this.getContext());
         editText.setId(viewsCount++);
         editText.setHint(hint);
@@ -95,7 +94,7 @@ public class WrittenForm extends Fragment {
                     NodeList node_meta = nodeList_meta.item(0).getChildNodes();
 
                     for (int i=0; i< node_meta.getLength(); i++) {
-                        createEditText(node_meta.item(i).getAttributes().getNamedItem("name").getNodeValue());
+                        createEditText(node_meta.item(i).getAttributes().getNamedItem("name").getNodeValue(), "");
                     }
                 } catch (SAXException e) {
                     e.printStackTrace();

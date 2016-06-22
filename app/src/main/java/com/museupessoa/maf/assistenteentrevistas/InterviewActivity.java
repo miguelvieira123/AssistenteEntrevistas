@@ -4,13 +4,16 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaRecorder;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +45,7 @@ import com.museupessoa.maf.assistenteentrevistas.dialogs.ConfirmFinishFormDialog
 import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteInterviewDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteSrcLinkDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
+import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.PhotoForm;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
 import org.w3c.dom.Attr;
@@ -56,8 +60,10 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,8 +88,8 @@ public class InterviewActivity extends AppCompatActivity {
     private String interview_path;
     private String audio_file_name;
     private String person_name;
-    private final int CAMERA_RESULT = 0;
-    SimpleDateFormat sdf;
+    private final int CAMERA_RESULT = 89;
+    private SimpleDateFormat sdf;
     private String fullFotoName;
     private String fotoName;
     DisplayMetrics metricsB;
@@ -96,46 +102,23 @@ public class InterviewActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         interview_path = intent.getStringExtra("path");
         String nome = getPersonNameFromXML();
-        Button name = (Button)findViewById(R.id.person_name);
+        TextView name = (TextView)findViewById(R.id.person_name);
         name.setText(nome);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         metricsB = getResources().getDisplayMetrics();
         sdf = new SimpleDateFormat("ddMMyy_HHmmss");
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //iniciar SlidingTabs para preencher metadata
-                setContentView(R.layout.fragment_interview_metadata);
 
 
-                CharSequence Titles[] = {"Aplicação", "Audio", "Foto"};
-                int Numboftabs = 3;
-                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
-                ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
-                pager.setAdapter(myPagerAdapter);
-                SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
-                tabs.setDistributeEvenly(true);
-
-                tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-                    @Override
-                    public int getIndicatorColor(int position) {
-                        return getResources().getColor(R.color.tabsCor);
-                    }
-
-                });
-                tabs.setViewPager(pager);
-            }
-        });
-
-
-        //Log.d("InterviewActivity", ">>>>>InterviewActivity>>>> var path: " + interview_path);
+        /*
         LinearLayout LQList = (LinearLayout) findViewById(R.id.interview_activity_questions_list);
+
         FrameLayout.LayoutParams paramsLayout = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                (metricsB.heightPixels-350)
+                (metricsB.heightPixels-(int)(metricsB.heightPixels*0.47))
         );
 
         LQList.setLayoutParams(paramsLayout);
+        */
         FragmentManager fragmentActionManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
         Interview interview = new Interview();
@@ -148,7 +131,6 @@ public class InterviewActivity extends AppCompatActivity {
         conta_gravacoes = getContadorFromXML(interview_path);
         rec_time = (Chronometer) findViewById(R.id.rec_chronometer);
 
-        //add Listenners to Buttons
         this.addListennerToButtons();
 
     }
@@ -252,7 +234,7 @@ public class InterviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fotoName = sdf.format(new Date()) + ".jpg";
-                fullFotoName = interview_path + "/Fotos/" + fotoName ;
+                fullFotoName = interview_path + "/Fotos/" + fotoName;
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(fullFotoName)));
                 startActivityForResult(cameraIntent, CAMERA_RESULT);
@@ -278,8 +260,6 @@ public class InterviewActivity extends AppCompatActivity {
         }
         mRecorder.start();
     }
-
-
     private void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
@@ -306,7 +286,6 @@ public class InterviewActivity extends AppCompatActivity {
         }
         return contador;
     }
-
     private void setContadorXML(String path, int novaContagem){
         File f  = new File(path, "manifesto.xml");
         if(f.exists()){
@@ -346,10 +325,20 @@ public class InterviewActivity extends AppCompatActivity {
             catch (Exception e ){
                 Toast.makeText(this,"Tenta outra vez", Toast.LENGTH_LONG).show();
             }
-
+        }else{
+            List<Fragment> fragments =  getSupportFragmentManager().getFragments();
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if(fragment instanceof PhotoForm)
+                    {
+                        fragment.onActivityResult(requestCode, resultCode, data);
+                    }
+                }
+            }
         }
 
     }
+
 
     private void Pic(String PATH) {
         int targetW = (int)metricsB.widthPixels;
@@ -404,6 +393,8 @@ public class InterviewActivity extends AppCompatActivity {
         }
 
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_interview, menu);
@@ -413,6 +404,25 @@ public class InterviewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.E_Editar:
+                setContentView(R.layout.fragment_interview_metadata);
+
+                CharSequence Titles[] = {"Texto", "Audio", "Foto"};
+                int Numboftabs = 3;
+                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
+                ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
+                pager.setAdapter(myPagerAdapter);
+                SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
+                tabs.setDistributeEvenly(true);
+                tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                    @Override
+                    public int getIndicatorColor(int position) {
+                        return getResources().getColor(R.color.tabsCor);
+                    }
+
+                });
+                tabs.setViewPager(pager);
+                return true;
             case R.id.E_Enviar:
                     final String arq =  General.PATH + "/Zips/"+interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip";
                     Zip.zip(interview_path, General.PATH + "/Zips",
@@ -428,7 +438,7 @@ public class InterviewActivity extends AppCompatActivity {
                     }
                     });
                     thrd.start();
-
+                    Toast.makeText(this,"O arquivo foi criado",Toast.LENGTH_LONG).show();
                 return true;
             case R.id.E_Eliminar:
                 FragmentManager addProject = getFragmentManager();
@@ -436,7 +446,7 @@ public class InterviewActivity extends AppCompatActivity {
                 dialogProjectName.show(addProject, "DeleteInterview");
                 return true;
             case R.id.E_Accept:
-                Toast.makeText(this,"asd",Toast.LENGTH_LONG).show();
+                //Toast.makeText(this,"accepted",Toast.LENGTH_LONG).show();
                 break;
     }
         return(super.onOptionsItemSelected(item));

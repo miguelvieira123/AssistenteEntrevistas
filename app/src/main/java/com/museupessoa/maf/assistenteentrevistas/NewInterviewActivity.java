@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.museupessoa.maf.assistenteentrevistas.dialogs.ConfirmFinishFormDialog
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectAddDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.AudioForm;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
+import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.PhotoForm;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.WrittenForm;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
@@ -38,6 +40,7 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -54,6 +57,7 @@ public class NewInterviewActivity extends AppCompatActivity {
     private String new_interview_path;
     public static Bitmap bitmapFormPhoto;
     public int status=0;
+    private HashMap<String,EditText> allViews = new HashMap<String,EditText>();
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -63,7 +67,6 @@ public class NewInterviewActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bitmapFormPhoto=null;
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         if (savedInstanceState == null){
 
@@ -89,9 +92,6 @@ public class NewInterviewActivity extends AppCompatActivity {
             pager.setAdapter(myPagerAdapter);
             SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
             tabs.setDistributeEvenly(true);
-
-
-
             tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
                 @Override
                 public int getIndicatorColor(int position) {
@@ -102,8 +102,6 @@ public class NewInterviewActivity extends AppCompatActivity {
             tabs.setViewPager(pager);
 
             selected_project = savedInstanceState.getString("myProject");
-            //Toast.makeText(this, "nome proj.: "+ selected_project, Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -130,7 +128,7 @@ public class NewInterviewActivity extends AppCompatActivity {
             setContentView(R.layout.fragment_interview_metadata);
 
 
-            CharSequence Titles[]={"Aplicação","Audio","Foto"};
+            CharSequence Titles[]={"Texto","Audio","Foto"};
             int Numboftabs = 3;
             EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path);
             ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
@@ -146,8 +144,6 @@ public class NewInterviewActivity extends AppCompatActivity {
 
             });
             tabs.setViewPager(pager);
-
-
         }else{
             Toast.makeText(this, "Não tem nenhum projeto selecionado.", Toast.LENGTH_SHORT).show();
         }
@@ -164,6 +160,11 @@ public class NewInterviewActivity extends AppCompatActivity {
                     dialogProjectName.show(addInterview, "AcceptNewInterview");
 
                 }
+                //NewInterviewActivity.bitmapFormPhoto=null;
+                saveFormContent();
+                Intent intent = new Intent(this, InterviewActivity.class);
+                intent.putExtra("path",new_interview_path);
+                startActivity(intent);
                 break;
         }
         return(super.onOptionsItemSelected(item));
@@ -233,5 +234,16 @@ public class NewInterviewActivity extends AppCompatActivity {
     public void cancelClicked() {
         Toast.makeText(getApplicationContext(), "Cancelado", Toast.LENGTH_LONG).show();
         this.finish();
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            List<Fragment> fragments =  getSupportFragmentManager().getFragments();
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if(fragment instanceof PhotoForm)
+                    {
+                        fragment.onActivityResult(requestCode, resultCode, data);
+                    }
+                }
+            }
     }
 }

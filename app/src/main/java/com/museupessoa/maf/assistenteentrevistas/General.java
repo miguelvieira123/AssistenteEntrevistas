@@ -38,6 +38,7 @@ public class General {
     public static int CR=227;
     public static int CG=110;
     public static int CB=20;
+    public static int CURR_TAB=0;
 
     public static boolean createStructOfFolders(String path){
         try {

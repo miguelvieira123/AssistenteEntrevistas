@@ -48,7 +48,7 @@ public class WrittenForm extends Fragment {
     LinearLayout linearLayout;
     LinearLayout.LayoutParams layout_params;
     private static int viewsCount = 0;
-    private HashMap<String,EditText> allViews = new HashMap<String,EditText>();
+    public static HashMap<String,EditText> allViews = new HashMap<String,EditText>();
 
     public Class<? extends WrittenForm> getFragmentClass() {
         return this.getClass();

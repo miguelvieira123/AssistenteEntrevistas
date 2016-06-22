@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -22,7 +23,11 @@ import android.widget.Toast;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.SelectProject;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.ConfirmFinishFormDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectAddDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.AudioForm;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
+import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.WrittenForm;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
 import org.w3c.dom.Document;
@@ -48,7 +53,7 @@ public class NewInterviewActivity extends AppCompatActivity {
     private String person_name;
     private String new_interview_path;
     public static Bitmap bitmapFormPhoto;
-    private HashMap<String,EditText> allViews = new HashMap<String,EditText>();
+    public int status=0;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -110,7 +115,7 @@ public class NewInterviewActivity extends AppCompatActivity {
 
     public void editInterviewMetadata(String projectName){
         if(projectName != null){
-
+            status=1;
             Toast.makeText(this, "Projeto selecionado: " + projectName, Toast.LENGTH_SHORT).show();
             this.selected_project = projectName;
 
@@ -152,11 +157,13 @@ public class NewInterviewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.E_Accept:
-                NewInterviewActivity.bitmapFormPhoto=null;
-                saveFormContent();
-                Intent intent = new Intent(this, InterviewActivity.class);
-                intent.putExtra("path",new_interview_path);
-                startActivity(intent);
+                if(status==1) {
+                    if(AudioForm.REC==1) AudioForm.stopRecording();
+                    FragmentManager addInterview = getFragmentManager();
+                    ConfirmFinishFormDialogFragment dialogProjectName = new ConfirmFinishFormDialogFragment();
+                    dialogProjectName.show(addInterview, "AcceptNewInterview");
+
+                }
                 break;
         }
         return(super.onOptionsItemSelected(item));
@@ -164,8 +171,8 @@ public class NewInterviewActivity extends AppCompatActivity {
 
     private void saveFormContent(){
         HashMap<String, String> info = new HashMap<>();
-        for (String key: allViews.keySet()) {
-            info.put(key, allViews.get(key).getText().toString());
+        for (String key: WrittenForm.allViews.keySet()) {
+            info.put(key, WrittenForm.allViews.get(key).getText().toString());
         }
         savePersonMetainfo(info);
     }
@@ -208,5 +215,23 @@ public class NewInterviewActivity extends AppCompatActivity {
                 }
             }
         }catch(Exception e){e.printStackTrace();}
+    }
+
+    @Override
+    public void onBackPressed() {
+    }
+
+
+    public void okClicked() {
+        NewInterviewActivity.bitmapFormPhoto=null;
+        saveFormContent();
+        Intent intent = new Intent(this, InterviewActivity.class);
+        intent.putExtra("path",new_interview_path);
+        startActivity(intent);
+    }
+
+    public void cancelClicked() {
+        Toast.makeText(getApplicationContext(), "Cancelado", Toast.LENGTH_LONG).show();
+        this.finish();
     }
 }

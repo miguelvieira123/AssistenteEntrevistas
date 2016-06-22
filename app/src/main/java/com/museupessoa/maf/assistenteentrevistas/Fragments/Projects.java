@@ -1,5 +1,6 @@
 package com.museupessoa.maf.assistenteentrevistas.Fragments;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,7 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -17,21 +21,31 @@ import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.DownloadProjectsActivity;
+import com.museupessoa.maf.assistenteentrevistas.General;
+import com.museupessoa.maf.assistenteentrevistas.InterviewActivity;
+import com.museupessoa.maf.assistenteentrevistas.MainActivity;
 import com.museupessoa.maf.assistenteentrevistas.NewProjectActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 
+import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
+import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.ConfirmFinishFormDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteInterviewDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteProjectDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.ProjectActionDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.newproject.MetaInfo;
 import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
+import java.io.File;
 import java.util.List;
 
 
 public class Projects extends Fragment{
-    RVProjectAdapter adapter;
-    private List<ProjectUnit> projectUnits;
-    private RecyclerView recyclerView;
+    private  static  RVProjectAdapter adapter;
+    private static List<ProjectUnit> projectUnits;
+    private static RecyclerView recyclerView;
     private FloatingActionButton fab;
     private FloatingActionButton fabD;
     private final  String TAG="AssistenteEntrevistas";
@@ -48,6 +62,7 @@ public class Projects extends Fragment{
         fab = (FloatingActionButton) project.findViewById(R.id.fab);
         fabD = (FloatingActionButton) project.findViewById(R.id.fabDownload);
         return project;
+
     }
 
     @Override
@@ -119,16 +134,22 @@ public class Projects extends Fragment{
                 Toast.makeText(getActivity(),"EDIT",Toast.LENGTH_LONG).show();
                 break;
             case  Projects.DELETE_PROJECT:
-                String deleted_project = projectUnits.get(requestCode).name;
-                if(ProjectUnit.deleteProject(projectUnits.get(requestCode).name,
-                        Environment.getExternalStoragePublicDirectory("/"+getResources().getString(R.string.APP_NAME)).toString())) {
-                    projectUnits.remove(requestCode);
-                    adapter.RVUpdateListAdapter(projectUnits);
-                    recyclerView.setAdapter(adapter);
-                    Toast.makeText(getActivity(), "Projeto "+deleted_project+" eliminado", Toast.LENGTH_LONG).show();
-                }
-                else Toast.makeText(getActivity(), "Erro", Toast.LENGTH_LONG).show();
+                android.support.v4.app.FragmentManager delProject = getFragmentManager();
+                DeleteProjectDialogFragment dialogProjectName = new DeleteProjectDialogFragment();
+                dialogProjectName.setTargetFragment(this, requestCode);
+                dialogProjectName.show(delProject, "DeleteProject");
                 break;
         }
     }
+   public static void delProject(int pos){
+       String deleted_project = projectUnits.get(pos).name;
+       if(ProjectUnit.deleteProject(projectUnits.get(pos).name,
+               Environment.getExternalStoragePublicDirectory("/" + General.APP_NAME).toString())) {
+           projectUnits.remove(pos);
+           adapter.RVUpdateListAdapter(projectUnits);
+           recyclerView.setAdapter(adapter);
+       }
+
+
+   }
 }

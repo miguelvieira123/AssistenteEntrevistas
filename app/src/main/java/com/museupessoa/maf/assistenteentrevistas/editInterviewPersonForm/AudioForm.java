@@ -43,7 +43,8 @@ public class AudioForm extends Fragment {
     private List<String> formNames;
     private RecyclerView recyclerView;
     Integer posStatus=-1;
-    private MediaRecorder mRecorder = null;
+    public static int REC=0;
+    private static MediaRecorder mRecorder = null;
 
     public AudioForm(String new_interview_path) {
         this.new_interview_path = new_interview_path;
@@ -91,6 +92,7 @@ public class AudioForm extends Fragment {
 
     }
     private void startRecording(String path, String name) {
+        REC=1;
         String mFileName = path +"/Audio/Form/"+name+".mp4";
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -107,7 +109,8 @@ public class AudioForm extends Fragment {
         }
         mRecorder.start();
     }
-    private void stopRecording() {
+    public static void stopRecording() {
+        REC=0;
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;

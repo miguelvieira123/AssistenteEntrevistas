@@ -38,6 +38,8 @@ import com.melnykov.fab.FloatingActionButton;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.ConfirmFinishFormDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteInterviewDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteSrcLinkDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
@@ -429,9 +431,9 @@ public class InterviewActivity extends AppCompatActivity {
 
                 return true;
             case R.id.E_Eliminar:
-                General.deleteDirectory(new File(interview_path));
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                FragmentManager addProject = getFragmentManager();
+                DeleteInterviewDialogFragment dialogProjectName = new DeleteInterviewDialogFragment();
+                dialogProjectName.show(addProject, "DeleteInterview");
                 return true;
             case R.id.E_Accept:
                 Toast.makeText(this,"asd",Toast.LENGTH_LONG).show();
@@ -464,9 +466,17 @@ public class InterviewActivity extends AppCompatActivity {
         return  list;
     }
 
+    public void okClicked() {
+        General.deleteDirectory(new File(interview_path));
+        this.finish();
+    }
+
+    public void cancelClicked() {
+
+    }
+
     @Override
     public void onBackPressed() {
-     Toast.makeText(this,"lk",Toast.LENGTH_LONG).show();
         this.finish();
     }
 

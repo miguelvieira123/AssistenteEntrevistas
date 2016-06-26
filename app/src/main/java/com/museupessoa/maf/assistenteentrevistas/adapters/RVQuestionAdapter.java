@@ -1,10 +1,13 @@
 package com.museupessoa.maf.assistenteentrevistas.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
@@ -23,6 +26,7 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
         CardView cv;
         TextView question_row;
 
+
         private OnItemClickListener listener;
         private int position;
 
@@ -31,6 +35,8 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
             cv = (CardView)itemView.findViewById(R.id.InterviewQuestionsCV);
             itemView = cv;
             question_row = (TextView)itemView.findViewById(R.id.InterviewQuestion);
+            question_row.setTextSize(16);
+            question_row.setTextColor(Color.rgb(143,142,141));
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

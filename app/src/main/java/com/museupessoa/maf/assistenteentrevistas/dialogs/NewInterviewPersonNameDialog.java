@@ -36,7 +36,7 @@ public class NewInterviewPersonNameDialog  extends DialogFragment {
                         else {
                             Intent intent = new Intent(getActivity(), NewInterviewActivity.class);
                             intent.putExtra("person_name",test.getText().toString());
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            //intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(intent);
 
                         }

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +21,20 @@ import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVInterviewAdapter;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewInterviewPersonNameDialog;
 import com.museupessoa.maf.assistenteentrevistas.units.InterviewUnit;
+import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Interviews extends Fragment {
-    private List<InterviewUnit> interviewUnits;
-    private RecyclerView recyclerView;
+    private static List<InterviewUnit> interviewUnits;
+    private static RecyclerView recyclerView;
     private FloatingActionButton fab;
     private TextView info;
-    private RVInterviewAdapter adapter;
+    private static RVInterviewAdapter adapter;
 
 
     @Override
@@ -46,7 +50,6 @@ public class Interviews extends Fragment {
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
@@ -81,6 +84,46 @@ public class Interviews extends Fragment {
             }
         });
 
+    }
+
+    public  static void updateInterviewList(String pattern){
+        int i;
+        List<InterviewUnit> newInterviewList = new ArrayList<InterviewUnit>();
+        for(i=0;i<interviewUnits.size();i++){
+            Pattern p = Pattern.compile(pattern);
+            Matcher m = p.matcher(interviewUnits.get(i).name);
+            if(m.find()){
+                newInterviewList.add(new InterviewUnit(interviewUnits.get(i).name,interviewUnits.get(i).foto,
+                                                interviewUnits.get(i).path,interviewUnits.get(i).project,
+                                                interviewUnits.get(i).time,interviewUnits.get(i).sendStatus,
+                                                interviewUnits.get(i).pos));
+            }
+        }
+        adapter.RVUpdateListAdapter(newInterviewList);
+        recyclerView.setAdapter(adapter);
+    }
+    public  static void setCurrentInterviewList(){
+        adapter.RVUpdateListAdapter(interviewUnits);
+        recyclerView.setAdapter(adapter);
+    }
+    public static boolean setInterviewStatusSentByPath(String Path){
+        int i=0;
+        for(i=0;i<interviewUnits.size();i++){
+            if(interviewUnits.get(i).path.equals(Path)){
+                interviewUnits.get(i).sendStatus=true;
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean getInterviewStatusSentByPath(String Path){
+        int i=0;
+        for(i=0;i<interviewUnits.size();i++){
+            if(interviewUnits.get(i).path.equals(Path)){
+                return interviewUnits.get(i).sendStatus;
+            }
+        }
+        return false;
     }
 
 }

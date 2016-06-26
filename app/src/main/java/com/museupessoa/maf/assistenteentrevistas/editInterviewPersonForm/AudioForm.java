@@ -2,6 +2,7 @@ package com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -10,9 +11,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.museupessoa.maf.assistenteentrevistas.DownloadProjectsActivity;
@@ -38,13 +42,15 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class AudioForm extends Fragment {
 
-    private String new_interview_path;
-    RVFormAudioAdapter adapter;
+    private static String new_interview_path;
+    static RVFormAudioAdapter adapter;
     private List<String> formNames;
-    private RecyclerView recyclerView;
-    Integer posStatus=-1;
+    private static RecyclerView recyclerView;
+    static Integer posStatus=-1;
     public static int REC=0;
     private static MediaRecorder mRecorder = null;
+    static android.support.v7.widget.CardView cardView;
+    static TextView audioName;
 
     public AudioForm(String new_interview_path) {
         this.new_interview_path = new_interview_path;
@@ -66,22 +72,35 @@ public class AudioForm extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
-        adapter = new RVFormAudioAdapter(formNames);
+        adapter = new RVFormAudioAdapter(formNames,new_interview_path);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((new RVFormAudioAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position,CardView cv) {
+                cardView = (android.support.v7.widget.CardView )v.findViewById(R.id.CV_audioForm);
+                audioName = (TextView)v.findViewById(R.id.audioFormName);
                 if(posStatus==-1){
+                    Log.e("PASS","1");
                     startRecording(new_interview_path, formNames.get(position));
+                    audioName.setTextColor(Color.rgb(151, 35, 26));
+                    cardView.setCardBackgroundColor(Color.rgb(209, 248, 255));
                     posStatus=position;
                 }
                 else if(posStatus==position) {
                     stopRecording();
-                   // cv.setCardBackgroundColor(Color.WHITE);
+                    recyclerView.setAdapter(adapter);
+                    cardView.setCardBackgroundColor(Color.WHITE);
+                    audioName.setTextColor(Color.rgb(120, 120, 120));
                     posStatus=-1;
                 }
                 else {
-
+                    audioName.setTextColor(Color.rgb(151, 35, 26));
+                    cardView.setCardBackgroundColor(Color.rgb(209, 248, 255));
+                    ViewGroup  vv = (ViewGroup)recyclerView.getChildAt(posStatus);
+                    cardView = (android.support.v7.widget.CardView )vv.findViewById(R.id.CV_audioForm);
+                    audioName = (TextView)vv.findViewById(R.id.audioFormName);
+                    cardView.setBackgroundColor(Color.WHITE);
+                    audioName.setTextColor(Color.rgb(120, 120, 120));
                     stopRecording();
                     startRecording(new_interview_path, formNames.get(position));
                     posStatus=position;
@@ -93,8 +112,8 @@ public class AudioForm extends Fragment {
     }
     private void startRecording(String path, String name) {
         REC=1;
-        String mFileName = path +"/Audio/Form/"+name+".mp4";
         mRecorder = new MediaRecorder();
+        String mFileName = path +"/Audio/Form/"+name+".mp4";
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
@@ -111,9 +130,12 @@ public class AudioForm extends Fragment {
     }
     public static void stopRecording() {
         REC=0;
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+        if(mRecorder!=null) {
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+
+        }
     }
 
     private List<String> getFormsNames(){
@@ -141,6 +163,25 @@ public class AudioForm extends Fragment {
             }
         }catch(Exception e){}
         return forms;
+    }
+
+    public static void startPlay(String name){
+        if(REC==1){
+        }else {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+            }
+            try {
+                mediaPlayer.setDataSource(new_interview_path + "/Audio/Form/" + name + ".mp4");
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

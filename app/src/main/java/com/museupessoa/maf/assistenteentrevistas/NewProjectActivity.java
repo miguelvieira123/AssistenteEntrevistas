@@ -25,7 +25,9 @@ import com.museupessoa.maf.assistenteentrevistas.newproject.NewProjectPagerAdapt
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewProjectActivity extends AppCompatActivity  {
@@ -83,10 +85,9 @@ public class NewProjectActivity extends AppCompatActivity  {
     }
 
     public void okClicked() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
         if(General.createProject(Environment.getExternalStorageDirectory()+"/"+APP_NAME,
-                name,metaList,questionsList,urlsList,status)){
-        //Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
+                name,metaList,questionsList,urlsList,status,sdf.format(new Date()))){
             if(status==1)
         Toast.makeText(getApplicationContext(), "Novo projeto foi criado",
                 Toast.LENGTH_LONG).show();

@@ -2,8 +2,19 @@ package com.museupessoa.maf.assistenteentrevistas.units;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.util.Log;
+
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
+import com.museupessoa.maf.assistenteentrevistas.General;
+import com.museupessoa.maf.assistenteentrevistas.MainActivity;
+import com.museupessoa.maf.assistenteentrevistas.R;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -28,11 +39,19 @@ public class InterviewUnit {
     public String name;
     public Bitmap foto;
     public String path;
+    public String project;
+    public String time;
+    public boolean sendStatus;
+    public int pos;
 
-    public InterviewUnit(String name, Bitmap foto, String path) {
+    public InterviewUnit(String name, Bitmap foto, String path, String project,String time,boolean sendStatus, int pos) {
         this.name = name;
         this.foto = foto;
         this.path = path;
+        this.project = project;
+        this.time = time;
+        this.sendStatus=sendStatus;
+        this.pos = pos;
     }
 
     static public List<InterviewUnit> getInterviews(String PATH){
@@ -45,12 +64,24 @@ public class InterviewUnit {
 
             // imagem ------------------------------------------------------------------------------
             Bitmap myBitmap = null;
+            Bitmap imageRounded=null;
             myBitmap = BitmapFactory.decodeFile(PATH+"/Entrevistas/"+interview_list[i]+"/Fotos/foto_perfil_thumbnail.jpg");
-
+            if(myBitmap!=null) {
+                imageRounded = Bitmap.createBitmap(myBitmap.getWidth(), myBitmap.getHeight(), myBitmap.getConfig());
+                Canvas canvas = new Canvas(imageRounded);
+                Paint mpaint = new Paint();
+                mpaint.setAntiAlias(true);
+                mpaint.setShader(new BitmapShader(myBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+                canvas.drawRoundRect((new RectF(0, 0, myBitmap.getWidth(), myBitmap.getHeight())), 100, 100, mpaint);
+            }
             // nome do entrevistado (Abrir XML) ----------------------------------------------------
             String interview_path = PATH + "/Entrevistas/"+interview_list[i] ;
             File manif_file = new File(interview_path, "manifesto.xml");
             String nome = "";
+            String project= "";
+            String time = "";
+            String sendStatus="";
+            Boolean sendS=false;
             try {
                 InputStream is = new FileInputStream(manif_file.getPath());
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -60,7 +91,15 @@ public class InterviewUnit {
 
                 NodeList nodeList = doc.getElementsByTagName("meta");
                 Node n = nodeList.item(0);
-                if(n != null){nome = n.getAttributes().getNamedItem("name").getNodeValue();}
+                if(n != null){
+                    nome = n.getAttributes().getNamedItem("name").getNodeValue();
+                    project = n.getAttributes().getNamedItem("project").getNodeValue();
+                    time = n.getAttributes().getNamedItem("time").getNodeValue();
+                    sendStatus = n.getAttributes().getNamedItem("send").getNodeValue();
+                    if(sendStatus.equals("yes"))sendS=true;
+
+                }
+
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -71,8 +110,9 @@ public class InterviewUnit {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            interviews.add(new InterviewUnit(nome, myBitmap, interview_path));
+            if(imageRounded==null){
+                interviews.add(new InterviewUnit(nome, General.DEFAULT_ICON, interview_path,project,time,sendS,i));
+            }else interviews.add(new InterviewUnit(nome, imageRounded, interview_path,project,time,sendS,i));
         }
         return  interviews;
     }

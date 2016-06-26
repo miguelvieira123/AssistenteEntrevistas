@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -28,14 +28,66 @@
             android:id="@+id/InterviewName"
             android:layout_toRightOf="@+id/foto_entrevista"
             android:layout_alignParentTop="false"
-            android:paddingLeft="9dp" />
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingLeft="15dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ProjectLableOfInterview"
+            android:layout_toRightOf="@+id/foto_entrevista"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="25dp"
+            android:paddingLeft="15dp"
+            android:text="Tema: "
+            android:textSize="10sp"
+            android:textColor="@color/grey"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ProjectNameOfInterview"
+            android:layout_toRightOf="@+id/ProjectLableOfInterview"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="25dp"
+            android:textSize="10sp"
+            android:textColor="@color/uminho_color"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TimeLableOfInterview"
+            android:layout_toRightOf="@+id/foto_entrevista"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="35dp"
+            android:paddingLeft="15dp"
+            android:text="Criado: "
+            android:textSize="10sp"
+            android:textColor="@color/grey"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TimeOfInterview"
+            android:layout_toRightOf="@+id/TimeLableOfInterview"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="35dp"
+            android:textSize="10sp"
+            android:textColor="@color/green"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/foto_entrevista"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:paddingLeft="5dp"/>
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:id="@+id/SendStatus"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"/>
 
     </RelativeLayout>
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ListenAudioIcon"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/player_play"
+        android:layout_centerVertical="true"/>
+    <TextView
+        android:id="@+id/ListenAudioName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="90dp"
+        android:singleLine="true"
+        android:textSize="36px"
+        android:layout_centerVertical="true">
+    </TextView>
+    <TextView
+        android:id="@+id/ListenAudioCurrentAudioTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:singleLine="true"
+        android:layout_marginRight="45dp"
+        android:textSize="24px"
+        android:text="00:00"
+        >
+    </TextView>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ListenAudioDelete"
+        android:background="@drawable/deletered"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
+
+
+</RelativeLayout>

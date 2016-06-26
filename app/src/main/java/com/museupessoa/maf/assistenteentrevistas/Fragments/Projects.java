@@ -39,7 +39,10 @@ import com.museupessoa.maf.assistenteentrevistas.newproject.MetaInfo;
 import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Projects extends Fragment{
@@ -95,6 +98,7 @@ public class Projects extends Fragment{
         adapter.setOnItemClickListener((new RVProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
+                Log.e("PROJECT",Integer.toString(position));
                 android.support.v4.app.FragmentManager fragmentActionManager = getFragmentManager();
                 ProjectActionDialogFragment dialogAction = new ProjectActionDialogFragment();
                 dialogAction.setTargetFragment(Projects.this, position);
@@ -146,10 +150,30 @@ public class Projects extends Fragment{
        if(ProjectUnit.deleteProject(projectUnits.get(pos).name,
                Environment.getExternalStoragePublicDirectory("/" + General.APP_NAME).toString())) {
            projectUnits.remove(pos);
+           for(int i =0;i<projectUnits.size();i++)projectUnits.get(i).pos=i;
            adapter.RVUpdateListAdapter(projectUnits);
            recyclerView.setAdapter(adapter);
+
        }
 
 
    }
+    public  static void updateProjectsList(String pattern){
+        int i;
+        List<ProjectUnit> newProjectList = new ArrayList<ProjectUnit>();
+        for(i=0;i<projectUnits.size();i++){
+            Pattern p = Pattern.compile(pattern);
+            Matcher m = p.matcher(projectUnits.get(i).name);
+            if(m.find()){
+                newProjectList.add(new ProjectUnit(projectUnits.get(i).name, projectUnits.get(i).pos));
+            }
+        }
+        adapter.RVUpdateListAdapter(newProjectList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public  static void setCurrentProjectList(){
+        adapter.RVUpdateListAdapter(projectUnits);
+        recyclerView.setAdapter(adapter);
+    }
 }

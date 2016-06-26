@@ -43,6 +43,7 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
         public void setOnItemClickListener(OnItemClickListener listener,int position ){
             this.listener = listener;
             this.position = position;
+
         }
 
 
@@ -66,8 +67,8 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
 
     @Override
     public void onBindViewHolder(RVProjectAdapter.ProjectViewHolder holder, int position) {
-        holder.projectName.setText( projects.get(position).name);
-        holder.setOnItemClickListener(listener, position);
+       holder.projectName.setText(projects.get(position).name);
+       holder.setOnItemClickListener(listener, projects.get(position).pos);
     }
 
     @Override

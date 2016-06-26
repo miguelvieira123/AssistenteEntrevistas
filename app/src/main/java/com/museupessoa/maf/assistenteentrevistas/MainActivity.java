@@ -3,23 +3,33 @@ package com.museupessoa.maf.assistenteentrevistas;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Projects;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
 import com.museupessoa.maf.assistenteentrevistas.adapters.MainActivityPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.NewProjectDialogFragmentNewItem;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -45,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, REQUEST_PERMISSIONS);
         }
 
-
+         General.DEFAULT_ICON = BitmapFactory.decodeResource(getResources(),
+             R.drawable.default_icon_for_m);
     }
 
     @Override
@@ -59,9 +70,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createAppFolders(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
         if (General.createStructOfFolders(Environment.getExternalStoragePublicDirectory("/" + APP_NAME).toString())) {
             General.createProject(Environment.getExternalStorageDirectory() + "/" + APP_NAME,
-                    "Geral", General.defaultMetaListInit(), General.defaultQuestionsListInit(), General.defaultLinksListInit(), 1);
+                    "Geral", General.defaultMetaListInit(), General.defaultQuestionsListInit(), General.defaultLinksListInit(), 1,sdf.format(new Date()));
 
             myPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
             pager = (ViewPager) findViewById(R.id.pager);
@@ -131,5 +143,57 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_search,menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final  android.support.v7.widget.SearchView searchView = ( android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new  android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return  false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                switch (General.CURR_TAB){
+                    case 1:
+                        if(!newText.isEmpty())Projects.updateProjectsList(newText);
+                        else  Projects.setCurrentProjectList();
+                        break;
+                    case 2:
+                        if(!newText.isEmpty()) Interviews.updateInterviewList(newText);
+                        else Interviews.setCurrentInterviewList();
+                        break;
+                }
+                return false;
+            }
+        });
+       searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+           @Override
+           public void onViewAttachedToWindow(View v) {
+           }
+
+           @Override
+           public void onViewDetachedFromWindow(View v) {
+               switch (General.CURR_TAB){
+                   case 1:
+                       Projects.setCurrentProjectList();
+                       break;
+                   case 2:
+                       Interviews.setCurrentInterviewList();
+                       break;
+               }
+
+           }
+       });
+
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
 
 }

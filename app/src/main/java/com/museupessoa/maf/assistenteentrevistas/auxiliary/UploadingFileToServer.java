@@ -24,7 +24,8 @@ public class UploadingFileToServer {
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1*1024*1024;
-
+        //Log.e("FILE", pathToOurFile);
+        //Log.e("URL", urlServer);
         try
         {
             FileInputStream fileInputStream = new FileInputStream(new File(pathToOurFile) );
@@ -63,7 +64,8 @@ public class UploadingFileToServer {
             fileInputStream.close();
             outputStream.flush();
             outputStream.close();
-            if (serverResponseCode == HttpURLConnection.HTTP_OK) { //success
+           // Log.e("CODE", Integer.toString(serverResponseCode));
+            if (serverResponseCode == HttpURLConnection.HTTP_OK) {//success
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         connection.getInputStream()));
                 String inputLine;
@@ -73,6 +75,7 @@ public class UploadingFileToServer {
                     response.append(inputLine);
                 }
                 in.close();
+                //Log.e("CODE2", response.toString());
                if(response.toString().equals("1")){return true; }
                 else return false;
             }else return false;

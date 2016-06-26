@@ -1,9 +1,13 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
+import com.museupessoa.maf.assistenteentrevistas.units.AudioUnit;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -40,6 +44,7 @@ public class General {
     public static int CR=212;
     public static int CG=79;
     public static int CB=22;
+    public static Bitmap DEFAULT_ICON;
 
     public static boolean createStructOfFolders(String path){
         try {
@@ -76,6 +81,7 @@ public class General {
             return false;
         }
     }
+
 
 
 
@@ -187,7 +193,34 @@ public class General {
             return false;
         }
     }
-    public static boolean createProject(String path,String projectName,List<String> info, List<String> questions, List<String> urls, int status){
+
+    public static boolean setInterviewStatusSent(String Path, boolean status){
+        File file = new File(Path, "/manifesto.xml");
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+            NodeList nodeList_meta = doc.getElementsByTagName("meta");
+            if(status)nodeList_meta.item(0).getAttributes().getNamedItem("send").setTextContent("yes");
+            else nodeList_meta.item(0).getAttributes().getNamedItem("send").setTextContent("no");
+            Transformer trans = TransformerFactory.newInstance().newTransformer();
+            DOMSource xmlSource = new DOMSource(doc);
+            StreamResult result = new StreamResult(Path + "/manifesto.xml");
+            trans.transform(xmlSource, result);
+            return true;
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean createProject(String path,String projectName,List<String> info, List<String> questions, List<String> urls, int status, String Date){
         try {
             File f  = new File(path + "/Projetos/" + projectName + ".xml");
             if(!f.exists()||status==2){
@@ -195,6 +228,7 @@ public class General {
                 org.w3c.dom.Element root;
                 root = doc.createElement("project");
                 root.setAttribute("name", projectName);
+                root.setAttribute("time", Date);
                 doc.appendChild(root);
                 org.w3c.dom.Element n1;
                 n1 = doc.createElement("meta");
@@ -488,5 +522,35 @@ public class General {
         }
         return(path.delete());
     }
+
+    public static  String getStrTime(Integer curTime){
+        String time  = new String();
+        Integer h,m,s,tmp;
+        if(curTime/1000>=60&&curTime/1000<60*60){
+            m = curTime/(1000*60);
+            s = (curTime/1000)-(60*m);
+            time = m<10?"0"+Integer.toString(m):Integer.toString(m);
+            time += ":";
+            time += s<10?"0"+Integer.toString(s):Integer.toString(s);
+        }else if(curTime/1000<60){
+            s = curTime/1000;
+            time ="00:";
+            time += s<10?"0"+Integer.toString(s):Integer.toString(s);
+        }else if(curTime/1000 >= 60*60 ){
+            h = curTime/(1000*60*60);
+            m = ((curTime/1000)-(h*60*60))/60;
+            s = (curTime/1000)-(h*60*60)-(m*60);
+            time = Integer.toString(h);
+            time +=":";
+            time = m<10?"0"+Integer.toString(m):Integer.toString(m);
+            time +=":";
+            time += s<10?"0"+Integer.toString(s):Integer.toString(s);
+        } else{
+            return "00:00";
+        }
+
+        return time;
+    }
+
 
 }

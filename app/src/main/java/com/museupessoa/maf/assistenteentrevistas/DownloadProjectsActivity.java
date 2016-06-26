@@ -109,7 +109,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
                 localProjects = ProjectUnit.getProjects(PATH);
                 for (int i=0; i<remoteProjects.size();i++){
                     if(!ProjectUnit.ifExists(remoteProjects.get(i),localProjects))
-                        projects.add(new ProjectUnit(remoteProjects.get(i)));
+                        projects.add(new ProjectUnit(remoteProjects.get(i),projects.size()));
                 }
 
                 adapter = new RVProjectAdapter(projects);

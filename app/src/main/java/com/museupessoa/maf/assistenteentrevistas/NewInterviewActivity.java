@@ -39,6 +39,8 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -105,11 +107,6 @@ public class NewInterviewActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_new_interview, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
     public void editInterviewMetadata(String projectName){
         if(projectName != null){
@@ -126,8 +123,6 @@ public class NewInterviewActivity extends AppCompatActivity {
 
             //iniciar SlidingTabs para preencher metadata
             setContentView(R.layout.fragment_interview_metadata);
-
-
             CharSequence Titles[]={"Texto","Audio","Foto"};
             int Numboftabs = 3;
             EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path);
@@ -149,6 +144,12 @@ public class NewInterviewActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_new_interview, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -158,14 +159,7 @@ public class NewInterviewActivity extends AppCompatActivity {
                     FragmentManager addInterview = getFragmentManager();
                     ConfirmFinishFormDialogFragment dialogProjectName = new ConfirmFinishFormDialogFragment();
                     dialogProjectName.show(addInterview, "AcceptNewInterview");
-
                 }
-                //NewInterviewActivity.bitmapFormPhoto=null;
-                saveFormContent();
-                Intent intent = new Intent(this, InterviewActivity.class);
-                intent.putExtra("path",new_interview_path);
-                startActivity(intent);
-                break;
         }
         return(super.onOptionsItemSelected(item));
     }
@@ -179,6 +173,7 @@ public class NewInterviewActivity extends AppCompatActivity {
     }
     private void savePersonMetainfo( HashMap<String, String> info){
         try{
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
             File f  = new File(new_interview_path, "manifesto.xml");
             if(f.exists()){
                 Document doc = null;
@@ -194,6 +189,9 @@ public class NewInterviewActivity extends AppCompatActivity {
 
                     n1 = doc.createElement("meta");
                     n1.setAttribute("name", person_name );
+                    n1.setAttribute("project", selected_project );
+                    n1.setAttribute("time", sdf.format(new Date()));
+                    n1.setAttribute("send","no");
                     for (String key: info.keySet()) {
                         n2 = doc.createElement( "info" );
                         n2.setAttribute("name", key );
@@ -226,13 +224,14 @@ public class NewInterviewActivity extends AppCompatActivity {
     public void okClicked() {
         NewInterviewActivity.bitmapFormPhoto=null;
         saveFormContent();
+        this.finish();
         Intent intent = new Intent(this, InterviewActivity.class);
         intent.putExtra("path",new_interview_path);
         startActivity(intent);
     }
 
     public void cancelClicked() {
-        Toast.makeText(getApplicationContext(), "Cancelado", Toast.LENGTH_LONG).show();
+        saveFormContent();
         this.finish();
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

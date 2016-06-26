@@ -130,13 +130,14 @@ public class PhotoForm extends Fragment {
         Bitmap myBitmap = null;
         if(imgFile.exists()){
             myBitmap = decodeFile(imgFile);
-            myBitmap = ThumbnailUtils.extractThumbnail(myBitmap, 64, 64);
+            myBitmap = ThumbnailUtils.extractThumbnail(myBitmap, 84, 84);
             OutputStream fOut = null;
             fOut = new FileOutputStream(file);
             myBitmap.compress(Bitmap.CompressFormat.JPEG, 55, fOut);
             fOut.flush();
             fOut.close();
         }
+        Log.e("PhotoForm","End thumbnailPic");
     }
 
     private void Pic(String PATH) {

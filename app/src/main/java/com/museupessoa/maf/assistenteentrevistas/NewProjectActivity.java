@@ -107,8 +107,6 @@ public class NewProjectActivity extends AppCompatActivity  {
     }
 
     public void cancelClicked() {
-        //Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
         this.finish();
         Toast.makeText(getApplicationContext(), "Cancelado",
                 Toast.LENGTH_LONG).show();

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -186,6 +187,7 @@ public class ListenAudio extends AppCompatActivity {
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
         time.setText(General.getStrTime(mediaPlayer.getCurrentPosition()));
         if (mediaPlayer.isPlaying()) {
+            Log.e("Esto","startPlayProgressUpdater IF");
             Runnable notification = new Runnable() {
                 public void run() {
                     startPlayProgressUpdater(groupPosition,childPosition);
@@ -193,21 +195,26 @@ public class ListenAudio extends AppCompatActivity {
             };
             seekHandler.postDelayed(notification,1000);
         }else{
-            status = STOP;
-            mediaPlayer.reset();
-            lastPosGroup = -1;
-            lastPosChild = -1;
-            //mediaPlayer.pause();
-            icon.setBackgroundResource(R.drawable.player_play);
-            audio.setTextColor(Color.rgb(120, 120, 120));
+            Log.e("Esto", "startPlayProgressUpdater Else");
+            if(status!=PAUSE) {
+                status = STOP;
+                mediaPlayer.reset();
+                lastPosGroup = -1;
+                lastPosChild = -1;
+                //mediaPlayer.pause();
+                icon.setBackgroundResource(R.drawable.player_play);
+                audio.setTextColor(Color.rgb(120, 120, 120));
+            }
         }
     }
 
     public void startPlay( int groupPosition, int childPosition, final Integer status){
         if(status==ON || status ==PAUSE){
+            Log.e("Esto","startPlay IF");
             mediaPlayer.stop();
             mediaPlayer.reset();
         }
+        Log.e("Esto","startPlay");
         try {
             File f = new File(interview_path + "/Audio/" + audioUnits.get(groupPosition).audio.get(childPosition));
             mediaPlayer.setDataSource(interview_path + "/Audio/" + audioUnits.get(groupPosition).audio.get(childPosition));

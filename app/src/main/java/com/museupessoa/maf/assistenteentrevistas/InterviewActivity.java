@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.NetworkOnMainThreadException;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.ChooseProjectDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteInterviewDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.FinishEnterviewDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.LinkChoiseForSendDialogFragment;
@@ -486,6 +488,11 @@ public class InterviewActivity extends AppCompatActivity {
                 FinishEnterviewDialogFragment finE = new FinishEnterviewDialogFragment();
                 finE.show(finishE,"FinishEntreview");
                 return true;
+            case R.id.E_Project:
+                FragmentManager fmP = getFragmentManager();
+                ChooseProjectDialogFragment project = new ChooseProjectDialogFragment();
+                project.show(fmP,"ChooseProjectDialogFragment");
+                return true;
             default:
 
                 break;
@@ -621,6 +628,34 @@ public class InterviewActivity extends AppCompatActivity {
         }
         if(SEND_STATUS){
             General.setInterviewStatusSent(interview_path,true);
+        }
+    }
+
+    public  static void changeProjectForInterview(String project){
+        File f  = new File(interview_path+"/manifesto.xml");
+        Document doc = null;
+        if(f.exists()) {
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList nodeList = doc.getElementsByTagName("meta");
+                nodeList.item(0).getAttributes().getNamedItem("project").setTextContent(project);
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSourse  =  new DOMSource(doc);
+                StreamResult streamResult = new StreamResult(interview_path+"/manifesto.xml");
+                trans.transform(xmlSourse,streamResult);
+                
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

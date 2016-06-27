@@ -17,7 +17,7 @@ public class ProjectUnit {
 
     static public List<ProjectUnit> getProjects(String PATH){
         String[] list;
-        List<ProjectUnit> projects = new ArrayList<>();;
+        List<ProjectUnit> projects = new ArrayList<ProjectUnit>();;
         File f = new File(PATH+"/Projetos");
         list = f.list();
         for(int i=0;i<list.length;i++)projects.add(new ProjectUnit(list[i].substring(0, list[i].length() - 4),i));

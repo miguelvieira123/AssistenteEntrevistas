@@ -28,7 +28,17 @@ import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVQuestionAdapter;
 import com.museupessoa.maf.assistenteentrevistas.units.QuestionUnit;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 
 public class Interview extends Fragment {
@@ -65,7 +75,12 @@ public class Interview extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
-        questionUnits = QuestionUnit.getQuestions(path);
+        questionUnits = getQuestionsFromProject(path);
+        //questionUnits = QuestionUnit.getQuestions(path);
+        if(questionUnits.size()==0){
+            TextView tv = (TextView)getActivity().findViewById(R.id.IfProjectDontExists);
+            tv.setText("O projeto associado não tem nenhuma pergunta ou se o projeto não existe, pode escoler outro");
+        }
         adapter = new RVQuestionAdapter(questionUnits);
         recyclerView.setAdapter(adapter);
         final Activity activity = getActivity();
@@ -147,5 +162,34 @@ public class Interview extends Fragment {
         });
     }
 
+    public List<QuestionUnit> getQuestionsFromProject(String PATH){
+        List<QuestionUnit> questionUnits = new ArrayList<QuestionUnit>();
+        File manifest  = new File(PATH, "/manifesto.xml");
+
+        if(manifest.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(manifest);
+                NodeList meta = doc.getElementsByTagName("meta");
+                String projectName = meta.item(0).getAttributes().getNamedItem("project").getTextContent();
+                File project =  new File(General.PATH+"/Projetos/"+projectName+".xml");
+                if(!project.exists())return questionUnits;
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(project);
+                NodeList questions = doc.getElementsByTagName("p");
+                for(int i=0;i<questions.getLength();i++){
+                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                }
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return questionUnits;
+    }
 
 }

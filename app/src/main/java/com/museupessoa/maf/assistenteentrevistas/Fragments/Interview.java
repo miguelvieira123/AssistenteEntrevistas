@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,14 +52,13 @@ public class Interview extends Fragment {
         this.path = null;
     }
     ImageView recStatus;
-    public  static  ImageView recAmpl;
-    ImageView recAmplLast;
     TextView question;
     private  Integer lastPos=-1;
     android.support.v7.widget.CardView cardView;
     int width;
     int height;
     LinearLayout.LayoutParams paramsLayout;
+    public  static  ProgressBar vProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,6 +81,7 @@ public class Interview extends Fragment {
             TextView tv = (TextView)getActivity().findViewById(R.id.IfProjectDontExists);
             tv.setText("O projeto associado não tem nenhuma pergunta ou se o projeto não existe, pode escoler outro");
         }
+
         adapter = new RVQuestionAdapter(questionUnits);
         recyclerView.setAdapter(adapter);
         final Activity activity = getActivity();
@@ -89,7 +90,7 @@ public class Interview extends Fragment {
             public void onItemClick(View v, int position) {
                 recStatus=(ImageView)v.findViewById(R.id.RecStatus);
                 question = (TextView)v.findViewById(R.id.InterviewQuestion);
-                recAmpl = (ImageView)v.findViewById(R.id.RecAmplitude);
+                vProgressBar = (ProgressBar)v.findViewById(R.id.vprogressbar);
                 cardView = ( android.support.v7.widget.CardView)v.findViewById(R.id.InterviewQuestionsCV);
                 if(lastPos==-1){
                     height=cardView.getHeight();
@@ -121,7 +122,7 @@ public class Interview extends Fragment {
                     cardView.setLayoutParams(paramsLayout);
                     if (activity instanceof InterviewActivity){
                         ((InterviewActivity) activity).newAudioStopRecord();
-                        recAmpl.setBackgroundResource(R.drawable.amp1);
+                        vProgressBar.setProgress(0);
                     }
                 }
                 else {
@@ -146,9 +147,9 @@ public class Interview extends Fragment {
                     cardView = ( android.support.v7.widget.CardView)v1.findViewById(R.id.InterviewQuestionsCV);
                     cardView.setCardBackgroundColor(Color.WHITE);
                     question.setTextSize(16);
-                    recAmplLast = (ImageView)v1.findViewById(R.id.RecAmplitude);
+                    vProgressBar = (ProgressBar)v1.findViewById(R.id.vprogressbar);
                     question.setTextColor(Color.rgb(143, 142, 141));
-                    recAmplLast.setBackgroundResource(R.drawable.amp1);
+                    vProgressBar.setProgress(0);
                     recStatus.setBackgroundResource(R.drawable.microphonedisabled);
                     paramsLayout = new  LinearLayout.LayoutParams(
                             width,

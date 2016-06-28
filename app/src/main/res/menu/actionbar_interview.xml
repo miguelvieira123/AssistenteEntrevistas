@@ -39,6 +39,11 @@
                 android:icon="@drawable/amarok"
                 android:showAsAction="never"
                 android:title="Ouvir"/>
+            <item
+                android:id="@+id/E_Foto"
+                android:icon="@drawable/diagram"
+                android:showAsAction="never"
+                android:title="Fotos"/>
 
         </menu>
 

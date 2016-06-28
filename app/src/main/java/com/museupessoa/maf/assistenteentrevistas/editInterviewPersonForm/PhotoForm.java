@@ -105,7 +105,8 @@ public class PhotoForm extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_RESULT_F) {
             try{
-                Pic(formPhoto_path);
+                //Pic(formPhoto_path);
+                picCompress(formPhoto_path);
             }
             catch (Exception e ){
                 e.printStackTrace();
@@ -114,6 +115,7 @@ public class PhotoForm extends Fragment {
         }
         else if (requestCode == CAMERA_RESULT_P){
             try{
+                picCompress(perfilPhoto_path);
                 thumbnailPic(perfilPhoto_path);
             }
             catch (Exception e ){
@@ -137,8 +139,28 @@ public class PhotoForm extends Fragment {
             fOut.flush();
             fOut.close();
         }
-        Log.e("PhotoForm","End thumbnailPic");
     }
+
+    private void picCompress(String PATH){
+        File imgFile = new  File(PATH);
+        Bitmap myBitmap = null;
+        if(imgFile.exists()){
+            try {
+                myBitmap = decodeFile(imgFile);
+                OutputStream fOut = null;
+                fOut = new FileOutputStream(imgFile);
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 55, fOut);
+                fOut.flush();
+                fOut.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
     private void Pic(String PATH) {
         int targetW = MetaPhoto.getWidth();

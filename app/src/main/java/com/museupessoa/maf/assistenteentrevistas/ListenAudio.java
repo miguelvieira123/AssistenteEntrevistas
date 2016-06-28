@@ -69,6 +69,7 @@ public class ListenAudio extends AppCompatActivity {
         interview_path = intent.getStringExtra("path");
         mediaPlayer =  new MediaPlayer();
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
+        getSupportActionBar().setTitle("Ouvir as gravações");
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
         audioUnits = getListOfAudio(interview_path);
         listAdapter = new ListAudioAdapter(this, audioUnits);
@@ -116,8 +117,6 @@ public class ListenAudio extends AppCompatActivity {
                       audio.setTextColor(Color.rgb(120, 120, 120));
                       icon.setBackgroundResource(R.drawable.player_play);
                   }
-                  //lastPosGroup=-1;
-                  //lastPosChild=-1;
               } else {
                   icon.setBackgroundResource(R.drawable.player_pause);
                   audio.setTextColor(Color.rgb(12, 147, 1));
@@ -138,8 +137,7 @@ public class ListenAudio extends AppCompatActivity {
                   lastPosChild = childPosition;
 
               }
-              /*Toast.makeText(getApplicationContext(), audioUnits.get(groupPosition).audio.get(childPosition), Toast.LENGTH_SHORT)
-                      .show();*/
+
               return false;
           }
       });
@@ -187,7 +185,6 @@ public class ListenAudio extends AppCompatActivity {
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
         time.setText(General.getStrTime(mediaPlayer.getCurrentPosition()));
         if (mediaPlayer.isPlaying()) {
-            Log.e("Esto","startPlayProgressUpdater IF");
             Runnable notification = new Runnable() {
                 public void run() {
                     startPlayProgressUpdater(groupPosition,childPosition);
@@ -195,13 +192,11 @@ public class ListenAudio extends AppCompatActivity {
             };
             seekHandler.postDelayed(notification,1000);
         }else{
-            Log.e("Esto", "startPlayProgressUpdater Else");
             if(status!=PAUSE) {
                 status = STOP;
                 mediaPlayer.reset();
                 lastPosGroup = -1;
                 lastPosChild = -1;
-                //mediaPlayer.pause();
                 icon.setBackgroundResource(R.drawable.player_play);
                 audio.setTextColor(Color.rgb(120, 120, 120));
             }
@@ -210,11 +205,9 @@ public class ListenAudio extends AppCompatActivity {
 
     public void startPlay( int groupPosition, int childPosition, final Integer status){
         if(status==ON || status ==PAUSE){
-            Log.e("Esto","startPlay IF");
             mediaPlayer.stop();
             mediaPlayer.reset();
         }
-        Log.e("Esto","startPlay");
         try {
             File f = new File(interview_path + "/Audio/" + audioUnits.get(groupPosition).audio.get(childPosition));
             mediaPlayer.setDataSource(interview_path + "/Audio/" + audioUnits.get(groupPosition).audio.get(childPosition));

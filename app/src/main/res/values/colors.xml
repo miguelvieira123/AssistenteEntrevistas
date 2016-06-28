@@ -14,6 +14,7 @@
     <color name="grey">#afafaf</color>
     <color name="uminho_color">#97231a</color>
     <color name="engenharia_color">#d44f16</color>
+    <color name="black">#101010</color>
     <color name="test">#d1f8ff</color>
 
 </resources>

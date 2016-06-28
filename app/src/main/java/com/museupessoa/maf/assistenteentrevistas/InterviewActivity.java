@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -50,8 +51,10 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -265,7 +268,7 @@ public class InterviewActivity extends AppCompatActivity {
             rec_time.start();
             startRecording(interview_path);
             writeAudioToXML(question, interview_path, Integer.toString(conta_gravacoes) + ".mp4");
-            startPlayProgressUpdater();
+            startAmplProgressUpdater();
             REC_STATUS=1;
         }
     }
@@ -377,6 +380,47 @@ public class InterviewActivity extends AppCompatActivity {
 
     }
 
+    private void picCompress(String PATH){
+        File imgFile = new  File(PATH);
+        Bitmap myBitmap = null;
+        if(imgFile.exists()){
+            try {
+                myBitmap = decodeFile(imgFile);
+                OutputStream fOut = null;
+                fOut = new FileOutputStream(imgFile);
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 55, fOut);
+                fOut.flush();
+                fOut.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private static Bitmap decodeFile(File f) {
+        try {
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+            // The new size we want to scale to
+            final int REQUIRED_SIZE=256;
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                scale *= 2;
+            }
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {}
+        return null;
+    }
 
     private void Pic(String PATH) {
         int targetW = (int)metricsB.widthPixels;
@@ -391,6 +435,7 @@ public class InterviewActivity extends AppCompatActivity {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
         BitmapFactory.decodeFile(PATH, bmOptions);
+        picCompress(PATH);
         File f  = new File(interview_path, "/manifesto.xml");
         if(f.exists()){
             Document doc = null;
@@ -479,9 +524,15 @@ public class InterviewActivity extends AppCompatActivity {
                 return true;
             case R.id.E_Listen:
                 newAudioStopRecord();
-                Intent intent = new Intent(this, ListenAudio.class);
-                intent.putExtra("path",interview_path);
-                startActivity(intent);
+                Intent intentAudio = new Intent(this, ListenAudio.class);
+                intentAudio.putExtra("path",interview_path);
+                startActivity(intentAudio);
+                return  true;
+            case R.id.E_Foto:
+                newAudioStopRecord();
+                Intent intentFoto = new Intent(this, FotoActivity.class);
+                intentFoto.putExtra("path",interview_path);
+                startActivity(intentFoto);
                 return  true;
             case 16908332: //Aqui nós tratamos  android:parentActivityName(Este atributo está no Manifesto)
                 FragmentManager finishE  = getFragmentManager();
@@ -507,9 +558,17 @@ public class InterviewActivity extends AppCompatActivity {
             Document doc = null;
             try {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
-                NodeList links = doc.getElementsByTagName("url");
-                for (int i=0;i<links.getLength();i++){
-                    list.add(links.item(i).getTextContent());
+                NodeList project = doc.getElementsByTagName("meta");
+                String projectPath = General.PATH+"/Projetos/"+
+                        project.item(0).getAttributes().getNamedItem("project").getTextContent()+".xml";
+                File f2 = new File(projectPath);
+                if(f2.exists()){
+                    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f2);
+                    NodeList links = doc.getElementsByTagName("url");
+                    for(int i=0;i<links.getLength();i++){
+                        list.add(links.item(i).getTextContent());
+                        Log.e("L",links.item(i).getTextContent());
+                    }
                 }
 
             } catch (SAXException e) {
@@ -542,50 +601,15 @@ public class InterviewActivity extends AppCompatActivity {
 
     }
 
-    public void startPlayProgressUpdater() {
+    public void startAmplProgressUpdater() {
         if (REC_STATUS==1) {
-           int ampl = mRecorder.getMaxAmplitude();
-           int id=0;
-           if(ampl>=0&&ampl<1000)id=R.drawable.amp1;
-           else if(ampl>=1000&&ampl<2000)id=R.drawable.amp2;
-           else if(ampl>=2000&&ampl<3000)id=R.drawable.amp3;
-           else if(ampl>=3000&&ampl<4000)id=R.drawable.amp4;
-           else if(ampl>=4000&&ampl<5000)id=R.drawable.amp5;
-           else if(ampl>=5000&&ampl<6000)id=R.drawable.amp6;
-           else if(ampl>=6000&&ampl<7000)id=R.drawable.amp7;
-           else if(ampl>=7000&&ampl<8000)id=R.drawable.amp8;
-           else if(ampl>=8000&&ampl<9000)id=R.drawable.amp9;
-           else if(ampl>=9000&&ampl<10000)id=R.drawable.amp10;
-           else if(ampl>=10000&&ampl<11000)id=R.drawable.amp11;
-           else if(ampl>=11000&&ampl<12000)id=R.drawable.amp12;
-           else if(ampl>=12000&&ampl<13000)id=R.drawable.amp13;
-           else if(ampl>=13000&&ampl<14000)id=R.drawable.amp14;
-           else if(ampl>=14000&&ampl<15000)id=R.drawable.amp15;
-           else if(ampl>=15000&&ampl<16000)id=R.drawable.amp16;
-           else if(ampl>=16000&&ampl<17000)id=R.drawable.amp17;
-           else if(ampl>=17000&&ampl<18000)id=R.drawable.amp18;
-           else if(ampl>=18000&&ampl<19000)id=R.drawable.amp19;
-           else if(ampl>=19000&&ampl<20000)id=R.drawable.amp20;
-           else if(ampl>=20000&&ampl<21000)id=R.drawable.amp21;
-           else if(ampl>=21000&&ampl<22000)id=R.drawable.amp22;
-           else if(ampl>=22000&&ampl<23000)id=R.drawable.amp23;
-           else if(ampl>=23000&&ampl<24000)id=R.drawable.amp24;
-           else if(ampl>=24000&&ampl<25000)id=R.drawable.amp25;
-           else if(ampl>=25000&&ampl<26000)id=R.drawable.amp26;
-           else if(ampl>=26000&&ampl<27000)id=R.drawable.amp27;
-           else if(ampl>=27000&&ampl<28000)id=R.drawable.amp28;
-           else if(ampl>=28000&&ampl<29000)id=R.drawable.amp29;
-           else if(ampl>=29000&&ampl<30000)id=R.drawable.amp30;
-           else if(ampl>=30000&&ampl<31000)id=R.drawable.amp31;
-           else if(ampl>=31000)id=R.drawable.amp32;
-            Interview.recAmpl.setBackgroundResource(id);
-
+            Interview.vProgressBar.setProgress(mRecorder.getMaxAmplitude());
             Runnable notification = new Runnable() {
                 public void run() {
-                    startPlayProgressUpdater();
+                    startAmplProgressUpdater();
                 }
             };
-            seekHandler.postDelayed(notification,1000);
+            seekHandler.postDelayed(notification,500);
         }
     }
 
@@ -643,7 +667,7 @@ public class InterviewActivity extends AppCompatActivity {
                 DOMSource xmlSourse  =  new DOMSource(doc);
                 StreamResult streamResult = new StreamResult(interview_path+"/manifesto.xml");
                 trans.transform(xmlSourse,streamResult);
-                
+
             } catch (SAXException e) {
                 e.printStackTrace();
             } catch (IOException e) {

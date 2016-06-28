@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.R;
@@ -25,6 +26,7 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
 
         CardView cv;
         TextView question_row;
+        ProgressBar vProgressBar;
 
 
         private OnItemClickListener listener;
@@ -35,6 +37,7 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
             cv = (CardView)itemView.findViewById(R.id.InterviewQuestionsCV);
             itemView = cv;
             question_row = (TextView)itemView.findViewById(R.id.InterviewQuestion);
+            vProgressBar = (ProgressBar)itemView.findViewById(R.id.vprogressbar);
             question_row.setTextSize(16);
             question_row.setTextColor(Color.rgb(143,142,141));
             cv.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,8 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
     @Override
     public void onBindViewHolder(final RVQuestionAdapter.QuestionViewHolder holder, final int position) {
         holder.question_row.setText(questions.get(position).question);
+        holder.vProgressBar.setMax(32000);
+
         holder.setOnItemClickListener(listener, position);
     }
 

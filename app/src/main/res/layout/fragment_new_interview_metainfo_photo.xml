@@ -28,7 +28,7 @@
     <Button
         android:layout_width="185dp"
         android:layout_height="wrap_content"
-        android:text="Procurar"
+        android:text="Formulário"
         android:id="@+id/BFrom"
         android:layout_gravity="right|bottom" />
 

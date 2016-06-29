@@ -148,6 +148,9 @@ public class NewProjectActivity extends AppCompatActivity  {
     }
     @Override
     public void onBackPressed() {
+        FragmentManager addProject = getSupportFragmentManager();
+        NewProjectAddDialogFragment dialogProjectName = new NewProjectAddDialogFragment();
+        dialogProjectName.show(addProject, "NewProjectAddDialogFragment");
     }
 
 }

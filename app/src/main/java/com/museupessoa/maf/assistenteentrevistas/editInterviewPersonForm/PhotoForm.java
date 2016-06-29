@@ -105,8 +105,7 @@ public class PhotoForm extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_RESULT_F) {
             try{
-                //Pic(formPhoto_path);
-                picCompress(formPhoto_path);
+                Pic(formPhoto_path);
             }
             catch (Exception e ){
                 e.printStackTrace();
@@ -115,7 +114,6 @@ public class PhotoForm extends Fragment {
         }
         else if (requestCode == CAMERA_RESULT_P){
             try{
-                picCompress(perfilPhoto_path);
                 thumbnailPic(perfilPhoto_path);
             }
             catch (Exception e ){
@@ -163,21 +161,30 @@ public class PhotoForm extends Fragment {
 
 
     private void Pic(String PATH) {
+        Bitmap myBitmap = null;
         int targetW = MetaPhoto.getWidth();
         int targetH = MetaPhoto.getHeight();
-
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(PATH, bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
-
         int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
-
+        myBitmap = BitmapFactory.decodeFile(PATH, bmOptions);
+        OutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(new File(PATH));
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //NewInterviewActivity.bitmapFormPhoto = BitmapFactory.decodeFile(PATH, bmOptions);
         //MetaPhoto.setImageBitmap(NewInterviewActivity.bitmapFormPhoto);
     }

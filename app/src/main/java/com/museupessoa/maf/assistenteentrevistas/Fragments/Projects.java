@@ -98,18 +98,14 @@ public class Projects extends Fragment{
         adapter.setOnItemClickListener((new RVProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Log.e("PROJECT",Integer.toString(position));
                 android.support.v4.app.FragmentManager fragmentActionManager = getFragmentManager();
-                ProjectActionDialogFragment dialogAction = new ProjectActionDialogFragment();
+                ProjectActionDialogFragment dialogAction = new ProjectActionDialogFragment(projectUnits.get(position).name);
                 dialogAction.setTargetFragment(Projects.this, position);
                 dialogAction.show(fragmentActionManager, "ProjectItemActionDialogFragment");
             }
         }));
 
-       //fab.attachToRecyclerView(recyclerView);
     }
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -135,7 +131,6 @@ public class Projects extends Fragment{
                 intent.putExtra("name",projectUnits.get(requestCode).name);
                 intent.putExtra("status",2);
                 startActivity(intent);
-                Toast.makeText(getActivity(),"EDIT",Toast.LENGTH_LONG).show();
                 break;
             case  Projects.DELETE_PROJECT:
                 android.support.v4.app.FragmentManager delProject = getFragmentManager();
@@ -145,7 +140,8 @@ public class Projects extends Fragment{
                 break;
         }
     }
-   public static void delProject(int pos){
+
+    public static void delProject(int pos){
        String deleted_project = projectUnits.get(pos).name;
        if(ProjectUnit.deleteProject(projectUnits.get(pos).name,
                Environment.getExternalStoragePublicDirectory("/" + General.APP_NAME).toString())) {
@@ -158,6 +154,7 @@ public class Projects extends Fragment{
 
 
    }
+
     public  static void updateProjectsList(String pattern){
         int i;
         List<ProjectUnit> newProjectList = new ArrayList<ProjectUnit>();

@@ -3,11 +3,13 @@ package com.museupessoa.maf.assistenteentrevistas.adapters;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.museupessoa.maf.assistenteentrevistas.General;
 import com.museupessoa.maf.assistenteentrevistas.R;
 import com.museupessoa.maf.assistenteentrevistas.units.ProjectUnit;
 
@@ -20,6 +22,8 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
 
         CardView cv;
         TextView projectName;
+        TextView projectEditable;
+        TextView projectTime;
         private final  String TAG="AssistenteEntrevistas";
         private OnItemClickListener listener;
         private int position;
@@ -28,6 +32,8 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.CV_Project);
             projectName = (TextView)itemView.findViewById(R.id.ProjectName);
+            projectEditable = (TextView)itemView.findViewById(R.id.ProjectEditable);
+            projectTime = (TextView)itemView.findViewById(R.id.ProjectTime);
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -68,6 +74,16 @@ public  class RVProjectAdapter extends   RecyclerView.Adapter<RVProjectAdapter.P
     @Override
     public void onBindViewHolder(RVProjectAdapter.ProjectViewHolder holder, int position) {
        holder.projectName.setText(projects.get(position).name);
+        if(General.isProjectEditable(General.PATH,projects.get(position).name)){
+            holder.projectEditable.setText("Sim");
+            holder.projectEditable.setTextColor(Color.rgb(103,155,101));
+        }
+        else {
+            holder.projectEditable.setText("Não");
+            holder.projectEditable.setTextColor(Color.rgb(151, 35, 26));
+        }
+        holder.projectTime.setText(General.getTimeOfProject(General.PATH+"/Projetos",projects.get(position).name));
+        holder.projectTime.setTextColor(Color.rgb(103,155,101));
        holder.setOnItemClickListener(listener, projects.get(position).pos);
     }
 

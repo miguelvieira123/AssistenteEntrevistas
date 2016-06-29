@@ -82,9 +82,6 @@ public class General {
         }
     }
 
-
-
-
     public static String createNewInterview(String app_path, String project_name, String person_name){
 
         List<String> meta = new ArrayList<>();
@@ -128,6 +125,7 @@ public class General {
         setContadorXML(app_path, contador);
         return "e00"+contador;
     }
+
     public static boolean createInterview(String path, String person_name, String interviewCode, List<String> meta, List<String> perguntas, List<String> urls){
         try{
             File f = new File(path + "/Entrevistas/" + interviewCode );
@@ -229,6 +227,7 @@ public class General {
                 root = doc.createElement("project");
                 root.setAttribute("name", projectName);
                 root.setAttribute("time", Date);
+                root.setAttribute("editable","yes");
                 doc.appendChild(root);
                 org.w3c.dom.Element n1;
                 n1 = doc.createElement("meta");
@@ -266,6 +265,45 @@ public class General {
 
     }
 
+    public static boolean isProjectEditable(String path,String projectName){
+        File f  = new File(path+"/Projetos/"+projectName+".xml");
+        Document doc = null;
+        if(f.exists()){
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList res = doc.getElementsByTagName("project");
+                if(res.item(0).getAttributes().getNamedItem("editable").getTextContent().equals("yes"))
+                    return true;
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static String getTimeOfProject(String path,String projectName){
+        File f  = new File(path+"/"+projectName+".xml");
+        Document doc = null;
+        if(f.exists()){
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList res = doc.getElementsByTagName("project");
+                return res.item(0).getAttributes().getNamedItem("time").getTextContent();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
     public static List<String> getProjectMeta(String nameProject, String PATH){
         List<String> meta = new ArrayList<String>();
         try {
@@ -286,6 +324,7 @@ public class General {
             return meta;
         }
     }
+
     public static List<String> getProjectQuestions(String nameProject, String PATH){
         List<String> questions = new ArrayList<String>();
         try {
@@ -306,6 +345,7 @@ public class General {
             return questions;
         }
     }
+
     public static List<String> getProjectUrls(String nameProject, String PATH){
         List<String> urls = new ArrayList<String>();
         try {
@@ -327,8 +367,6 @@ public class General {
         }
     }
 
-
-
     public static List<String> defaultMetaListInit() {
 
         List<String> local = new ArrayList<String>();
@@ -340,6 +378,7 @@ public class General {
         return local;
 
     }
+
     public static List<String>  defaultQuestionsListInit(){
         List<String> local = new ArrayList<String>();
         local.add("Profissão");
@@ -349,12 +388,12 @@ public class General {
         local.add("Atividades Desportivas");
         return local;
     }
+
     public static List<String>  defaultLinksListInit(){
         List<String> local = new ArrayList<String>();
         local.add("http://www.museudapessoa.net/submissoes");
         return local;
     }
-
 
     private static int getContadorFromXML(String path){
         int contador=0;
@@ -376,6 +415,7 @@ public class General {
         }
         return contador;
     }
+
     private static void setContadorXML(String path, int novaContagem){
         File f  = new File(path, "config.xml");
         if(f.exists()){
@@ -406,8 +446,6 @@ public class General {
         }
     }
 
-
-
     public static void addSourceLink(String path, String link){
         File f  = new File(path, "/links.xml");
         if(f.exists()){
@@ -437,6 +475,7 @@ public class General {
         }
 
     }
+
     public static void deleteLink(String path, String link){
         File f  = new File(path, "/links.xml");
         if(f.exists()){
@@ -468,7 +507,6 @@ public class General {
         }
     }
 
-
     public static List<String> getSourceLinks(String path){
         List<String> links = new ArrayList<String>();
         File f  = new File(path, "/links.xml");
@@ -491,6 +529,7 @@ public class General {
         }
         return links;
     }
+
     public static void createSourceLinkFile(String path){
         try {
                 File f  = new File(path + "/links.xml");

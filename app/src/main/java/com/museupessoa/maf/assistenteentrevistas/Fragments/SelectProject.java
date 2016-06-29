@@ -2,12 +2,14 @@ package com.museupessoa.maf.assistenteentrevistas.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class SelectProject extends Fragment {
     private List<ProjectUnit> projectUnits;
     private RVProjectAdapter adapter;
     private String projectName;
+    int lastViewPos=-1;
 
 
     @Nullable
@@ -69,6 +72,15 @@ public class SelectProject extends Fragment {
             public void onItemClick(View v, int position) {
                 v.setSelected(true);
                 projectName = projectUnits.get(position).name;
+                if(lastViewPos==-1){
+                    v.setBackgroundColor(Color.rgb(209, 248, 255));
+                    lastViewPos=position;
+                }else {
+                    v.setBackgroundColor(Color.rgb(209, 248, 255));
+                    View vv = recyclerView.getChildAt(lastViewPos);
+                    vv.setBackgroundColor(Color.rgb(250,250,250));
+                    lastViewPos=position;
+                }
             }
         });
 

@@ -16,12 +16,6 @@
                 android:title="Editar"
                 />
             <item
-                android:id="@+id/E_Project"
-                android:icon="@drawable/pencil"
-                android:showAsAction="never"
-                android:title="Project"
-                />
-            <item
                 android:id="@+id/E_Enviar"
                 android:icon="@drawable/send"
                 android:showAsAction="never"

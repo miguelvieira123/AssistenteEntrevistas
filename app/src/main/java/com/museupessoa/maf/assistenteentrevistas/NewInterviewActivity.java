@@ -47,6 +47,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -70,8 +72,9 @@ public class NewInterviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
+        getSupportActionBar().setTitle("Nova Entrevista");
         if (savedInstanceState == null){
-
+            Log.e("D0","1111111");
             Intent intent = getIntent();
             person_name = intent.getStringExtra("person_name");
 
@@ -86,6 +89,7 @@ public class NewInterviewActivity extends AppCompatActivity {
             fragmentTransaction.add(R.id.new_interview_frameLayout, selectProject);
             fragmentTransaction.commit();
         }else{
+            Log.e("S0","123123");
             setContentView(R.layout.fragment_interview_metadata);
             CharSequence Titles[]={"Aplicação","Audio","Foto"};
             int Numboftabs = 3;
@@ -104,6 +108,7 @@ public class NewInterviewActivity extends AppCompatActivity {
             tabs.setViewPager(pager);
 
             selected_project = savedInstanceState.getString("myProject");
+
         }
     }
 
@@ -119,7 +124,8 @@ public class NewInterviewActivity extends AppCompatActivity {
             String new_interview_folder = General.createNewInterview(projects_path, projectName, person_name);
             new_interview_path = Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)+"/Entrevistas/"+new_interview_folder).toString();
 
-
+            //Copiar Projeto para a pasta da entervista
+            copyProject(projectName,new_interview_path);
 
             //iniciar SlidingTabs para preencher metadata
             setContentView(R.layout.fragment_interview_metadata);
@@ -244,5 +250,30 @@ public class NewInterviewActivity extends AppCompatActivity {
                     }
                 }
             }
+    }
+
+    public boolean copyProject(String projectName, String newPath){
+        File f  = new File(General.PATH+"/Projetos/"+projectName+".xml");
+        Log.e("S1",General.PATH+"/Projetos/"+projectName+".xml");
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            DOMSource domSource = new DOMSource(doc);
+            StreamResult streamResult = new StreamResult(newPath+"/"+projectName+".xml");
+            Log.e("S2", newPath + "/" + projectName+".xml");
+            transformer.transform(domSource,streamResult);
+            return true;
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 }

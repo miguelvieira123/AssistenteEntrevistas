@@ -59,6 +59,7 @@ public class Interview extends Fragment {
     int height;
     LinearLayout.LayoutParams paramsLayout;
     public  static  ProgressBar vProgressBar;
+    //public  static  ProgressBar vProgressBarOld;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,10 +77,9 @@ public class Interview extends Fragment {
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
         questionUnits = getQuestionsFromProject(path);
-        //questionUnits = QuestionUnit.getQuestions(path);
         if(questionUnits.size()==0){
             TextView tv = (TextView)getActivity().findViewById(R.id.IfProjectDontExists);
-            tv.setText("O projeto associado não tem nenhuma pergunta ou se o projeto não existe, pode escoler outro");
+            tv.setText("O projeto associado não tem nenhuma pergunta");
         }
 
         adapter = new RVQuestionAdapter(questionUnits);
@@ -88,11 +88,14 @@ public class Interview extends Fragment {
         adapter.setOnItemClickListener(new RVQuestionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
+               // Log.e("LAST-POS",Integer.toString(lastPos));
+               // Log.e("CURR-POS",Integer.toString(position));
+                //Log.e("--------","-------------------------");
                 recStatus=(ImageView)v.findViewById(R.id.RecStatus);
                 question = (TextView)v.findViewById(R.id.InterviewQuestion);
-                vProgressBar = (ProgressBar)v.findViewById(R.id.vprogressbar);
                 cardView = ( android.support.v7.widget.CardView)v.findViewById(R.id.InterviewQuestionsCV);
                 if(lastPos==-1){
+                    vProgressBar = (ProgressBar)v.findViewById(R.id.vprogressbar);
                     height=cardView.getHeight();
                     width=cardView.getWidth();
                     lastPos=position;
@@ -110,10 +113,12 @@ public class Interview extends Fragment {
                     }
                 }
                 else if(lastPos==position){
+                    vProgressBar = (ProgressBar)v.findViewById(R.id.vprogressbar);
                     cardView.setCardBackgroundColor(Color.WHITE);
                     question.setTextSize(16);
                     question.setTextColor(Color.rgb(143, 142, 141));
                     recStatus.setBackgroundResource(R.drawable.microphonedisabled);
+                    vProgressBar.setProgress(0);
                     lastPos=-1;
                     paramsLayout = new  LinearLayout.LayoutParams(
                             width,
@@ -122,11 +127,10 @@ public class Interview extends Fragment {
                     cardView.setLayoutParams(paramsLayout);
                     if (activity instanceof InterviewActivity){
                         ((InterviewActivity) activity).newAudioStopRecord();
-                        vProgressBar.setProgress(0);
                     }
                 }
                 else {
-                    if (activity instanceof InterviewActivity){
+                   /* if (activity instanceof InterviewActivity){
                         ((InterviewActivity) activity).newAudioStopRecord();
                     }
                     if (activity instanceof InterviewActivity){
@@ -147,16 +151,16 @@ public class Interview extends Fragment {
                     cardView = ( android.support.v7.widget.CardView)v1.findViewById(R.id.InterviewQuestionsCV);
                     cardView.setCardBackgroundColor(Color.WHITE);
                     question.setTextSize(16);
-                    vProgressBar = (ProgressBar)v1.findViewById(R.id.vprogressbar);
+                    vProgressBarOld = (ProgressBar)v1.findViewById(R.id.vprogressbar);
                     question.setTextColor(Color.rgb(143, 142, 141));
-                    vProgressBar.setProgress(0);
+                    vProgressBarOld.setProgress(0);
                     recStatus.setBackgroundResource(R.drawable.microphonedisabled);
                     paramsLayout = new  LinearLayout.LayoutParams(
                             width,
                             height
                     );
                     cardView.setLayoutParams(paramsLayout);
-                    lastPos=position;
+                    lastPos=position;*/
                 }
 
             }
@@ -166,19 +170,30 @@ public class Interview extends Fragment {
     public List<QuestionUnit> getQuestionsFromProject(String PATH){
         List<QuestionUnit> questionUnits = new ArrayList<QuestionUnit>();
         File manifest  = new File(PATH, "/manifesto.xml");
-
         if(manifest.exists()){
             Document doc = null;
             try {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(manifest);
                 NodeList meta = doc.getElementsByTagName("meta");
                 String projectName = meta.item(0).getAttributes().getNamedItem("project").getTextContent();
-                File project =  new File(General.PATH+"/Projetos/"+projectName+".xml");
+                File project =  new File(PATH+"/"+projectName+".xml");
                 if(!project.exists())return questionUnits;
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(project);
                 NodeList questions = doc.getElementsByTagName("p");
                 for(int i=0;i<questions.getLength();i++){
                     questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                }
+                File projectN =  new File(General.PATH+"/Projetos/"+projectName+".xml");
+                if(projectN.exists()){
+                   if(!General.getTimeOfProject(PATH, projectName).equals(General.getTimeOfProject(General.PATH+"/Projetos",projectName))){
+                       doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(projectN);
+                       NodeList questions2 = doc.getElementsByTagName("p");
+                       for(int i=0;i<questions2.getLength();i++){
+                           if(!existsString(questions2.item(i).getTextContent(),questionUnits)){
+                               questionUnits.add(new QuestionUnit(questions2.item(i).getTextContent()));
+                           }
+                       }
+                   }
                 }
 
             } catch (SAXException e) {
@@ -193,4 +208,10 @@ public class Interview extends Fragment {
         return questionUnits;
     }
 
+    public boolean existsString(String str, List<QuestionUnit> questionUnits){
+        for (int i=0;i<questionUnits.size();i++){
+            if(questionUnits.get(i).question.equals(str))return true;
+        }
+        return  false;
+    }
 }

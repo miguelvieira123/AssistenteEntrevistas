@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.NetworkOnMainThreadException;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -33,7 +32,6 @@ import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.Zip;
-import com.museupessoa.maf.assistenteentrevistas.dialogs.ChooseProjectDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.DeleteInterviewDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.FinishEnterviewDialogFragment;
 import com.museupessoa.maf.assistenteentrevistas.dialogs.LinkChoiseForSendDialogFragment;
@@ -98,6 +96,7 @@ public class InterviewActivity extends AppCompatActivity {
         TextView name = (TextView)findViewById(R.id.person_name);
         name.setText(nome);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
+        getSupportActionBar().setTitle("Entrevista");
         metricsB = getResources().getDisplayMetrics();
         sdf = new SimpleDateFormat("ddMMyy_HHmmss");
         createAudioXML(interview_path);
@@ -380,15 +379,16 @@ public class InterviewActivity extends AppCompatActivity {
 
     }
 
-    private void picCompress(String PATH){
+   /* private void picCompress(String PATH){
         File imgFile = new  File(PATH);
         Bitmap myBitmap = null;
         if(imgFile.exists()){
             try {
-                myBitmap = decodeFile(imgFile);
+                //myBitmap = decodeFile(imgFile);
+                myBitmap =
                 OutputStream fOut = null;
                 fOut = new FileOutputStream(imgFile);
-                myBitmap.compress(Bitmap.CompressFormat.JPEG, 55, fOut);
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                 fOut.flush();
                 fOut.close();
             } catch (FileNotFoundException e) {
@@ -398,7 +398,7 @@ public class InterviewActivity extends AppCompatActivity {
             }
 
         }
-    }
+    }*/
 
     private static Bitmap decodeFile(File f) {
         try {
@@ -423,6 +423,7 @@ public class InterviewActivity extends AppCompatActivity {
     }
 
     private void Pic(String PATH) {
+        Bitmap myBitmap = null;
         int targetW = (int)metricsB.widthPixels;
         int targetH =(int) metricsB.heightPixels;
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -434,8 +435,20 @@ public class InterviewActivity extends AppCompatActivity {
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
-        BitmapFactory.decodeFile(PATH, bmOptions);
-        picCompress(PATH);
+        myBitmap = BitmapFactory.decodeFile(PATH, bmOptions);
+        OutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(new File(PATH));
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, 95, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //picCompress(PATH);
         File f  = new File(interview_path, "/manifesto.xml");
         if(f.exists()){
             Document doc = null;
@@ -446,6 +459,7 @@ public class InterviewActivity extends AppCompatActivity {
                 photo.setAttribute("name", fotoName);
                 photo.setAttribute("time", rec_time.getText().toString());
                 photo.setAttribute("audio",conta_gravacoes+".mp3");
+                photo.setAttribute("legend","");
                 if(photos.getLength()==0){
                     NodeList root = doc.getElementsByTagName("manifesto");
                     org.w3c.dom.Element photosN = doc.createElement("photos");
@@ -539,11 +553,6 @@ public class InterviewActivity extends AppCompatActivity {
                 FinishEnterviewDialogFragment finE = new FinishEnterviewDialogFragment();
                 finE.show(finishE,"FinishEntreview");
                 return true;
-            case R.id.E_Project:
-                FragmentManager fmP = getFragmentManager();
-                ChooseProjectDialogFragment project = new ChooseProjectDialogFragment();
-                project.show(fmP,"ChooseProjectDialogFragment");
-                return true;
             default:
 
                 break;
@@ -598,7 +607,9 @@ public class InterviewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        FragmentManager finishE  = getFragmentManager();
+        FinishEnterviewDialogFragment finE = new FinishEnterviewDialogFragment();
+        finE.show(finishE,"FinishEntreview");
     }
 
     public void startAmplProgressUpdater() {
@@ -655,31 +666,4 @@ public class InterviewActivity extends AppCompatActivity {
         }
     }
 
-    public  static void changeProjectForInterview(String project){
-        File f  = new File(interview_path+"/manifesto.xml");
-        Document doc = null;
-        if(f.exists()) {
-            try {
-                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
-                NodeList nodeList = doc.getElementsByTagName("meta");
-                nodeList.item(0).getAttributes().getNamedItem("project").setTextContent(project);
-                Transformer trans = TransformerFactory.newInstance().newTransformer();
-                DOMSource xmlSourse  =  new DOMSource(doc);
-                StreamResult streamResult = new StreamResult(interview_path+"/manifesto.xml");
-                trans.transform(xmlSourse,streamResult);
-
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (TransformerConfigurationException e) {
-                e.printStackTrace();
-            } catch (TransformerException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 }

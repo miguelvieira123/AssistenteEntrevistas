@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (resultCode){
             default:
-               Log.e("EE","asd");
+
                 break;
         }
 

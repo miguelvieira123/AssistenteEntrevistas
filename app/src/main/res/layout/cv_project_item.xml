@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="8dp"
         >
 
         <TextView
@@ -20,8 +20,46 @@
             android:layout_height="wrap_content"
             android:id="@+id/ProjectName"
             android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_gravity="center|center"
+            android:textSize="18dp"
+            android:layout_marginLeft="30dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/ProjectEditableLabel"
+            android:layout_below="@+id/ProjectName"
+            android:text="Editável: "
+            android:textSize="12dp"
+            android:layout_marginLeft="30dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ProjectEditable"
+            android:layout_below="@+id/ProjectName"
+            android:textSize="12dp"
+            android:layout_toEndOf="@+id/ProjectEditableLabel"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/ProjectTimeLabel"
+            android:layout_below="@+id/ProjectEditableLabel"
+            android:text="Criado: "
+            android:textSize="12dp"
+            android:layout_marginLeft="30dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ProjectTime"
+            android:layout_below="@+id/ProjectEditableLabel"
+            android:textSize="12dp"
+            android:layout_toEndOf="@+id/ProjectTimeLabel"
+
             />
 
     </RelativeLayout>

@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -64,11 +66,16 @@ public class FotoActivity extends AppCompatActivity {
 
     private List<String> getlistOfFoto(String path){
         List<String> out = new ArrayList<String>();
+        Pattern p = Pattern.compile("foto_perfil");
         File f = new File(path+"/Fotos/");
         String[] list =f.list();
-        for(int i=0;i<list.length;i++)out.add(list[i]);
+        for(int i=0;i<list.length;i++){
+            Matcher m = p.matcher(list[i]);
+            if(!m.find()&&!list[i].equals("form.jpg")) out.add(list[i]);
+        }
         return  out;
     }
+
     public static void deleteFoto(int position){
         File f  = new File( interview_path + "/Manifesto.xml");
         Document doc = null;
@@ -109,7 +116,8 @@ public class FotoActivity extends AppCompatActivity {
         }
 
     }
-    public static void changeName( int position,String newName ){
+
+    public static void setLegendForFoto( int position,String legend ){
         File f  = new File( interview_path + "/Manifesto.xml");
         Document doc = null;
         if(f.exists()) {
@@ -118,7 +126,7 @@ public class FotoActivity extends AppCompatActivity {
                 NodeList photos = doc.getElementsByTagName("photo");
                 for(int i =0;i<photos.getLength();i++){
                     if(photos.item(i).getAttributes().getNamedItem("name").getTextContent().equals(fotos.get(position))){
-                        photos.item(i).getAttributes().getNamedItem("name").setTextContent(newName);
+                        photos.item(i).getAttributes().getNamedItem("legend").setTextContent(legend);
                         Transformer trans = TransformerFactory.newInstance().newTransformer();
                         DOMSource xmlSource = new DOMSource(doc);
                         StreamResult result = new StreamResult(interview_path + "/Manifesto.xml");
@@ -126,11 +134,10 @@ public class FotoActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                File img = new File(interview_path+"/Fotos/"+fotos.get(position));
-                img.renameTo(new File(interview_path+"/Fotos/"+newName));
-                fotos.set(position, newName);
+
                 adapter.updateData(fotos);
                 viewPager.setAdapter(FotoActivity.adapter);
+                viewPager.setCurrentItem(position);
              } catch (SAXException e) {
                 e.printStackTrace();
             } catch (ParserConfigurationException e) {

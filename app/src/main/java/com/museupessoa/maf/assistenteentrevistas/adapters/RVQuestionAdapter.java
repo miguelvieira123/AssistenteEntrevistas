@@ -3,6 +3,7 @@ package com.museupessoa.maf.assistenteentrevistas.adapters;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,14 +74,15 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
     @Override
     public void onBindViewHolder(final RVQuestionAdapter.QuestionViewHolder holder, final int position) {
         holder.question_row.setText(questions.get(position).question);
-        holder.vProgressBar.setMax(32000);
-
+        holder.vProgressBar.setMax(32767);
         holder.setOnItemClickListener(listener, position);
     }
 
     @Override
     public int getItemCount() {
+
         return questions.size();
+
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){

@@ -18,9 +18,19 @@ import android.widget.TextView;
 
 import com.museupessoa.maf.assistenteentrevistas.FotoActivity;
 import com.museupessoa.maf.assistenteentrevistas.R;
-import com.museupessoa.maf.assistenteentrevistas.dialogs.ChangeNameFotoDialogFragment;
+import com.museupessoa.maf.assistenteentrevistas.dialogs.SetLegendForFotoDialogFragment;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class SwipeFotoAdapter extends PagerAdapter {
     private Context ctx;
@@ -56,16 +66,19 @@ public class SwipeFotoAdapter extends PagerAdapter {
         layoutInflater =  (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View item_view = layoutInflater.inflate(R.layout.swipe_fotos,container,false);
         ImageView imageView = (ImageView)item_view.findViewById(R.id.swipe_foto);
-        TextView textView = (TextView)item_view.findViewById(R.id.swipe_foto_name);
+        TextView name = (TextView)item_view.findViewById(R.id.swipe_foto_name);
+        TextView legend = (TextView)item_view.findViewById(R.id.swipe_foto_legend);
         imageView.setImageBitmap(getBitmapOfFoto(fotos.get(position)));
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangeDeleteFoto(position);
+                DeleteOrAddLegendFoto(position);
             }
         });
-        textView.setText(fotos.get(position));
-        textView.setTextColor(Color.WHITE);
+        name.setText(fotos.get(position));
+        name.setTextColor(Color.WHITE);
+        legend.setText(getFotoLegend(position));
+        legend.setTextColor(Color.rgb(200,200,200));
         container.addView(item_view);
         return item_view;
     }
@@ -81,7 +94,7 @@ public class SwipeFotoAdapter extends PagerAdapter {
         return bitmap;
     }
 
-    private void ChangeDeleteFoto(final int position) {
+    private void DeleteOrAddLegendFoto(final int position) {
         AlertDialog.Builder quitDialog = new AlertDialog.Builder(
                 ctx);
         quitDialog.setTitle("O que?");
@@ -93,17 +106,40 @@ public class SwipeFotoAdapter extends PagerAdapter {
 
           }
       });
-        quitDialog.setNegativeButton("Mudar nome", new DialogInterface.OnClickListener() {
+        quitDialog.setNegativeButton("Escrever legenda", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 FragmentManager fm = FotoActivity.fm;
-                ChangeNameFotoDialogFragment fotoName = new ChangeNameFotoDialogFragment(position,fotos.get(position));
+                SetLegendForFotoDialogFragment fotoName = new SetLegendForFotoDialogFragment(position,getFotoLegend(position));
                 fotoName.show(fm,"ChangeNameFotoDialogFragment");
             }
         });
 
         quitDialog.show();
     }
-
+ private String getFotoLegend(int position){
+     String legend = new String();
+     File f = new File(path+"/Manifesto.xml");
+     Document doc=null;
+     if(f.exists()){
+         try {
+             doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+             NodeList res = doc.getElementsByTagName("photo");
+             for(int i=0;i<res.getLength();i++){
+                 if(res.item(i).getAttributes().getNamedItem("name").getTextContent().equals(fotos.get(position))){
+                     legend = res.item(i).getAttributes().getNamedItem("legend").getTextContent();
+                     break;
+                 }
+             }
+         } catch (SAXException e) {
+             e.printStackTrace();
+         } catch (IOException e) {
+             e.printStackTrace();
+         } catch (ParserConfigurationException e) {
+             e.printStackTrace();
+         }
+     }
+     return  legend;
+ }
 
 }

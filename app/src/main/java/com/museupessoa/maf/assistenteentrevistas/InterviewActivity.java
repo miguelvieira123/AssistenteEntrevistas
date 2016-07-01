@@ -287,7 +287,7 @@ public class InterviewActivity extends AppCompatActivity {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mRecorder.setAudioEncodingBitRate(32);
         mRecorder.setAudioSamplingRate(44100);
         mRecorder.setAudioChannels(2);

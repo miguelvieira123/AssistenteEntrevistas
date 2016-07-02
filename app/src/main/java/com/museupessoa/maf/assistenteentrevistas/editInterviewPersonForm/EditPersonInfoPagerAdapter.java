@@ -15,20 +15,22 @@ public class EditPersonInfoPagerAdapter extends FragmentStatePagerAdapter {
     private CharSequence Titles[];
     private int NumbOfTabs;
     private String interview_path;
+    private String project_name;
 
 
-    public EditPersonInfoPagerAdapter(FragmentManager fm, CharSequence mTitles[], int numbOfTabs, String interview_path) {
+    public EditPersonInfoPagerAdapter(FragmentManager fm, CharSequence mTitles[], int numbOfTabs, String interview_path, String selected_project) {
         super(fm);
         this.Titles = mTitles;
         this.NumbOfTabs = numbOfTabs;
         this.interview_path = interview_path;
+        this.project_name = selected_project;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new WrittenForm(interview_path);
+                return new WrittenForm(interview_path, project_name);
             case 1:
                 return new AudioForm(interview_path);
             case 2:

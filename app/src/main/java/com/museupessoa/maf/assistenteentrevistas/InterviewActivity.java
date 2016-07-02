@@ -42,6 +42,7 @@ import com.museupessoa.maf.assistenteentrevistas.dialogs.LinkChoiseForSendDialog
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.PhotoForm;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
+import com.museupessoa.maf.assistenteentrevistas.units.QuestionUnit;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -78,6 +79,7 @@ public class InterviewActivity extends AppCompatActivity {
     private MediaRecorder mRecorder = null;
     private int conta_gravacoes;
     private static String interview_path;
+    private String project_name;
     private String audio_file_name;
     private String person_name;
     private final int CAMERA_RESULT = 89;
@@ -97,6 +99,7 @@ public class InterviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_interview);
         final Intent intent = getIntent();
         interview_path = intent.getStringExtra("path");
+        project_name = getProjectNameFromXML();
         String nome = getPersonNameFromXML();
         TextView name = (TextView)findViewById(R.id.person_name);
         name.setText(nome);
@@ -182,6 +185,27 @@ public class InterviewActivity extends AppCompatActivity {
         }
         return nome;
     }
+    private String getProjectNameFromXML(){
+            List<QuestionUnit> questionUnits = new ArrayList<QuestionUnit>();
+            File manifest = new File(interview_path, "/manifesto.xml");
+        String projectName = null;
+            if (manifest.exists()) {
+                Document doc = null;
+                try {
+                    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(manifest);
+                    NodeList meta = doc.getElementsByTagName("meta");
+                    projectName = meta.item(0).getAttributes().getNamedItem("project").getTextContent();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        return projectName;
+    }
+
 
     private boolean writeAudioToXML(String question, String path, String audioName){
         File audio = new File(path + "/Manifesto.xml" );
@@ -266,7 +290,7 @@ public class InterviewActivity extends AppCompatActivity {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mRecorder.setAudioEncodingBitRate(32);
         mRecorder.setAudioSamplingRate(44100);
         mRecorder.setAudioChannels(2);
@@ -359,6 +383,7 @@ public class InterviewActivity extends AppCompatActivity {
         }
 
     }
+
 
     private static Bitmap decodeFile(File f) {
         try {
@@ -465,7 +490,7 @@ public class InterviewActivity extends AppCompatActivity {
 
                 CharSequence Titles[] = {"Texto", "Audio", "Foto"};
                 int Numboftabs = 3;
-                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
+                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path, project_name);
                 ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
                 pager.setAdapter(myPagerAdapter);
                 SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);

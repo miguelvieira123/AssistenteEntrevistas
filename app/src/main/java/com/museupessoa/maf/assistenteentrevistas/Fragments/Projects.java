@@ -131,12 +131,16 @@ public class Projects extends Fragment{
                 intent.putExtra("name",projectUnits.get(requestCode).name);
                 intent.putExtra("status",2);
                 startActivity(intent);
+
+
+                Toast.makeText(getActivity(),"Editar",Toast.LENGTH_LONG).show();
+
                 break;
             case  Projects.DELETE_PROJECT:
                 android.support.v4.app.FragmentManager delProject = getFragmentManager();
                 DeleteProjectDialogFragment dialogProjectName = new DeleteProjectDialogFragment();
                 dialogProjectName.setTargetFragment(this, requestCode);
-                dialogProjectName.show(delProject, "DeleteProject");
+                dialogProjectName.show(delProject, "Eliminar");
                 break;
         }
     }

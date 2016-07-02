@@ -147,12 +147,12 @@ public class NewInterviewActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_new_interview, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -173,7 +173,6 @@ public class NewInterviewActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-
     public void okClicked() {
         NewInterviewActivity.bitmapFormPhoto=null;
         this.finish();
@@ -186,6 +185,7 @@ public class NewInterviewActivity extends AppCompatActivity {
     public void cancelClicked() {
         this.finish();
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
             List<Fragment> fragments =  getSupportFragmentManager().getFragments();
             if (fragments != null) {

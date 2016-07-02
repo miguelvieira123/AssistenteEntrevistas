@@ -74,8 +74,8 @@
             android:textColor="@color/green"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             android:id="@+id/foto_entrevista"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="false"

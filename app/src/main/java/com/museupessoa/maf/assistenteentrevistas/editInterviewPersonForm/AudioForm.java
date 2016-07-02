@@ -80,7 +80,6 @@ public class AudioForm extends Fragment {
                 cardView = (android.support.v7.widget.CardView )v.findViewById(R.id.CV_audioForm);
                 audioName = (TextView)v.findViewById(R.id.audioFormName);
                 if(posStatus==-1){
-                    Log.e("PASS","1");
                     startRecording(new_interview_path, formNames.get(position));
                     audioName.setTextColor(Color.rgb(151, 35, 26));
                     cardView.setCardBackgroundColor(Color.rgb(209, 248, 255));
@@ -94,7 +93,7 @@ public class AudioForm extends Fragment {
                     posStatus=-1;
                 }
                 else {
-                    audioName.setTextColor(Color.rgb(151, 35, 26));
+                   /* audioName.setTextColor(Color.rgb(151, 35, 26));
                     cardView.setCardBackgroundColor(Color.rgb(209, 248, 255));
                     ViewGroup  vv = (ViewGroup)recyclerView.getChildAt(posStatus);
                     cardView = (android.support.v7.widget.CardView )vv.findViewById(R.id.CV_audioForm);
@@ -103,20 +102,21 @@ public class AudioForm extends Fragment {
                     audioName.setTextColor(Color.rgb(120, 120, 120));
                     stopRecording();
                     startRecording(new_interview_path, formNames.get(position));
-                    posStatus=position;
+                    posStatus=position;*/
                 }
 
             }
         }));
 
     }
+
     private void startRecording(String path, String name) {
         REC=1;
         mRecorder = new MediaRecorder();
         String mFileName = path +"/Audio/Form/"+name+".mp4";
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mRecorder.setAudioEncodingBitRate(16);
         mRecorder.setAudioSamplingRate(44100);
         mRecorder.setAudioChannels(1);
@@ -128,6 +128,7 @@ public class AudioForm extends Fragment {
         }
         mRecorder.start();
     }
+
     public static void stopRecording() {
         REC=0;
         if(mRecorder!=null) {
@@ -174,9 +175,11 @@ public class AudioForm extends Fragment {
                 mediaPlayer.reset();
             }
             try {
-                mediaPlayer.setDataSource(new_interview_path + "/Audio/Form/" + name + ".mp4");
-                mediaPlayer.prepare();
-                mediaPlayer.start();
+                if(new File(new_interview_path + "/Audio/Form/" + name + ".mp4").exists()) {
+                    mediaPlayer.setDataSource(new_interview_path + "/Audio/Form/" + name + ".mp4");
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();

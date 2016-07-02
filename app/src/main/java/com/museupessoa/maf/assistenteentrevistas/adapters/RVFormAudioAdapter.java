@@ -98,7 +98,6 @@ public class RVFormAudioAdapter extends   RecyclerView.Adapter<RVFormAudioAdapte
         holder.formName.setText(formNames.get(position));
         File f = new File(interview_path+"/Audio/Form/"+formNames.get(position)+".mp4");
         if(f.exists()){
-            Log.e("e",interview_path+"/Audio/Form/"+formNames.get(position)+".mp4");
             holder.playIcon.setBackgroundResource(R.drawable.amarok);
         }
         holder.setOnItemClickListener(listener, position);

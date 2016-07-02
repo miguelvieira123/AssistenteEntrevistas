@@ -64,6 +64,11 @@ public  class RVQuestionAdapter extends   RecyclerView.Adapter<RVQuestionAdapter
     public RVQuestionAdapter(List<QuestionUnit> questions){
         this.questions =  questions;
     }
+
+    public void updateRVQuestionAdapter(List<QuestionUnit> questions){
+        this.questions =  questions;
+    }
+
     @Override
     public RVQuestionAdapter.QuestionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cv_interview_questions, parent, false);

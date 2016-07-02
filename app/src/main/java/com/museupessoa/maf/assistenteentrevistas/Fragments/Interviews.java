@@ -102,10 +102,12 @@ public class Interviews extends Fragment {
         adapter.RVUpdateListAdapter(newInterviewList);
         recyclerView.setAdapter(adapter);
     }
+
     public  static void setCurrentInterviewList(){
         adapter.RVUpdateListAdapter(interviewUnits);
         recyclerView.setAdapter(adapter);
     }
+
     public static boolean setInterviewStatusSentByPath(String Path){
         int i=0;
         for(i=0;i<interviewUnits.size();i++){
@@ -116,6 +118,7 @@ public class Interviews extends Fragment {
         }
         return false;
     }
+
     public static boolean getInterviewStatusSentByPath(String Path){
         int i=0;
         for(i=0;i<interviewUnits.size();i++){

@@ -32,7 +32,7 @@ public class ListAudioAdapter  extends BaseExpandableListAdapter  {
     }
 
     public  void deleteAudioFromList(int groupPosition,int childPosititon){
-       this.audioUnit.get(groupPosition).audio.remove(childPosititon);
+        this.audioUnit.get(groupPosition).audio.remove(childPosititon);
         this.audioUnit.get(groupPosition).time.remove(childPosititon);
     }
 

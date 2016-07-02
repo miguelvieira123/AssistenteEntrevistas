@@ -30,6 +30,7 @@ import com.museupessoa.maf.assistenteentrevistas.adapters.RVQuestionAdapter;
 import com.museupessoa.maf.assistenteentrevistas.units.QuestionUnit;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -40,6 +41,12 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 
 public class Interview extends Fragment {
@@ -96,18 +103,10 @@ public class Interview extends Fragment {
                 cardView = ( android.support.v7.widget.CardView)v.findViewById(R.id.InterviewQuestionsCV);
                 if(lastPos==-1){
                     vProgressBar = (ProgressBar)v.findViewById(R.id.vprogressbar);
-                    height=cardView.getHeight();
-                    width=cardView.getWidth();
                     lastPos=position;
                     cardView.setCardBackgroundColor(Color.rgb(209, 248, 255));
-                    question.setTextSize(18);
                     question.setTextColor(Color.rgb(151, 35, 26));
                     recStatus.setBackgroundResource(R.drawable.microphonepressed);
-                    paramsLayout = new  LinearLayout.LayoutParams(
-                            width+10,
-                            height+10
-                    );
-                    cardView.setLayoutParams(paramsLayout);
                     if (activity instanceof InterviewActivity){
                         ((InterviewActivity) activity).newAudioStartRecord(questionUnits.get(position).question);
                     }
@@ -115,16 +114,10 @@ public class Interview extends Fragment {
                 else if(lastPos==position){
                     vProgressBar = (ProgressBar)v.findViewById(R.id.vprogressbar);
                     cardView.setCardBackgroundColor(Color.WHITE);
-                    question.setTextSize(16);
                     question.setTextColor(Color.rgb(143, 142, 141));
                     recStatus.setBackgroundResource(R.drawable.microphonedisabled);
                     vProgressBar.setProgress(0);
                     lastPos=-1;
-                    paramsLayout = new  LinearLayout.LayoutParams(
-                            width,
-                            height
-                    );
-                    cardView.setLayoutParams(paramsLayout);
                     if (activity instanceof InterviewActivity){
                         ((InterviewActivity) activity).newAudioStopRecord();
                     }
@@ -140,11 +133,7 @@ public class Interview extends Fragment {
                     question.setTextSize(18);
                     question.setTextColor(Color.rgb(151, 35, 26));
                     recStatus.setBackgroundResource(R.drawable.microphonepressed);
-                    paramsLayout = new  LinearLayout.LayoutParams(
-                            width+10,
-                            height+10
-                    );
-                    cardView.setLayoutParams(paramsLayout);
+
                     ViewGroup v1 = (ViewGroup)recyclerView.getChildAt(lastPos);
                     recStatus=(ImageView)v1.findViewById(R.id.RecStatus);
                     question = (TextView)v1.findViewById(R.id.InterviewQuestion);
@@ -155,11 +144,7 @@ public class Interview extends Fragment {
                     question.setTextColor(Color.rgb(143, 142, 141));
                     vProgressBarOld.setProgress(0);
                     recStatus.setBackgroundResource(R.drawable.microphonedisabled);
-                    paramsLayout = new  LinearLayout.LayoutParams(
-                            width,
-                            height
-                    );
-                    cardView.setLayoutParams(paramsLayout);
+
                     lastPos=position;*/
                 }
 
@@ -211,6 +196,45 @@ public class Interview extends Fragment {
     public boolean existsString(String str, List<QuestionUnit> questionUnits){
         for (int i=0;i<questionUnits.size();i++){
             if(questionUnits.get(i).question.equals(str))return true;
+        }
+        return  false;
+    }
+
+    public void createNewQuestion(){
+        if(writeQuestionToXML("Pergunta Rapida" + Integer.toString(questionUnits.size()))){
+            questionUnits.add(new QuestionUnit("Pergunta Rapida" + Integer.toString(questionUnits.size())));
+            adapter.updateRVQuestionAdapter(questionUnits);
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
+    private boolean writeQuestionToXML(String question){
+        String projectName = General.getProjectNameOfInterview(path);
+        File f = new File(path+"/"+projectName+".xml");
+        if(f.exists()){
+            try {
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList perguntas = doc.getElementsByTagName("perguntas");
+                org.w3c.dom.Element n1;
+                n1 = doc.createElement("p");
+                n1.setTextContent(question);
+                perguntas.item(0).appendChild(n1);
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(path+"/"+projectName+".xml");
+                trans.transform(xmlSource, result);
+                return true;
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
         }
         return  false;
     }

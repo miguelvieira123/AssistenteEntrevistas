@@ -40,7 +40,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="50dp"
-        android:layout_above="@+id/toggleButton"
+        android:layout_above="@+id/AddFastQuestion"
         android:layout_marginBottom="20dp">
 
         <LinearLayout
@@ -63,17 +63,16 @@
         fab:fab_colorPressed="@color/fabPressed"
         fab:fab_colorRipple="@color/fabRipple" />
 
-
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:textOn=""
-        android:textOff=""
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/AddFastQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/ic_toggle_bg"
-        android:padding="5dp"
-        android:visibility="invisible"/>
+        android:src="@drawable/ic_add_white_24dp"
+        fab:fab_colorNormal="@color/fabPrimary"
+        fab:fab_colorPressed="@color/fabPressed"
+        fab:fab_colorRipple="@color/fabRipple" />
+
 
 </RelativeLayout>

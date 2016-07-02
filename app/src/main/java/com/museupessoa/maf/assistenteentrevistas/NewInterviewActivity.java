@@ -74,7 +74,6 @@ public class NewInterviewActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         getSupportActionBar().setTitle("Nova Entrevista");
         if (savedInstanceState == null){
-            Log.e("D0","1111111");
             Intent intent = getIntent();
             person_name = intent.getStringExtra("person_name");
 
@@ -89,7 +88,6 @@ public class NewInterviewActivity extends AppCompatActivity {
             fragmentTransaction.add(R.id.new_interview_frameLayout, selectProject);
             fragmentTransaction.commit();
         }else{
-            Log.e("S0","123123");
             setContentView(R.layout.fragment_interview_metadata);
             CharSequence Titles[]={"Aplicação","Audio","Foto"};
             int Numboftabs = 3;
@@ -150,12 +148,12 @@ public class NewInterviewActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_new_interview, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -177,6 +175,7 @@ public class NewInterviewActivity extends AppCompatActivity {
         }
         savePersonMetainfo(info);
     }
+
     private void savePersonMetainfo( HashMap<String, String> info){
         try{
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
@@ -226,7 +225,6 @@ public class NewInterviewActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-
     public void okClicked() {
         NewInterviewActivity.bitmapFormPhoto=null;
         saveFormContent();
@@ -240,6 +238,7 @@ public class NewInterviewActivity extends AppCompatActivity {
         saveFormContent();
         this.finish();
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
             List<Fragment> fragments =  getSupportFragmentManager().getFragments();
             if (fragments != null) {

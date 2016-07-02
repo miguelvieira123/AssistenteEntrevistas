@@ -117,7 +117,8 @@ public class SwipeFotoAdapter extends PagerAdapter {
 
         quitDialog.show();
     }
- private String getFotoLegend(int position){
+
+    private String getFotoLegend(int position){
      String legend = new String();
      File f = new File(path+"/Manifesto.xml");
      Document doc=null;

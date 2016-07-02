@@ -85,8 +85,6 @@ public class General {
     public static String createNewInterview(String app_path, String project_name, String person_name){
 
         List<String> meta = new ArrayList<>();
-        List<String> perguntas= new ArrayList<>();
-        List<String> urls = new ArrayList<>();
 
         // abrir project e sacar info
         try{
@@ -96,17 +94,9 @@ public class General {
                 try {
                     doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
                     NodeList n_meta = doc.getElementsByTagName("info");
-                    NodeList n_perguntas = doc.getElementsByTagName("p");
-                    NodeList n_urls = doc.getElementsByTagName("url");
 
                     for (int i=0; i<n_meta.getLength(); i++) {
                         meta.add(n_meta.item(i).getFirstChild().getNodeValue());
-                    }
-                    for (int i=0; i<n_perguntas.getLength(); i++) {
-                        perguntas.add(n_perguntas.item(i).getFirstChild().getNodeValue());
-                    }
-                    for (int i=0; i<n_urls.getLength(); i++) {
-                        urls.add(n_urls.item(i).getFirstChild().getNodeValue());
                     }
 
                 } catch (SAXException e) {
@@ -121,12 +111,12 @@ public class General {
 
         int contador = getContadorFromXML(app_path);
         contador++;
-        createInterview(app_path, person_name, "e00"+contador, meta, perguntas, urls);
+        createInterview(app_path, person_name, "e00"+contador, meta);
         setContadorXML(app_path, contador);
         return "e00"+contador;
     }
 
-    public static boolean createInterview(String path, String person_name, String interviewCode, List<String> meta, List<String> perguntas, List<String> urls){
+    public static boolean createInterview(String path, String person_name, String interviewCode, List<String> meta){
         try{
             File f = new File(path + "/Entrevistas/" + interviewCode );
             if (!f.exists())if(!f.mkdirs())return false;
@@ -153,29 +143,13 @@ public class General {
                     //n2 = doc.createElement( info );
 
                     n2 = doc.createElement( "info" );
-                    n2.setAttribute("name", info );
+                    n2.setAttribute("name", info);
                     n1.appendChild(n2);
                 }
                 root.appendChild(n1);
 
-                n1 = doc.createElement("perguntas");
-                for (String perg: perguntas) {
-                    n2 = doc.createElement("pergunta");
-                    n2.setTextContent( perg );
-                    n1.appendChild(n2);
-                }
-                root.appendChild(n1);
 
-                n1 = doc.createElement("urls");
-                for (String url : urls ) {
-                    n2 = doc.createElement("url");
-                    n2.setTextContent( url );
-                    n1.appendChild(n2);
-
-                }
-                root.appendChild(n1);
-
-                n1 = doc.createElement("audio");
+                n1 = doc.createElement("audios");
                 n1.setAttribute("count", "0");
                 root.appendChild(n1);
 
@@ -216,6 +190,25 @@ public class General {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static String getProjectNameOfInterview(String PATH){
+        File f  = new File(PATH+"/manifesto.xml");
+        Document doc = null;
+        if(f.exists()){
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList res = doc.getElementsByTagName("meta");
+                return  res.item(0).getAttributes().getNamedItem("project").getTextContent();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
     }
 
     public static boolean createProject(String path,String projectName,List<String> info, List<String> questions, List<String> urls, int status, String Date){
@@ -590,6 +583,7 @@ public class General {
 
         return time;
     }
+
 
 
 }

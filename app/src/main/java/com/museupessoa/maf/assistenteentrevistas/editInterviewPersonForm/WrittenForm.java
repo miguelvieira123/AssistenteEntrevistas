@@ -46,19 +46,21 @@ import javax.xml.transform.stream.StreamResult;
 public class WrittenForm extends Fragment {
 
     private String new_interview_path;
+    private String project_name;
     private FloatingActionButton add;
 
     LinearLayout linearLayout;
     LinearLayout.LayoutParams layout_params;
     private static int viewsCount = 0;
-    public static HashMap<String,EditText> allViews = new HashMap<String,EditText>();
+    private static HashMap<String,EditText> allViews = new HashMap<String,EditText>();
 
     public Class<? extends WrittenForm> getFragmentClass() {
         return this.getClass();
     }
 
-    public WrittenForm(String new_interview_path) {
+    public WrittenForm(String new_interview_path, String project_name) {
         this.new_interview_path = new_interview_path;
+        this.project_name = project_name;
     }
 
     @Override
@@ -77,14 +79,21 @@ public class WrittenForm extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        HashMap<String, String> info = new HashMap<>();
-        for (String key: WrittenForm.allViews.keySet()) {
-                info.put(key, WrittenForm.allViews.get(key).getText().toString());
-            }
-            savePersonMetainfo(info);
+        savePersonMetainfo();
     }
 
-    private void savePersonMetainfo( HashMap<String, String> info){
+    @Override
+    public void onPause(){
+        super.onPause();
+        savePersonMetainfo();
+    }
+
+
+    private void savePersonMetainfo( ){
+        HashMap<String, String> info = new HashMap<>();
+        for (String key: allViews.keySet()) {
+            info.put(key, allViews.get(key).getText().toString());
+        }
         try{
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
             File f  = new File(new_interview_path, "manifesto.xml");
@@ -102,7 +111,7 @@ public class WrittenForm extends Fragment {
 
                     n1 = doc.createElement("meta");
                     n1.setAttribute("name", person_name );
-                    n1.setAttribute("project", "popo" ); ///ATENÇÃO A ISTO!!!!!!!
+                    n1.setAttribute("project", project_name ); ///ATENÇÃO A ISTO!!!!!!!
                     n1.setAttribute("time", sdf.format(new Date()));
                     n1.setAttribute("send","no");
                     for (String key: info.keySet()) {

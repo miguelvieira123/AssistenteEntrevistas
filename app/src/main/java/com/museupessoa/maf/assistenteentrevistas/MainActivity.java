@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Configuration;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Projects;
 import com.museupessoa.maf.assistenteentrevistas.adapters.RVProjectAdapter;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         if (General.createStructOfFolders(Environment.getExternalStoragePublicDirectory("/" + APP_NAME).toString())) {
             General.createProject(Environment.getExternalStorageDirectory() + "/" + APP_NAME,
                     "Geral", General.defaultMetaListInit(), General.defaultQuestionsListInit(), General.defaultLinksListInit(), 1,sdf.format(new Date()));
-
+            Configuration.photoQuality = General.getPhotoQualityFromXML(General.PATH);
             myPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
             pager = (ViewPager) findViewById(R.id.pager);
             pager.setAdapter(myPagerAdapter);

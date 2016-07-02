@@ -1,8 +1,10 @@
 package com.museupessoa.maf.assistenteentrevistas;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,11 +25,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Configuration;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
@@ -38,6 +42,7 @@ import com.museupessoa.maf.assistenteentrevistas.dialogs.LinkChoiseForSendDialog
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.EditPersonInfoPagerAdapter;
 import com.museupessoa.maf.assistenteentrevistas.editInterviewPersonForm.PhotoForm;
 import com.museupessoa.maf.assistenteentrevistas.tabs.SlidingTabLayout;
+import com.museupessoa.maf.assistenteentrevistas.units.QuestionUnit;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -74,6 +79,7 @@ public class InterviewActivity extends AppCompatActivity {
     private MediaRecorder mRecorder = null;
     private int conta_gravacoes;
     private static String interview_path;
+    private String project_name;
     private String audio_file_name;
     private String person_name;
     private final int CAMERA_RESULT = 89;
@@ -84,6 +90,7 @@ public class InterviewActivity extends AppCompatActivity {
     private static Integer REC_STATUS=0;
     private  static boolean SEND_STATUS=false;
     Handler seekHandler = new Handler();
+    public Interview interview;
 
 
     @Override
@@ -92,6 +99,7 @@ public class InterviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_interview);
         final Intent intent = getIntent();
         interview_path = intent.getStringExtra("path");
+        project_name = getProjectNameFromXML();
         String nome = getPersonNameFromXML();
         TextView name = (TextView)findViewById(R.id.person_name);
         name.setText(nome);
@@ -99,10 +107,9 @@ public class InterviewActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Entrevista");
         metricsB = getResources().getDisplayMetrics();
         sdf = new SimpleDateFormat("ddMMyy_HHmmss");
-        createAudioXML(interview_path);
         FragmentManager fragmentActionManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentActionManager.beginTransaction();
-        Interview interview = new Interview();
+        interview = new Interview();
         Bundle bundle = new Bundle();
         bundle.putString("path", interview_path);
         interview.setArguments(bundle);
@@ -115,6 +122,7 @@ public class InterviewActivity extends AppCompatActivity {
         this.addListennerToButtons();
 
     }
+
     private void addListennerToButtons(){
 
         FloatingActionButton photo = (FloatingActionButton) findViewById(R.id.photo_button);
@@ -128,8 +136,29 @@ public class InterviewActivity extends AppCompatActivity {
                 startActivityForResult(cameraIntent, CAMERA_RESULT);
             }
         });
-    }
+        FloatingActionButton createFastQuection = (FloatingActionButton) findViewById(R.id.AddFastQuestion);
+        createFastQuection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder createQ = new AlertDialog.Builder(InterviewActivity.this);
+                createQ.setTitle("Adicionar pergunta rápida?");
+                createQ.setPositiveButton("Adicionar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        interview.createNewQuestion();
+                    }
+                });
+                createQ.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                });
+                createQ.show();
+
+            }
+        });
+    }
 
     private String getPersonNameFromXML(){
         File manif_file = new File(interview_path, "manifesto.xml");
@@ -156,60 +185,34 @@ public class InterviewActivity extends AppCompatActivity {
         }
         return nome;
     }
-
-    private boolean createAudioMetaInfo(String audioFileName){
-        try{
-            File outputFile = new File(interview_path + "/Audio/" + audioFileName + ".xml" );
-            if (!outputFile.exists()){
-                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-                org.w3c.dom.Element root;
-                root = doc.createElement("tags-log");
-                root.setAttribute("id", audioFileName);
-                doc.appendChild(root);
-                Transformer trans = TransformerFactory.newInstance().newTransformer();
-                DOMSource xmlSource = new DOMSource(doc);
-                StreamResult result = new StreamResult(interview_path + "/Audio/" + audioFileName + ".xml");
-                trans.transform(xmlSource, result);
+    private String getProjectNameFromXML(){
+            List<QuestionUnit> questionUnits = new ArrayList<QuestionUnit>();
+            File manifest = new File(interview_path, "/manifesto.xml");
+        String projectName = null;
+            if (manifest.exists()) {
+                Document doc = null;
+                try {
+                    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(manifest);
+                    NodeList meta = doc.getElementsByTagName("meta");
+                    projectName = meta.item(0).getAttributes().getNamedItem("project").getTextContent();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            return true;
-        } catch (Exception e) {
-            //e.printStackTrace();
-            return false;
-        }
+        return projectName;
     }
 
-    private void createAudioXML(String path){
-        File audio = new File(path + "/Audio/audio.xml" );
-        if(!audio.exists()){
-            Document doc = null;
-            try {
-                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-                org.w3c.dom.Element root;
-                root = doc.createElement("root");
-                doc.appendChild(root);
-                Transformer trans = TransformerFactory.newInstance().newTransformer();
-                DOMSource xmlSource = new DOMSource(doc);
-                StreamResult result = new StreamResult(path + "/Audio/audio.xml");
-                trans.transform(xmlSource, result);
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (TransformerConfigurationException e) {
-                e.printStackTrace();
-            } catch (TransformerException e) {
-                e.printStackTrace();
-            }
 
-        }
-    }
     private boolean writeAudioToXML(String question, String path, String audioName){
-        File audio = new File(path + "/Audio/audio.xml" );
+        File audio = new File(path + "/Manifesto.xml" );
         Document doc = null;
-        if(!audio.exists()) {
-            createAudioXML(path);
-        }
             try {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(audio);
-                NodeList root =doc.getElementsByTagName("root");
+                NodeList root =doc.getElementsByTagName("audios");
                 NodeList questionList = doc.getElementsByTagName("question");
                 org.w3c.dom.Element n1;
                 org.w3c.dom.Element n2;
@@ -228,7 +231,7 @@ public class InterviewActivity extends AppCompatActivity {
                             questionList.item(i).appendChild(n2);
                             Transformer trans = TransformerFactory.newInstance().newTransformer();
                             DOMSource xmlSource = new DOMSource(doc);
-                            StreamResult result = new StreamResult(path + "/Audio/audio.xml");
+                            StreamResult result = new StreamResult(path + "/Manifesto.xml");
                             trans.transform(xmlSource, result);
                             return true;
                         }
@@ -242,7 +245,7 @@ public class InterviewActivity extends AppCompatActivity {
                 }
                 Transformer trans = TransformerFactory.newInstance().newTransformer();
                 DOMSource xmlSource = new DOMSource(doc);
-                StreamResult result = new StreamResult(path + "/Audio/audio.xml");
+                StreamResult result = new StreamResult(path + "/Manifesto.xml");
                 trans.transform(xmlSource, result);
                 return true;
             } catch (SAXException e) {
@@ -260,7 +263,6 @@ public class InterviewActivity extends AppCompatActivity {
         return false;
     }
 
-
     public void newAudioStartRecord(String question){
         if(REC_STATUS==0) {
             rec_time.setBase(SystemClock.elapsedRealtime());
@@ -271,6 +273,7 @@ public class InterviewActivity extends AppCompatActivity {
             REC_STATUS=1;
         }
     }
+
     public void newAudioStopRecord() {
         if(REC_STATUS==1) {
             REC_STATUS = 0;
@@ -287,7 +290,7 @@ public class InterviewActivity extends AppCompatActivity {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mRecorder.setAudioEncodingBitRate(32);
         mRecorder.setAudioSamplingRate(44100);
         mRecorder.setAudioChannels(2);
@@ -299,6 +302,7 @@ public class InterviewActivity extends AppCompatActivity {
         }
         mRecorder.start();
     }
+
     public void stopRecording() {
         REC_STATUS=0;
         mRecorder.stop();
@@ -313,7 +317,7 @@ public class InterviewActivity extends AppCompatActivity {
             Document doc = null;
             try {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
-                NodeList audio = doc.getElementsByTagName("audio");
+                NodeList audio = doc.getElementsByTagName("audios");
                 NamedNodeMap attrs = audio.item(0).getAttributes();
                 contador = Integer.parseInt(attrs.getNamedItem("count").getNodeValue());
             } catch (SAXException e) {
@@ -326,13 +330,14 @@ public class InterviewActivity extends AppCompatActivity {
         }
         return contador;
     }
+
     private void setContadorXML(String path, int novaContagem){
         File f  = new File(path, "manifesto.xml");
         if(f.exists()){
             Document doc = null;
             try {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
-                NodeList audio = doc.getElementsByTagName("audio");
+                NodeList audio = doc.getElementsByTagName("audios");
                 NamedNodeMap attrs = audio.item(0).getAttributes();
                 attrs.getNamedItem("count").setNodeValue(""+novaContagem);
 
@@ -379,26 +384,6 @@ public class InterviewActivity extends AppCompatActivity {
 
     }
 
-   /* private void picCompress(String PATH){
-        File imgFile = new  File(PATH);
-        Bitmap myBitmap = null;
-        if(imgFile.exists()){
-            try {
-                //myBitmap = decodeFile(imgFile);
-                myBitmap =
-                OutputStream fOut = null;
-                fOut = new FileOutputStream(imgFile);
-                myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                fOut.flush();
-                fOut.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }*/
 
     private static Bitmap decodeFile(File f) {
         try {
@@ -439,7 +424,7 @@ public class InterviewActivity extends AppCompatActivity {
         OutputStream fOut = null;
         try {
             fOut = new FileOutputStream(new File(PATH));
-            myBitmap.compress(Bitmap.CompressFormat.JPEG, 95, fOut);
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, Configuration.photoQuality, fOut);
             fOut.flush();
             fOut.close();
         } catch (FileNotFoundException e) {
@@ -490,7 +475,6 @@ public class InterviewActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_interview, menu);
@@ -506,7 +490,7 @@ public class InterviewActivity extends AppCompatActivity {
 
                 CharSequence Titles[] = {"Texto", "Audio", "Foto"};
                 int Numboftabs = 3;
-                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path);
+                EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, interview_path, project_name);
                 ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
                 pager.setAdapter(myPagerAdapter);
                 SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
@@ -597,6 +581,7 @@ public class InterviewActivity extends AppCompatActivity {
         General.deleteDirectory(new File(interview_path));
         this.finish();
     }
+
     public void finishEntr() {
         newAudioStopRecord();
         this.finish();

@@ -121,7 +121,7 @@ public class ListenAudio extends AppCompatActivity {
                   icon.setBackgroundResource(R.drawable.player_pause);
                   audio.setTextColor(Color.rgb(12, 147, 1));
                   View vv = listAdapter.childviewReferences.get(Integer.toString(lastPosGroup) + Integer.toString(lastPosChild));
-                  icon = (ImageView) vv.findViewById(R.id.ListenAudioIcon);
+                  icon = (ImageView) vv.findViewById(R.id.ListenAudioIcon);//11111111111111111
                   audio = (TextView) vv.findViewById(R.id.ListenAudioName);
                   time = (TextView) vv.findViewById(R.id.ListenAudioCurrentAudioTime);
                   audio.setTextColor(Color.rgb(120, 120, 120));
@@ -149,7 +149,7 @@ public class ListenAudio extends AppCompatActivity {
     public static List<AudioUnit> getListOfAudio(String PATH){
         List<AudioUnit> audioList = new ArrayList<AudioUnit>();
         MediaMetadataRetriever mmr = (MediaMetadataRetriever) new MediaMetadataRetriever();
-        File f  = new File(PATH+"/Audio/audio.xml");
+        File f  = new File(PATH+"/manifesto.xml");
         Document doc = null;
         if(f.exists()) {
             try {
@@ -179,7 +179,6 @@ public class ListenAudio extends AppCompatActivity {
         }
         return audioList;
     }
-
 
     public void startPlayProgressUpdater(final Integer groupPosition, final Integer childPosition) {
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
@@ -223,15 +222,13 @@ public class ListenAudio extends AppCompatActivity {
 
     }
 
-
-
     public static   void deleteAudio(){
         if(groupPosToDel==lastPosGroup&&childPosToDel==lastPosChild){
             mediaPlayer.stop();
             mediaPlayer.reset();
             status=STOP;
         }
-        File f  = new File(interview_path+"/Audio/audio.xml");
+        File f  = new File(interview_path+"/manifesto.xml");
         Document doc = null;
         if(f.exists()) {
             try {
@@ -248,6 +245,10 @@ public class ListenAudio extends AppCompatActivity {
                                 listAdapter.deleteAudioFromList(groupPosToDel, childPosToDel);//Apagamos audio da Lista
                                 expListView.collapseGroup(groupPosToDel);//para renovar os elementos de um grupo
                                 expListView.expandGroup(groupPosToDel);//para renovar os elementos de um grupo
+                                if(nodeList2.getLength()==1){
+                                    NodeList root = doc.getElementsByTagName("audios");
+                                    root.item(0).removeChild(nodeList.item(i));
+                                }
                                 break;//é muito importante ter aqui este break; se não vai apagar todos elementos até ao fim dum grupo
                             }
                         }
@@ -257,7 +258,7 @@ public class ListenAudio extends AppCompatActivity {
                 }
                 Transformer trans = TransformerFactory.newInstance().newTransformer();
                 DOMSource xmlSource = new DOMSource(doc);
-                StreamResult result = new StreamResult(interview_path+"/Audio/audio.xml");
+                StreamResult result = new StreamResult(interview_path+"/manifesto.xml");
                 trans.transform(xmlSource, result);
 
             } catch (SAXException e) {
@@ -275,4 +276,10 @@ public class ListenAudio extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        lastPosGroup = -1;
+        lastPosChild = -1;
+        this.finish();
+    }
 }

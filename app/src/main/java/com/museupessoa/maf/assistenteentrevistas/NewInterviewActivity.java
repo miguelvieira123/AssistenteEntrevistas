@@ -74,10 +74,8 @@ public class NewInterviewActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(General.CR, General.CG, General.CB)));
         getSupportActionBar().setTitle("Nova Entrevista");
         if (savedInstanceState == null){
-            Log.e("D0","1111111");
             Intent intent = getIntent();
             person_name = intent.getStringExtra("person_name");
-
             setContentView(R.layout.activity_new_interview);
             projects_path = Environment.getExternalStoragePublicDirectory("/" + getResources().getString(R.string.APP_NAME)).toString();
             FragmentManager fragmentActionManager =  getFragmentManager();
@@ -89,11 +87,10 @@ public class NewInterviewActivity extends AppCompatActivity {
             fragmentTransaction.add(R.id.new_interview_frameLayout, selectProject);
             fragmentTransaction.commit();
         }else{
-            Log.e("S0","123123");
             setContentView(R.layout.fragment_interview_metadata);
-            CharSequence Titles[]={"Aplicação","Audio","Foto"};
+            CharSequence Titles[]={"Texto","Audio","Foto"};
             int Numboftabs = 3;
-            EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path);
+            EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path, selected_project);
             ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
             pager.setAdapter(myPagerAdapter);
             SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
@@ -131,7 +128,7 @@ public class NewInterviewActivity extends AppCompatActivity {
             setContentView(R.layout.fragment_interview_metadata);
             CharSequence Titles[]={"Texto","Audio","Foto"};
             int Numboftabs = 3;
-            EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path);
+            EditPersonInfoPagerAdapter myPagerAdapter = new EditPersonInfoPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, new_interview_path, selected_project);
             ViewPager pager = (ViewPager) findViewById(R.id.new_interview_pager);
             pager.setAdapter(myPagerAdapter);
             SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.new_interview_tabs);
@@ -150,12 +147,12 @@ public class NewInterviewActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_new_interview, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -170,82 +167,30 @@ public class NewInterviewActivity extends AppCompatActivity {
         return(super.onOptionsItemSelected(item));
     }
 
-    private void saveFormContent(){
-        HashMap<String, String> info = new HashMap<>();
-        for (String key: WrittenForm.allViews.keySet()) {
-            info.put(key, WrittenForm.allViews.get(key).getText().toString());
-        }
-        savePersonMetainfo(info);
-    }
-    private void savePersonMetainfo( HashMap<String, String> info){
-        try{
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-            File f  = new File(new_interview_path, "manifesto.xml");
-            if(f.exists()){
-                Document doc = null;
-                try {
-                    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
-                    NodeList nodeList_meta = doc.getElementsByTagName("meta");
-                    String person_name = nodeList_meta.item(0).getAttributes().getNamedItem("name").getNodeValue();
-                    doc.getFirstChild().removeChild(nodeList_meta.item(0));
-                    Node root = doc.getElementsByTagName("manifesto").item(0);
 
-                    org.w3c.dom.Element n1;
-                    org.w3c.dom.Element n2;
-
-                    n1 = doc.createElement("meta");
-                    n1.setAttribute("name", person_name );
-                    n1.setAttribute("project", selected_project );
-                    n1.setAttribute("time", sdf.format(new Date()));
-                    n1.setAttribute("send","no");
-                    for (String key: info.keySet()) {
-                        n2 = doc.createElement( "info" );
-                        n2.setAttribute("name", key );
-                        n2.setTextContent(info.get(key));
-                        n1.appendChild(n2);
-                    }
-                    root.appendChild(n1);
-
-                    Transformer trans = TransformerFactory.newInstance().newTransformer();
-                    DOMSource xmlSource = new DOMSource(doc);
-                    StreamResult result = new StreamResult(new_interview_path + "/manifesto.xml");
-                    trans.transform(xmlSource, result);
-
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
-                    e.printStackTrace();
-                }
-            }
-        }catch(Exception e){e.printStackTrace();}
-    }
 
     @Override
     public void onBackPressed() {
     }
 
-
     public void okClicked() {
         NewInterviewActivity.bitmapFormPhoto=null;
-        saveFormContent();
         this.finish();
         Intent intent = new Intent(this, InterviewActivity.class);
         intent.putExtra("path",new_interview_path);
+        getFragmentManager().popBackStack();
         startActivity(intent);
     }
 
     public void cancelClicked() {
-        saveFormContent();
         this.finish();
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
             List<Fragment> fragments =  getSupportFragmentManager().getFragments();
             if (fragments != null) {
                 for (Fragment fragment : fragments) {
-                    if(fragment instanceof PhotoForm)
-                    {
+                    if(fragment instanceof PhotoForm) {
                         fragment.onActivityResult(requestCode, resultCode, data);
                     }
                 }

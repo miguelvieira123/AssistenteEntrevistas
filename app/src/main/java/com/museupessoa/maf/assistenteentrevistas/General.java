@@ -70,6 +70,10 @@ public class General {
                 n1 = doc.createElement("interviews");
                 n1.setAttribute("counter", "2" );
                 root.appendChild(n1);
+                n1 = doc.createElement("photo");
+                n1.setAttribute("quality", "95" );
+                n1.setAttribute("type", "jpg");
+                root.appendChild(n1);
                 Transformer trans = TransformerFactory.newInstance().newTransformer();
                 DOMSource xmlSource = new DOMSource(doc);
                 StreamResult result = new StreamResult(path + "/config.xml");
@@ -407,6 +411,53 @@ public class General {
             }
         }
         return contador;
+    }
+
+    public  static int  getPhotoQualityFromXML(String path){
+        File f  = new File(path, "config.xml");
+        if(f.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList photo = doc.getElementsByTagName("photo");
+                return Integer.parseInt( photo.item(0).getAttributes().getNamedItem("quality").getTextContent());
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return 95;
+    }
+
+    public  static void  setPhotoQualityFromXML(String path,Integer value){
+        File f  = new File(path, "config.xml");
+        if(f.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                NodeList photo = doc.getElementsByTagName("photo");
+                photo.item(0).getAttributes().getNamedItem("quality").setTextContent(Integer.toString(value));
+                Transformer trans = TransformerFactory.newInstance().newTransformer();
+                DOMSource xmlSource = new DOMSource(doc);
+                StreamResult result = new StreamResult(path + "/config.xml");
+                trans.transform(xmlSource, result);
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private static void setContadorXML(String path, int novaContagem){

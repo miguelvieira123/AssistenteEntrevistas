@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.museupessoa.maf.assistenteentrevistas.Fragments.Configuration;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interview;
 import com.museupessoa.maf.assistenteentrevistas.Fragments.Interviews;
 import com.museupessoa.maf.assistenteentrevistas.auxiliary.UploadingFileToServer;
@@ -398,7 +399,7 @@ public class InterviewActivity extends AppCompatActivity {
         OutputStream fOut = null;
         try {
             fOut = new FileOutputStream(new File(PATH));
-            myBitmap.compress(Bitmap.CompressFormat.JPEG, 95, fOut);
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, Configuration.photoQuality, fOut);
             fOut.flush();
             fOut.close();
         } catch (FileNotFoundException e) {

@@ -5444,12 +5444,14 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #RecyclerView_android_descendantFocusability android:descendantFocusability}</code></td><td></td></tr>
            <tr><td><code>{@link #RecyclerView_android_orientation android:orientation}</code></td><td></td></tr>
            <tr><td><code>{@link #RecyclerView_layoutManager com.melnykov.fab.test:layoutManager}</code></td><td></td></tr>
            <tr><td><code>{@link #RecyclerView_reverseLayout com.melnykov.fab.test:reverseLayout}</code></td><td></td></tr>
            <tr><td><code>{@link #RecyclerView_spanCount com.melnykov.fab.test:spanCount}</code></td><td></td></tr>
            <tr><td><code>{@link #RecyclerView_stackFromEnd com.melnykov.fab.test:stackFromEnd}</code></td><td></td></tr>
            </table>
+           @see #RecyclerView_android_descendantFocusability
            @see #RecyclerView_android_orientation
            @see #RecyclerView_layoutManager
            @see #RecyclerView_reverseLayout
@@ -5457,9 +5459,15 @@ containing a value of this type.
            @see #RecyclerView_stackFromEnd
          */
         public static final int[] RecyclerView = {
-            0x010100c4, 0x7f0100af, 0x7f0100b0, 0x7f0100b1,
-            0x7f0100b2
+            0x010100c4, 0x010100f1, 0x7f0100af, 0x7f0100b0,
+            0x7f0100b1, 0x7f0100b2
         };
+        /**
+          <p>This symbol is the offset where the {@link android.R.attr#descendantFocusability}
+          attribute's value can be found in the {@link #RecyclerView} array.
+          @attr name android:descendantFocusability
+        */
+        public static final int RecyclerView_android_descendantFocusability = 1;
         /**
           <p>This symbol is the offset where the {@link android.R.attr#orientation}
           attribute's value can be found in the {@link #RecyclerView} array.
@@ -5479,7 +5487,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.melnykov.fab.test:layoutManager
         */
-        public static final int RecyclerView_layoutManager = 1;
+        public static final int RecyclerView_layoutManager = 2;
         /**
           <p>This symbol is the offset where the {@link com.melnykov.fab.test.R.attr#reverseLayout}
           attribute's value can be found in the {@link #RecyclerView} array.
@@ -5493,7 +5501,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.melnykov.fab.test:reverseLayout
         */
-        public static final int RecyclerView_reverseLayout = 3;
+        public static final int RecyclerView_reverseLayout = 4;
         /**
           <p>This symbol is the offset where the {@link com.melnykov.fab.test.R.attr#spanCount}
           attribute's value can be found in the {@link #RecyclerView} array.
@@ -5507,7 +5515,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.melnykov.fab.test:spanCount
         */
-        public static final int RecyclerView_spanCount = 2;
+        public static final int RecyclerView_spanCount = 3;
         /**
           <p>This symbol is the offset where the {@link com.melnykov.fab.test.R.attr#stackFromEnd}
           attribute's value can be found in the {@link #RecyclerView} array.
@@ -5521,7 +5529,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.melnykov.fab.test:stackFromEnd
         */
-        public static final int RecyclerView_stackFromEnd = 4;
+        public static final int RecyclerView_stackFromEnd = 5;
         /** Attributes that can be used with a SearchView.
            <p>Includes the following attributes:</p>
            <table>

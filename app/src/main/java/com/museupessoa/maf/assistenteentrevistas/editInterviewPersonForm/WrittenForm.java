@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,9 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,13 +74,75 @@ public class WrittenForm extends Fragment {
     }
 
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        HashMap<String, String> info = new HashMap<>();
+        for (String key: WrittenForm.allViews.keySet()) {
+                info.put(key, WrittenForm.allViews.get(key).getText().toString());
+            }
+            savePersonMetainfo(info);
+    }
+
+    private void savePersonMetainfo( HashMap<String, String> info){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+            File f  = new File(new_interview_path, "manifesto.xml");
+            if(f.exists()){
+                Document doc = null;
+                try {
+                    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
+                    NodeList nodeList_meta = doc.getElementsByTagName("meta");
+                    String person_name = nodeList_meta.item(0).getAttributes().getNamedItem("name").getNodeValue();
+                    doc.getFirstChild().removeChild(nodeList_meta.item(0));
+                    Node root = doc.getElementsByTagName("manifesto").item(0);
+
+                    org.w3c.dom.Element n1;
+                    org.w3c.dom.Element n2;
+
+                    n1 = doc.createElement("meta");
+                    n1.setAttribute("name", person_name );
+                    n1.setAttribute("project", "popo" ); ///ATENÇÃO A ISTO!!!!!!!
+                    n1.setAttribute("time", sdf.format(new Date()));
+                    n1.setAttribute("send","no");
+                    for (String key: info.keySet()) {
+                        n2 = doc.createElement( "info" );
+                        n2.setAttribute("name", key );
+                        n2.setTextContent(info.get(key));
+                        n1.appendChild(n2);
+                    }
+                    root.appendChild(n1);
+
+                    Transformer trans = TransformerFactory.newInstance().newTransformer();
+                    DOMSource xmlSource = new DOMSource(doc);
+                    StreamResult result = new StreamResult(new_interview_path + "/manifesto.xml");
+                    trans.transform(xmlSource, result);
+
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch(Exception e){e.printStackTrace();}
+    }
+
+
+
 
     private void createEditText(String hint, String value) {
         EditText editText = new EditText(this.getContext());
+        TextView label = new TextView(this.getContext());
+        label.setText(hint+":");
         editText.setId(viewsCount++);
         editText.setHint(hint);
         editText.setSingleLine();
+        editText.setText(value);
+        Log.d("VALUE", " " + value);
         allViews.put(hint, editText);//para mais tarde recolher o input
+        linearLayout.addView(label, layout_params);
         linearLayout.addView(editText, layout_params);
     }
 
@@ -94,7 +159,13 @@ public class WrittenForm extends Fragment {
                     NodeList node_meta = nodeList_meta.item(0).getChildNodes();
 
                     for (int i=0; i< node_meta.getLength(); i++) {
-                        createEditText(node_meta.item(i).getAttributes().getNamedItem("name").getNodeValue(), "");
+                        if (node_meta.item(i).hasChildNodes()){
+                            createEditText( node_meta.item(i).getAttributes().getNamedItem("name").getNodeValue(),
+                                            node_meta.item(i).getFirstChild().getNodeValue());
+                        }else{
+                            createEditText( node_meta.item(i).getAttributes().getNamedItem("name").getNodeValue(),
+                                            "");
+                        }
                     }
                 } catch (SAXException e) {
                     e.printStackTrace();

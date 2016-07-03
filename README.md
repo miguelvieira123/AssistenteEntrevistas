@@ -1,5 +1,6 @@
 # Assistente de Entrevistas
-![alt tag](/documentacao/diagramas/ClassDiagram4.svg)
+
+<img src="documentacao/diagramas/ClassDiagram4.svg" width="350"/>
 ##Synopsis
 
 ##Instalation

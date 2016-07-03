@@ -38,6 +38,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -166,19 +168,78 @@ public class Interview extends Fragment {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(project);
                 NodeList questions = doc.getElementsByTagName("p");
                 for(int i=0;i<questions.getLength();i++){
-                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                    if(questions.item(i).hasAttributes()){
+                        String metafieldData = getMetaInfoByName(questions.item(i).getAttributes().
+                                getNamedItem("metafield").getTextContent(),PATH);
+                        int op = Integer.parseInt(questions.item(i).getAttributes().
+                                getNamedItem("op").getTextContent());
+                        switch (op){
+                            case 1:
+                                if(Integer.parseInt(metafieldData)==Integer.parseInt(
+                                        questions.item(i).getAttributes().
+                                                getNamedItem("value").getTextContent())){
+                                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                                }
+                                break;
+                            case 2:
+                                if(Integer.parseInt(metafieldData)!=Integer.parseInt(
+                                        questions.item(i).getAttributes().
+                                                getNamedItem("value").getTextContent())){
+                                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                                }
+                                break;
+                            case 3:
+                                if(Integer.parseInt(metafieldData)<Integer.parseInt(
+                                        questions.item(i).getAttributes().
+                                                getNamedItem("value").getTextContent())){
+                                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                                }
+                                break;
+                            case 4:
+                                if(Integer.parseInt(metafieldData)>Integer.parseInt(
+                                        questions.item(i).getAttributes().
+                                                getNamedItem("value").getTextContent())){
+                                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                                }
+                                break;
+                            case 5:
+                                if(Integer.parseInt(metafieldData)<=Integer.parseInt(
+                                        questions.item(i).getAttributes().
+                                                getNamedItem("value").getTextContent())){
+                                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                                }
+                                break;
+                            case 6:
+                                if(Integer.parseInt(metafieldData)>=Integer.parseInt(
+                                        questions.item(i).getAttributes().
+                                                getNamedItem("value").getTextContent())){
+                                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                                }
+                                break;
+                            case 7:
+                                Pattern p = Pattern.compile(questions.item(i).getAttributes().
+                                        getNamedItem("value").getTextContent());
+                                Matcher m = p.matcher(metafieldData);
+                                if(m.find()){
+                                    questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
+                                }
+
+                                break;
+
+                        }
+                    }else questionUnits.add(new QuestionUnit(questions.item(i).getTextContent()));
                 }
                 File projectN =  new File(General.PATH+"/Projetos/"+projectName+".xml");
                 if(projectN.exists()){
-                   if(!General.getTimeOfProject(PATH, projectName).equals(General.getTimeOfProject(General.PATH+"/Projetos",projectName))){
-                       doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(projectN);
-                       NodeList questions2 = doc.getElementsByTagName("p");
-                       for(int i=0;i<questions2.getLength();i++){
-                           if(!existsString(questions2.item(i).getTextContent(),questionUnits)){
-                               questionUnits.add(new QuestionUnit(questions2.item(i).getTextContent()));
-                           }
-                       }
-                   }
+                    if(!General.getTimeOfProject(PATH, projectName).equals(General.getTimeOfProject(General.PATH+"/Projetos",projectName))){
+                        doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(projectN);
+                        NodeList questions2 = doc.getElementsByTagName("p");
+                        for(int i=0;i<questions2.getLength();i++){
+                            if(!existsString(questions2.item(i).getTextContent(),questionUnits)){
+                                questionUnits.add(new QuestionUnit(questions2.item(i).getTextContent()));
+                            }
+                        }
+                    }
                 }
 
             } catch (SAXException e) {
@@ -192,6 +253,33 @@ public class Interview extends Fragment {
         }
         return questionUnits;
     }
+
+    public String getMetaInfoByName(String name, String PATH){
+        String out = new String();
+        File manifest  = new File(PATH, "/manifesto.xml");
+        if(manifest.exists()){
+            Document doc = null;
+            try {
+                doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(manifest);
+                NodeList meta = doc.getElementsByTagName("info");
+                for(int i=0;i<meta.getLength();i++){
+                    if(meta.item(i).getAttributes().getNamedItem("name").getTextContent().equals(name)){
+                        return meta.item(i).getTextContent();
+                    }
+                }
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return out;
+    }
+
 
     public boolean existsString(String str, List<QuestionUnit> questionUnits){
         for (int i=0;i<questionUnits.size();i++){

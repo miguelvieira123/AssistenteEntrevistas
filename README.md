@@ -1,5 +1,5 @@
 # Assistente de Entrevistas
-![alt tag](https://github.com/miguelvieira123/AssistenteEntrevistas/blob/master/documentacao/diagramas/ClassDiagram4.svg)
+![alt tag](/documentacao/diagramas/ClassDiagram4.svg?raw=true "Title")
 ##Synopsis
 
 ##Instalation

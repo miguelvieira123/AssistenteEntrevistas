@@ -1,6 +1,5 @@
 # Assistente de Entrevistas
-
-<img src="documentacao/diagramas/Modulo - Organizador Pastas_Ficheiros.jpg" width="350"/>
+![Alt class_diagram](https://github.com/miguelvieira123/miguelvieira123.github.io/blob/master/ClassDiagram4.svg)
 ##Synopsis
 
 ##Instalation

@@ -1,6 +1,6 @@
 # Assistente de Entrevistas
 
-<img src="documentacao/diagramas/ClassDiagram4.svg" width="350"/>
+<img src="documentacao/diagramas/Modulo - Organizador Pastas_Ficheiros.jpg" width="350"/>
 ##Synopsis
 
 ##Instalation

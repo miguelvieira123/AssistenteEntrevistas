@@ -20,6 +20,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -89,6 +90,7 @@ public class InterviewActivity extends AppCompatActivity {
     private  static boolean SEND_STATUS=false;
     Handler seekHandler = new Handler();
     public Interview interview;
+    public static TelephonyManager tm;
 
 
     @Override
@@ -96,6 +98,7 @@ public class InterviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interview);
         final Intent intent = getIntent();
+        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         interview_path = intent.getStringExtra("path");
         String nome = getPersonNameFromXML();
         TextView name = (TextView)findViewById(R.id.person_name);
@@ -599,14 +602,17 @@ public class InterviewActivity extends AppCompatActivity {
     }
 
     public static void send(final List<String> links){
-        final String arq =  General.PATH + "/Zips/"+interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip";
+        final String arq =  General.PATH + "/Zips/"+tm.getDeviceId()+"_"+interview_path.substring(interview_path.lastIndexOf("/")+1,interview_path.length())+".zip";
+        Log.e("P",arq);
         Zip.zip(interview_path, General.PATH + "/Zips",
-                interview_path.substring(interview_path.lastIndexOf("/") + 1, interview_path.length()) + ".zip", true);
+                tm.getDeviceId()+"_"+interview_path.substring(interview_path.lastIndexOf("/") + 1, interview_path.length()) + ".zip", true);
 
         Thread thrd = new Thread(new Runnable() {
             @Override
             public void run() {
                 for(int i=0;i< links.size();i++){
+
+                    String device_id = tm.getDeviceId();
                     if(UploadingFileToServer.uploadingFileToTheServer(arq, links.get(i))) {
                         Interviews.setInterviewStatusSentByPath(interview_path);
                         SEND_STATUS=true;

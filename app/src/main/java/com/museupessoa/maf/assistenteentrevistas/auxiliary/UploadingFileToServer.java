@@ -14,6 +14,7 @@ import java.net.URL;
 public class UploadingFileToServer {
 
     public static boolean uploadingFileToTheServer(String pathToOurFile,String urlServer ){
+
         HttpURLConnection connection = null;
         DataOutputStream outputStream = null;
         DataInputStream inputStream = null;
@@ -26,6 +27,7 @@ public class UploadingFileToServer {
         int maxBufferSize = 1*1024*1024;
         //Log.e("FILE", pathToOurFile);
         //Log.e("URL", urlServer);
+
         try
         {
             FileInputStream fileInputStream = new FileInputStream(new File(pathToOurFile) );
@@ -64,7 +66,7 @@ public class UploadingFileToServer {
             fileInputStream.close();
             outputStream.flush();
             outputStream.close();
-           // Log.e("CODE", Integer.toString(serverResponseCode));
+            //Log.e("CODE", Integer.toString(serverResponseCode));
             if (serverResponseCode == HttpURLConnection.HTTP_OK) {//success
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         connection.getInputStream()));
@@ -79,7 +81,6 @@ public class UploadingFileToServer {
                if(response.toString().equals("1")){return true; }
                 else return false;
             }else return false;
-
 
         }
         catch (Exception ex)

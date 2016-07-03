@@ -92,6 +92,7 @@ public class DownloadProjectsActivity extends AppCompatActivity {
                         try {
                            remoteProjects = new ArrayList<String>();
                            remoteProjects =  Http.getListOfProjects2(dataAdapter.getItem(position));
+
                         } catch (IOException e) {
 
                         }
@@ -103,7 +104,6 @@ public class DownloadProjectsActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
 
                 projects = new ArrayList<>();
                 localProjects = ProjectUnit.getProjects(PATH);

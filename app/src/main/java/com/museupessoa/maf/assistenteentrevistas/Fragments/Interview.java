@@ -173,6 +173,7 @@ public class Interview extends Fragment {
                                 getNamedItem("metafield").getTextContent(),PATH);
                         int op = Integer.parseInt(questions.item(i).getAttributes().
                                 getNamedItem("op").getTextContent());
+                        if (metafieldData.length() == 0){op=89;}
                         switch (op){
                             case 1:
                                 if(Integer.parseInt(metafieldData)==Integer.parseInt(
@@ -263,8 +264,10 @@ public class Interview extends Fragment {
                 doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(manifest);
                 NodeList meta = doc.getElementsByTagName("info");
                 for(int i=0;i<meta.getLength();i++){
-                    if(meta.item(i).getAttributes().getNamedItem("name").getTextContent().equals(name)){
-                        return meta.item(i).getTextContent();
+                    if(meta.item(i).hasChildNodes()){ //os atributos sao child nodes?
+                        if(meta.item(i).getAttributes().getNamedItem("name").getTextContent().equals(name)){
+                            return meta.item(i).getTextContent();
+                        }
                     }
                 }
 

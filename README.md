@@ -19,7 +19,7 @@ Utilizando o botão 'play' do menu é possivel instalar o .apk no dispositivo se
 ###Android SDK(Linha de comandos)
 Tendo apenas o Android SDK instalado e o ficheiro .apk da aplicação podemos utilizar o comando '$adb' (Android Debug Bridge) para instalar a aplicação.
 
-#####É necessário descarregar o pacote Platform-tools através do android-sdk.
+#####Descarregar o pacote Platform-tools através do android-sdk.
 ```{r, engine='bash'}
 android list sdk -u
 ```
@@ -46,6 +46,19 @@ android update sdk -u -t 1,2
 Em alternativa podemos usar o comando que se segue e instalar tudo.
 ```{r, engine='bash'}
 android update sdk -u
+```
+#####Instalar no dispositivo
+Verificar quais os dispositivos ligados.
+```
+adb devices
+```
+Instalar a aplicação.
+```
+adb install ./AssistenteEntrevistas/app/build/outputs/apk/app-debug.apk
+```
+Desinstalar a aplicação.
+```
+adb -s YT9106M7HG  uninstall com.museupessoa.maf.assistenteentrevistas
 ```
 
 
